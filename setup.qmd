@@ -17,14 +17,11 @@ First, make sure you have installed or updated the following software.
 
 Now you will need to install the following packages:
 
-- R
-- RStudio
-- R packages:
-    - tidyverse
-    - remotes
-    - lme4
-    - sjPlots
-
+- tidyverse
+- lme4
+- sjPlots
+- remotes
+- ds4ling
 
 You can do so by copying and pasting the following code into the console:
 
