@@ -8,7 +8,7 @@ project:
     - "img/"
 
 website:
-  title: "learnBayes"
+  title: "Data science for linguists"
   navbar:
     left:
       - href: index.qmd
@@ -17,14 +17,16 @@ website:
         text: Set-up
       - text: Slides
         menu:
-          - href: "slides/01_how_bayes/"
+          - href: "slides/00_coming_soon/"
             text: "Day 1"
-          - href: "slides/02_how_priors/"
+          - href: "slides/00_coming_soon/"
             text: "Day 2"
+          - href: "slides/00_coming_soon/"
+            text: "Day 3"
 
 format:
   html:
-    theme: cosmo
+    theme: simplex
     css: styles.css
     toc: true
 

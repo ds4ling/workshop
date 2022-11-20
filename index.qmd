@@ -1,14 +1,14 @@
 ---
-title: "learnBayes in R"
+title: "Workshops"
 ---
 
-This is the website of the workshop **learnBayes**.
+This is the website for statistics workshops.
 
-Please, check the [Set-up](setup.qmd) page for important set-up instructions, before joining the workshop.
+Please, check the [set-up](setup.qmd) page for important set-up instructions, before the workshop.
 
-This workshop assumes you have a **solid command of R and tidyverse packages, and familiarity with linear modelling** (including interpreting coefficients and interactions, running linear models with binomial/Bernoulli family, aka logistic regression).
+This workshop assumes you  **do not** have prior knowledge of statistics.
 
-If you wish to revise any of these topics, we recommend the following resources:
+I recommend the following resources:
 
 - [R for Data Science](https://r4ds.had.co.nz) (online book).
 - [Statistics for Linguists in R](https://www.routledge.com/Statistics-for-Linguists-An-Introduction-Using-R/Winter/p/book/9781138056091) (texbook).

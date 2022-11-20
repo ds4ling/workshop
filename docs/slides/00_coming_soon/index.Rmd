@@ -1,0 +1,12 @@
+---
+title: "Coming soon"
+subtitle: "Slides will be available here"
+date: "Last update: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---

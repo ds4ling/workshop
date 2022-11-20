@@ -1,4 +1,4 @@
-# Stats workshop
+# Stats workshops
 
 ## About
 
