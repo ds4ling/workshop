@@ -10,3 +10,22 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+
+```{r}
+#| label: place-holder
+#| echo: false
+#| message: false
+#| warning: false
+#| out.width: "100%"
+#| fig.height: 5.5
+library("tidyverse")
+library("ds4ling")
+
+# xaringan::inf_mr("./slides/00_coming_soon/index.Rmd")
+assumptions_data %>% 
+  ggplot(., aes(x = x, y = y)) + 
+    geom_point() + 
+    theme_void() + 
+    geom_smooth(method = "lm", se = F, formula = "y ~ x")
+```
+
