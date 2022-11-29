@@ -1,0 +1,1177 @@
+---
+title   : 'Statistics for Linguists'
+subtitle: 'Day 1 - The linear model:</br>.lightgrey[Assumptions, diagnostics, and interpretation]'
+author  : "Joseph V. Casillas, PhD"
+date    : "Rutgers University</br>Last update: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: assets
+    css: ["hygge", "rutgers", "rutgers-fonts"]
+    nature:
+      beforeInit: ["https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js", "https://platform.twitter.com/widgets.js"]
+      highlightStyle: default
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+    includes:
+      in_header: "../assets/partials/header.html"
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(fig.retina=2)
+```
+
+```{r xaringan-extra-all-the-things, echo=FALSE}
+xaringanExtra::use_xaringan_extra(
+  c("tile_view", "panelset", "editable", "animate", "tachyons", "webcam")
+)
+```
+
+```{r, 'helpers', echo=FALSE, message=F, warning=F}
+source(here::here("slides", "assets", "scripts", "helpers.R"))
+read_chunk(here::here("slides", "01_05_lm_assumptions_diagnostics", "assets", 
+  "scripts", "assumptions_diagnostics.R"))
+```
+
+class: inverse, middle
+
+<blockquote align='center' class="twitter-tweet" data-lang="de">
+<a href="https://twitter.com/thomasp85/status/963836721866661889"></a>
+</blockquote>
+
+---
+class: title-slide-section-grey, middle
+
+# Assumptions
+
+---
+layout: true
+
+# Assumptions
+
+---
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/lm_assumptions.png)
+background-size: 400px
+background-position: 95% 50%
+
+
+
+### Statistical assumptions
+
+- Every model has assumptions that need  
+to be met in  order for the model to work  
+properly and be trustworthy
+
+- It is not standard practice to report  
+whether all assumptions have been met when  
+writing up your results... 
+--
+.RUred[but it should be].
+
+- Make a habit of assessing your models and  
+incorporating the relevant information in  
+your writing. 
+
+---
+
+### Regression assumptions
+
+We can break the assumptions up into 3 areas: 
+
+1. Model specification
+
+2. Measurement error
+
+3. The error term
+
+---
+
+### Model specification
+
+There should be no specification error
+
+- The relationship between x<sub>i</sub> and y<sub>i</sub> is linear: 
+$y_i = \alpha + \beta x_i + \epsilon _i$
+
+- Including irrelevant variables 🤷🏽
+
+- Omitting relevant variables 👎🏽
+
+--
+
+### Importance: **HIGH**
+
+---
+background-image: url(./assets/img/sin.png)
+background-size: 400px
+background-position: 95% 50%
+
+### Including an irrelevant variable (sin of commission): 🤷🏽
+
+.pull-left[
+
+- Similar to a Type I error
+
+- Adds to the error of prediction, but it does not bias the parameter estimates 
+
+- If model includes multiple predictors, other estimates are not influenced by 
+the irrelevant variable
+
+- Though the parameter estimates won't be biased, the standard error terms 
+around each beta weight will increase (this affects t-ratio and p-value)
+
+]
+
+---
+background-image: url(./assets/img/sin.png)
+background-size: 400px
+background-position: 95% 50%
+
+### Including an irrelevant variable (sin of commission): 🤷🏽
+
+.pull-left[
+
+- For example, imagine a situation in which you model employee performance as a 
+function of a bunch of good predictors
+
+- Adding the variable of astrological horoscope sign will not bias the other 
+estimates
+
+- You are considering something that doesn't matter, i.e., astrology
+
+]
+
+---
+background-image: url(./assets/img/sin.png)
+background-size: 400px
+background-position: 95% 50%
+
+### Excluding a relevant variable (sin of omission): 👎🏽
+
+.pull-left[
+
+- Similar to a Type II error
+
+- This is much more serious!
+
+- This will bias your parameter estimates
+
+- You are leaving something important out (variance left unexplained)
+
+]
+
+---
+background-image: url(./assets/img/sin.png)
+background-size: 400px
+background-position: 95% 50%
+
+### Excluding a relevant variable (sin of omission): 👎🏽
+
+.pull-left[
+
+- For example, if you want to model RT as a function of working memory but you 
+forget to look at age
+
+- Then your prediction might be wrong
+
+- You don’t know which way you are biasing things either!
+
+- You could be either overestimating or underestimating the other regression 
+parameters
+
+]
+
+---
+
+### What to Do
+
+#### After including an irrelevant predictor:
+
+- Drop the irrelevant variable
+
+- Not much of a problem
+
+--
+
+#### After excluding a relevant predictor:
+
+- Look at data again to see if it is in there
+
+- Hope and Pray!
+
+- If it’s not in you data, you are SOL
+
+- You need to repeat the study!
+
+- There is a problem in your design and there is no mathematical solution to 
+fix this problem
+
+---
+
+### Measurement error
+
+There should be no measurement error
+
+- Variables x<sub>i</sub> and y<sub>i</sub> should be as accurate as possible
+
+--
+
+### Importance: .RUred[high]
+
+---
+
+### About the error term
+
+#### The error term should meet the following characteristics...
+
+- Mean = 0
+
+- Homoskedasticity
+
+- No autocorrelation
+
+- Predictor not correlated with error term
+
+- Error is normally distributed 
+
+---
+
+### About the error term
+
+#### Mean of 0
+
+- Slope estimates will not be biased
+
+- Intercept can be biased
+
+--
+
+### Importance: .blue[low]... unless you are interested in the intercept.
+
+---
+
+### About the error term
+
+#### Homoskedasticity
+
+- Variance around predicted values should be consistent
+
+- Common simple inspection is to look at scatter plot of fitted vs. x-values 
+(should look like blob with no interesting patterns)
+
+- If variance is heteroskedastic you will typically see fan-like patterns
+
+- Will not bias parameter estimates
+
+- Will increase confidence intervals, thus affects t-ratios and p-values
+
+--
+
+### Importance: .orange[medium/high]
+
+---
+
+### About the error term
+
+#### No autocorrelation
+
+- If the residuals are autocorrelated, it means that the prediction error of a 
+given observation depends on that of the previous observation
+
+- This shows up as a clear unexplained pattern in the y variable 
+
+- Most common in repeated measures and longitudinal data
+
+- Will not bias parameter estimates
+
+- Will affect confidence intervals, t-ratios, p-values
+
+- Increased chance of Type II error
+
+--
+
+### Importance: .RUred[High], but uncommon in standard regression
+
+---
+
+### Predictor not correlated with error term
+
+- Typically the result of omitting a relevant variable (sin of omission)
+
+- Will bias parameter estimates
+
+- Solution: include missing variable
+
+--
+
+### Importance: .RUred[high]
+
+---
+
+### Normally Distributed Errors 
+
+- There is no a priori reason for error to be anything but normally distributed 
+
+- It should become standard practice for you to examine your residuals to see 
+if they are normally distributed or not
+
+- If they aren't normally distributed there is a substantial possibility of 
+Type II error
+
+- If this is the case, then the residuals may not be "pure" error, and you may 
+have omitted a relevant variable from the equation that is making the residuals 
+not be normally distributed
+
+- In other words, the residuals may contain systematic variance that can still 
+be explained by something else
+
+- You cannot conclude with 100% certainty that a Type II error has been 
+committed, but you might strongly suspect it
+
+---
+
+### Summarizing
+
+1. Model specification
+  - The relationship between x<sub>i</sub> and y<sub>i</sub> is linear
+  - Including irrelevant variables 
+  - Omitting relevant variables
+
+2. Measurement error
+
+3. The error term
+  - Mean = 0
+  - Homoskedasticity
+  - No autocorrelation
+  - Predictor not correlated with error term
+  - Error is normally distributed 
+
+---
+
+
+
+
+
+
+
+
+
+class: title-slide-section-grey, middle
+layout: false
+
+# Diagnostics
+
+---
+layout: true
+
+# Diagnostics
+
+---
+
+### Remember those "residuals"?
+
+- A residual represents prediction error in our model with regard 
+to a single point. 
+  - Our `mtcars` model predicted that a 6 ton car should get 5.22 mpg. 
+  - If in reality it gets 10.22 mpg, then the residual for that specific 
+data point would be 5 mpg. 
+
+--
+
+- Remember: All models are wrong. 
+
+--
+
+- Our models will always be off by at least a little bit for most 
+of the observations we try to fit. 
+
+- Nonetheless, it is good practice to examine the residuals of 
+your models in order to help assess how well it fits your data.
+
+- Specifically, we need to make sure that there aren't any unexpected 
+patterns because that would suggest that our model does not properly 
+fit our data.
+
+---
+background-image: url(https://www.realitybytesinc.com/images/sick-computer.jpg)
+background-size: 400px
+background-position: 95% 50%
+
+### 1. Model assumptions
+
+### 2. Outliers
+
+---
+
+### The relationship between x<sub>i</sub> and y<sub>i</sub> is linear.
+
+1. Double check linear specification
+2. Eyeball it
+
+```{r, fit_mods, echo=FALSE, cache=FALSE}
+data(assumptions_data)
+mod1 <- lm(y ~ x, data = assumptions_data)
+mod2 <- lm(y_quad ~ x, data = assumptions_data)
+```
+
+.pull-left[
+
+```{r, assumptions_linear_plot, echo=FALSE, fig.height=5}
+assumptions_data %>% 
+  ggplot(., aes(x = x, y = y)) + 
+  geom_point(pch = 21, color = 'darkgrey', fill = 'darkred', 
+             stroke = 1, size = 2) + 
+  ds4ling_bw_theme(base_family = 'Times', base_size = 20)
+```
+
+]
+
+.pull-right[
+
+```{r, assumptions_quadratic_plot, echo=FALSE, fig.height=5}
+assumptions_data %>% 
+  ggplot(., aes(x = x, y = y_quad)) + 
+  geom_point(pch = 21, color = 'darkgrey', fill = 'darkred', 
+             stroke = 1, size = 2) + 
+  ds4ling_bw_theme(base_family = 'Times', base_size = 20)
+```
+
+]
+
+---
+
+### The mean of residuals is zero
+
+1. Check model summary
+2. Test manually
+
+.pull-left[
+
+```{r, cache=FALSE, eval=FALSE}
+# Fit model
+mod1 <- lm(y ~ x, data = assumptions_data)
+
+# Print summary
+summary(mod1)
+```
+
+```{r, linear_model_print, warning=F, results='asis', echo=FALSE}
+summary(mod1$resid) %>% 
+  as.vector() %>% 
+  as_tibble() %>% 
+  mutate(name = summary(mod1$resid) %>% names) %>% 
+  pivot_wider(names_from = "name", values_from = "value") %>% 
+  kable(format = 'html', digits = 2) %>% 
+  kable_styling(bootstrap_options = "striped", font_size = 13)
+```
+
+```{r, manual_resids, cache=FALSE}
+# Test manually
+mean(mod1$residuals)
+```
+
+]
+
+.pull-right[
+
+```{r, fake_print_quad, cache=FALSE, eval=FALSE}
+# Fit mod
+mod2 <- lm(y_quad ~ x, data = assumptions_data)
+
+# Print summary
+summary(mod2)
+```
+
+```{r, quad_model_print, warning=FALSE, results='asis', echo=FALSE}
+summary(mod2$residuals) %>% 
+  as.vector() %>% 
+  as_tibble() %>% 
+  mutate(name = summary(mod2$resid) %>% names) %>% 
+  pivot_wider(names_from = "name", values_from = "value") %>% 
+  kable(., format = 'html', digits = 2) %>% 
+  kable_styling(bootstrap_options = "striped", font_size = 13)
+```
+
+```{r, manual_resids_quad, cache=FALSE}
+# Test manually
+mean(mod2$residuals)
+```
+
+]
+
+---
+
+### Homoskedasticity of residuals
+
+```{r, homoskedasticity_linear, fig.width=14, echo=FALSE, fig.height=5, warning=F}
+autoplot(mod1, which = c(1, 3)) + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+```
+
+.footnote[mod1]
+
+---
+
+### Homoskedasticity of residuals
+
+```{r, homoskedasticity_quadratic, fig.width=14, echo=FALSE, fig.height=5, warning=F}
+autoplot(mod2, which = c(1, 3)) + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+```
+
+.footnote[mod2]
+
+---
+
+### No autocorrelation of residuals
+
+```{r, linear_autocorrelation, echo=FALSE, fig.height=6, fig.width=6.5, out.extra="style=float:right"}
+# visual inspection
+acf(mod1$residuals) 
+```
+
+1. Visual inspection
+2. Durbin-Watson test
+
+```{r, linear_durbin_watson, echo=FALSE, comment=''}
+# formal test: Durbin-Watson test
+lmtest::dwtest(mod1)
+```
+
+.footnote[mod1]
+
+---
+
+### No autocorrelation of residuals
+
+```{r, quadratic_autocorrelation, echo=FALSE, fig.height=6, fig.width=6.5, out.extra="style=float:right"}
+# visual inspection
+acf(mod2$residuals) 
+```
+
+1. Visual inspection
+2. Durbin-Watson test
+
+```{r, quadratic_durbin_watson, echo=FALSE, comment=''}
+# formal test: Durbin-Watson test
+lmtest::dwtest(mod2)
+```
+
+.footnote[mod2]
+
+---
+
+### No autocorrelation of residuals - Correction
+
+```{r, auto_cor_fix, echo=FALSE, message=FALSE, fig.height=6, fig.width=6.5, out.extra="style=float:right"}
+library(DataCombine)
+autocor_data <- data.frame(assumptions_data, resid_mod2=mod2$residuals)
+autocor_data1 <- slide(autocor_data, 
+                      Var="resid_mod2", 
+                      NewVar = "lag1", 
+                      slideBy = -1)
+autocor_data2 <- na.omit(autocor_data1)
+mod2_fix <- lm(y_quad ~ x + lag1, data = autocor_data2)
+
+acf(mod2_fix$residuals)
+```
+
+```{r, autocor_durbin_watson, echo=FALSE, comment=''}
+lmtest::dwtest(mod2_fix)  # formal test: Durbin-Watson test
+```
+
+.footnote[mod2]
+
+---
+
+### Predictors and residuals are uncorrelated
+
+- Test for correlation
+- Think about your study
+
+```{r, pred_resid_corr_test_linear}
+cor.test(assumptions_data$x, mod1$residuals) # do correlation test 
+```
+
+.footnote[mod1]
+
+---
+
+### Predictors and residuals are uncorrelated
+
+- Test for correlation
+- Think about your study
+
+```{r, pred_resid_corr_test_quadratic}
+cor.test(assumptions_data$x, mod2$residuals) # do correlation test 
+```
+
+.footnote[mod2]
+
+---
+
+### Normality of residuals
+
+- QQplots
+
+--
+
+```{r, normal_resids_linear-quadratic, echo=FALSE, fig.height=5, fig.width=12, fig.align='center'}
+ap1 <- autoplot(mod1, which = 2) + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+
+ap2 <- autoplot(mod2, which = 2) + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+
+ap1 + ap2
+```
+
+
+---
+layout: false
+class: title-slide-section-grey, middle
+
+# Dealing with influential data points
+
+---
+layout: true
+
+# Diagnostics
+
+---
+
+### Outliers/influential data points
+
+- An influential point is one that would significantly change the fit if 
+removed from the data 
+
+- .blue[Cook’s distance] is a commonly used influence measure 
+
+#### Leverage
+
+- The leverage of an observation measures its ability to move the regression 
+line by simply moving up/down along the y-axis.
+
+- The measurement represents the amount by which the predicted value would 
+change if the observation was shifted one unit in the y-direction.
+
+- The leverage always takes values between 0 and 1.
+
+- A point with 0 leverage does not effect the regression line.
+
+---
+
+### Influential data points
+
+.pull-left[
+
+```{r, cooks_distance_linear, echo=FALSE, fig.height=5.5}
+# autoplot(mod2, which = 4)
+# Cook's D plot
+cutoff <- function(model) {
+  # identify D values > 4 / (n-k-1)
+  n <- length(model$residuals)
+  k <- length(model$coefficients)
+  cutoff <- 4 / (n - k - 1)
+  return(cutoff)
+}
+
+cooks.distance(mod1) %>% 
+  tibble(., observation = as.numeric(names(.)), cooksd = .) %>%
+  arrange(., observation) %>% 
+  mutate(., label = if_else(cooksd > cutoff(mod1), 
+                            true = as.character(observation), 
+                            false = ' ')) %>% 
+ggplot(., aes(x = observation, y = cooksd, label = label)) + 
+  geom_hline(yintercept = cutoff(mod1), lty = 3) + 
+  geom_point() + 
+  geom_text(nudge_y = 0.1) + 
+  geom_segment(aes(xend = observation, y = 0, yend = cooksd)) + 
+  labs(x = "Obs. Number", y = "Cook's distance", title = "Cook's distance") + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+```
+
+]
+
+.pull-right[
+
+```{r, cooks_distance_quadratic, echo=FALSE, fig.height=5.5}
+cooks.distance(mod2) %>% 
+  tibble(., observation = as.numeric(names(.)), cooksd = .) %>%
+  arrange(., observation) %>% 
+  mutate(., label = if_else(cooksd > cutoff(mod2), 
+                            true = as.character(observation), 
+                            false = ' ')) %>% 
+ggplot(., aes(x = observation, y = cooksd, label = label)) + 
+  geom_hline(yintercept = cutoff(mod2), lty = 3) + 
+  geom_point() + 
+  geom_text(nudge_y = 0.05) + 
+  geom_segment(aes(xend = observation, y = 0, yend = cooksd)) + 
+  labs(x = "Obs. Number", y = "Cook's distance", title = "Cook's distance") + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+```
+
+]
+
+---
+
+### Influential data points
+
+```{r, leverage_linear_quadratic2, echo=FALSE, fig.height=5.5, fig.width=12, fig.align='center'}
+ap3 <- autoplot(mod1, which = 5) + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+
+ap4 <- autoplot(mod2, which = 5) + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+
+ap3 + ap4
+```
+
+---
+
+### Influential data points
+
+.pull-left[
+
+```{r, mod1_with_outlier, echo=FALSE, fig.height=6}
+noOut <- lm(y ~ x, data = assumptions_data[1:50, ])
+
+assumptions_data %>% 
+  mutate(., observation = row_number(),
+            label = if_else(observation == 51, true = "51", false = " ")) %>% 
+  ggplot(., aes(x = x, y = y, label = label)) + 
+  geom_point(aes(color = label), size = 3, show.legend = FALSE) + 
+  geom_text(nudge_y = 0.3, size = 5, color = "darkred") + 
+  geom_smooth(method = lm, se = F, size = 1.5, color = "darkred", 
+    formula = "y ~ x") + 
+  geom_abline(intercept = noOut$coef[1], slope = noOut$coef[2], 
+              color = 'blue', size = 1.5) + 
+  scale_color_brewer(palette = "Set1", guide = "none", direction = -1) + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+```
+
+]
+
+.pull-right[
+
+#### .RUred[Mod1 with influential data point]:
+
+.content-box-red[
+
+```{r, model_print_with_outlier, results='asis', echo=FALSE}
+b_with <- coef(mod1)
+cat(sprintf("$$y = %.02f + %.02f x$$", b_with[1], b_with[2]))
+```
+
+]
+
+#### .blue[Mod1 without influential data point]: 
+
+.content-box-blue[
+
+```{r, model_print_without_outlier, results='asis', echo=FALSE}
+b_without <- coef(noOut)
+cat(sprintf("$$y = %.02f + %.02f x$$", b_without[1], b_without[2]))
+```
+
+]
+]
+
+---
+
+### Global test of model assumptions
+
+- It is also possible to use the package `gvlma` to test model assumptions. 
+
+- It seems rather conservative
+
+- I don't know too much about it. 
+
+---
+
+```{r, gvlma_test_with, echo=FALSE}
+library(gvlma)
+gvmodel_1with <- gvlma(mod1)
+gvmodel_1with
+```
+
+---
+
+```{r, gvlma_test_without, echo=FALSE}
+gvmodel_1_without <- gvlma(noOut)
+gvmodel_1_without 
+```
+
+---
+
+```{r, gvlma_test_mod2, echo=FALSE}
+gvmodel_2 <- gvlma(mod2)
+gvmodel_2
+```
+
+---
+layout: false
+class: middle, center
+
+<iframe src="https://gallery.shinyapps.io/slr_diag/" style="border:none;" height="600" width="1300"></iframe>
+
+---
+layout: false
+class: title-slide-section-grey, middle
+
+# Interpretation
+
+---
+layout: true
+
+# Interpretation
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+```{r, model_output, echo=FALSE, comment=''}
+cars_mod <- lm(mpg ~ wt, data = mtcars)
+summary(cars_mod)
+```
+
+]
+
+.pull-right[
+
+1. Function call
+2. Model residuals
+3. Model coefficients
+4. Significance codes
+5. Variance explained
+6. F-ratio
+
+]
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+```{r, model_output1, comment=''}
+summary(cars_mod)$call
+```
+
+]
+
+.pull-right[
+
+1. Function .RUred[call]
+2. Model residuals
+3. Model coefficients
+4. Significance codes
+5. Variance explained
+6. F-ratio
+
+.content-box-blue[
+- This is the model you fit using `lm()`. 
+- It is the exact same code you typed into R. 
+- Use to double check to see if you made any typos.
+]
+
+]
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+```{r, model_output2, comment='', results='hold'}
+summary(cars_mod$residuals)
+```
+
+]
+
+.pull-right[
+
+1. Function call
+2. Model .RUred[residuals]
+3. Model coefficients
+4. Significance codes
+5. Variance explained
+6. F-ratio
+
+.content-box-blue[
+- Should be normally distributed
+- Absolute values of 1Q and 3Q should be similar
+- Mean = 0, median close to 0
+- If anything is off you can see it here, but check residual plots
+]
+
+]
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+```{r, model_output3, comment='', results='hold'}
+summary(cars_mod)$coef
+```
+
+]
+
+.pull-right[
+
+1. Function call
+2. Model residuals
+3. Model .RUred[coefficients]
+4. Significance codes
+5. Variance explained
+6. F-ratio
+
+.content-box-blue[
+- Meat and potatoes of the output
+- Parameter estimates of intercept and predictor(s)
+- Expresses strength of relationship between predictor(s) and outcome variable
+- One unit change in predictor will change outcome by...
+]
+
+]
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+```{r, model_output4, comment='', results='hold'}
+summary(cars_mod)
+```
+
+]
+
+.pull-right[
+
+1. Function call
+2. Model residuals
+3. Model coefficients
+4. .RUred[Significance codes]
+5. Variance explained
+6. F-ratio
+
+.content-box-blue[
+- Assessment of statistical significance of predictor(s) and the intercept 
+- Everything except "." is probably "good"
+]
+]
+
+---
+
+### Statistical Significance
+
+- As long as the effect is not statistically equivalent to 0 it is called 
+statistically significant
+
+- It may be an effect of trivial magnitude
+
+- Basically, it means that this prediction is better than nothing
+
+- It doesn’t really mean it is really “significant” in the terms that we 
+  think of as significance
+
+- It doesn’t indicate importance
+
+---
+
+### Significance versus Importance 
+
+#### How do we know if the “significant” effect we found is actually important?
+
+- The coefficient of determination (r-squared) tells you how much of the 
+variance you have explained
+
+- It tells us how big the effect is and not just that it is not equal to zero
+
+- You want to know if your predictions are better than chance alone (F-ratio) 
+but you also want to know how explanatory your predictions are (r-squared)
+
+#### How important are the chosen predictors?
+
+- The numerators in both ratios are similar
+
+- They represent the predicted portion of the variance
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+```{r, model_output5, comment='', results='hold'}
+summary(cars_mod)
+```
+
+]
+
+.pull-right[
+
+1. Function call
+2. Model residuals
+3. Model coefficients
+4. Significance codes
+5. .RUred[Variance explained]
+6. F-ratio
+
+.content-box-blue[
+- Assessment of R<sup>2</sup>
+- More variance explained is better
+- Should pretty much always be reported
+]
+]
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+```{r, model_output6, comment='', results='hold'}
+summary(cars_mod)
+```
+
+]
+
+.pull-right[
+
+1. Function call
+2. Model residuals
+3. Model coefficients
+4. Significance codes
+5. Variance explained
+6. .RUred[F-ratio]
+
+.content-box-blue[
+- Assesses overall significance... omnibus model
+- If F-ratio is significant, at least one predictor or intercept is too
+- If F-ratio is not significant your experiment is over
+]
+]
+
+---
+
+### A note about F-ratios
+
+#### If you have an ANOVA background... Mean Squared Deviations
+
+$$MS_{Total} = \frac{\sum{(y_i - \bar{y})^2}}{n-1}$$  
+
+$$MS_{Predicted} = \frac{\sum{(\hat{y}_i - \bar{y})^2}}{k}$$  
+
+$$MS_{Error} = \frac{\sum{(y_i - \hat{y}_i)^2}}{n - k - 1}$$
+
+.content-box-green[
+#### $$F_{(k),(n-k-1)} = \frac{\sum{(\hat{y}_i - \bar{y})^2} / (k)}{\sum{(y_i - \hat{y}_i)^2} / (n - k - 1)}$$
+]
+
+---
+
+### A note about F-ratios
+
+#### If you have an ANOVA background... Mean Squared Deviations
+
+$$MS_{Total} = \frac{SS_{Total}}{df_{Total}}$$
+
+$$MS_{Predicted} = \frac{SS_{Predicted}}{df_{Predicted}}$$
+
+$$MS_{Error} = \frac{SS_{Error}}{df_{Error}}$$
+
+.content-box-green[
+#### $$F = \frac{MS_{Predicted}}{MS_{Error}}$$
+]
+
+---
+
+### Degrees of Freedom
+
+#### Derived from the number of sample statistics used in your computation:
+
+- e.g., for a standard deviation, you subtract all the raw scores from the mean
+
+- Since you used the sample mean, you used up 1 df
+
+- df = n - 1
+
+---
+
+### Degrees of Freedom
+
+#### In the denominator of the standard deviation, you are using a sample statistic, not a population parameter, so you have df = n - 1:
+
+- n - 1 reflects the fact that you used a statistic and if you know one number 
+(the mean) there is less uncertainty remaining
+- If you know the mean and you have 10 scores, then you only need 9 of the 
+remaining scores to predict all 10 of them
+
+#### Usually we have an F-table with associated degrees of freedom to show us whether the F-ratio is "statistically significant":
+
+- Numerator df = k 
+- Denominator df = n - k - 1
+
+---
+
+### Degrees of Freedom
+
+### $$df_{Total} = n - 1$$ 
+
+### $$df_{Predicted} = k$$ 
+
+### $$df_{Error} = n - k - 1$$
+
+## $$df_{Total} = df_{Predicted} + df_{Error}$$
+
+---
+layout: false
+class: middle
+
+```{r, tiktok, echo=F}
+tt_url <- "https://www.tiktok.com/@chelseaparlettpelleriti/video/6811647290709757189"
+tt <- tiktok_embed(tt_url)
+tt
+```
+
+---
+layout: false
+class: title-slide-final, left
+
+# References
+
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=F, message=F}
+bib <- ReadBib(here("slides", "assets", "bib", "ds4ling_refs.bib"), check = FALSE)
+ui <- "- "
+```
+
+```{r, print_refs, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
+writeLines(ui)
+print(bib[key = "wickham2016r"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+writeLines(ui)
+print(bib[key = "qass22_ch2"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+writeLines(ui)
+print(bib[key = "qass57_ch1"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+```
+
+- Figueredo, A. J. (2013).  Multiple Regression. *Statistical 
+Methods in Psychological Research*.
+
+
+

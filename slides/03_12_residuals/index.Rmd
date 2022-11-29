@@ -1,0 +1,336 @@
+---
+title   : 'Statistics for Linguists'
+subtitle: 'Day 3 - Residuals'
+author  : "Joseph V. Casillas, PhD"
+date    : "Rutgers University</br>Last update: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: assets
+    css: ["hygge", "rutgers", "rutgers-fonts"]
+    nature:
+      beforeInit: ["https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js", "https://platform.twitter.com/widgets.js"]
+      highlightStyle: default
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+    includes:
+      in_header: "../assets/partials/header.html"
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra-all-the-things, echo=FALSE}
+xaringanExtra::use_xaringan_extra(
+  c("tile_view", "panelset", "editable" 
+    #"scribble", "search", "webcam"
+    )
+)
+```
+
+```{r, 'helpers', echo=FALSE, message=F, warning=F}
+source(here::here("slides", "assets", "scripts", "helpers.R"))
+```
+
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=F, message=F}
+bib <- ReadBib(here("slides", "assets", "bib", "ds4ling_refs.bib"), check = FALSE)
+ui <- "- "
+```
+
+```{r 'global_setup', echo=FALSE}
+opts_chunk$set(fig.retina=2, cache=FALSE)
+```
+
+exclude: true
+class: title-slide-section-grey, middle
+
+
+# .white[What is Data Science again?]
+
+---
+exclude: true
+background-image: url("../../sources/img/workflow/data_science1.png")
+background-size: contain
+
+---
+exclude: true
+background-image: url("../../sources/img/workflow/data_science2.png")
+background-size: contain
+
+---
+exclude: true
+background-image: url("../../sources/img/workflow/data_science3.png")
+background-size: contain
+
+---
+exclude: true
+background-image: url("../../sources/img/workflow/datascience_workflow1.png")
+background-size: contain
+
+--
+exclude: true
+
+.center[.big[**You have learned how to version control this process!**]]
+
+---
+exclude: true
+background-image: url("../../sources/img/workflow/datascience_workflow2.png"), url(../../sources/img/workflow/workflow_10.png)
+background-size: 600px, 700px
+background-position: 15% 90%, 95% 40%
+
+--
+exclude: true
+
+.center[.big[**You have learned how to version control this process!**]]
+
+---
+exclude: true
+class: title-slide-section-grey, middle
+
+# .white[So what was version control  
+again?]
+
+--
+exclude: true
+background-image: url("../../sources/img/workflow/final_doc.png")
+background-size: 525px
+background-position: 100% 50%
+
+---
+exclude: true
+background-image: url("../../sources/img/workflow/datascience_workflow3.png")
+background-size: 600px
+background-position: 10% 50%
+
+# Don't forget the stats...
+
+--
+exclude: true
+
+.pull-right[
+
+```{r, warning=FALSE, message=FALSE, fig.retina=2, fig.height=5}
+library(tidyverse)
+ggplot(mtcars, aes(x = disp, y = mpg)) + 
+  geom_point() + 
+  {{geom_smooth(method = 'lm')}}
+```
+
+]
+
+---
+background-image: url("../../sources/img/workflow/datascience_workflow4.png")
+background-size: 500px
+background-position: 90% 50%
+
+# We do literate programming
+
+.pull-left[
+
+- This means we write code in a way that clearly documents 
+what we did.
+
+- Instead of writing code with the purpose of telling the 
+computer what to do, we write code that tells other humans 
+what we told the computer to do and *why*. 
+
+- Importantly, we don't separate our code from the report/essay/manuscript
+we are writing. Everyting is together, in a single document.  
+
+]
+
+---
+exclude: true
+
+class: center, middle
+
+# .black[In this class you have learned to...]
+
+--
+exclude: true
+
+### .big[.RUred[manage version controlled research projects]] in a way that facilitates collaboration and honesty
+
+--
+exclude: true
+
+### get and .big[.blue[tidy]] data
+
+--
+exclude: true
+
+### transform and .big[.RUred[visualize]] your data
+
+--
+exclude: true
+
+### fit statistical .big[.blue[models]] to your data and test hypotheses
+
+--
+exclude: true
+
+### .big[.black[communicate]] your results using .big[.RUred[literate programming]]
+
+---
+exclude: true
+
+class: center, middle
+
+## This is .big[**reproducible research**]
+
+---
+exclude: true
+
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/philosophy_of_science_stats.png)
+background-size: contain
+
+---
+layout: true
+
+# What we've seen
+
+- MRC
+
+- Linear regression
+
+- General linear model
+
+- Generalized linear model
+
+---
+
+background-image: url(./assets/img/lm_ex1.png)
+background-position: 100% 50%
+background-size: 750px
+
+---
+
+background-image: url(./assets/img/lm_ex2.png)
+background-position: 100% 50%
+background-size: 750px
+
+---
+
+background-image: url(./assets/img/lm_ex4.png)
+background-position: 100% 50%
+background-size: 750px
+
+---
+layout: false
+background-color: black
+background-image: url(./assets/img/lm_ex5.png)
+background-position: 100% 50%
+background-size: 750px
+
+# What we've seen
+
+.white[
+~~Frequentist~~  
+
+- **Bayesian** MRC
+
+- **Bayesian** Linear regression
+
+- **Bayesian** General linear model
+
+- **Bayesian** Generalized linear model
+
+]
+
+---
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/rstats_knowledge.png)
+background-size: contain
+
+---
+class: title-slide-section-grey, middle
+
+# Next steps
+
+---
+background-image: url(./assets/img/gelman_hill.png)
+background-position: 90% 50%
+
+# Moving forward
+
+.pull-left[
+- Unfortunately we don't have enough time to go into more detail
+
+- Your journey with programming and statistics is just getting started
+
+- Use your knowledge to think critically about what you read and about your own data
+
+- New techniques and methods are constantly coming out, but it 
+seems unlikely we will stray too far from the linear model
+
+<p></p>
+
+- Book recommendations
+  - Data Analysis Using Regression and Multlilevel-Hierarchicaal Models (Gelman & Hill, 2007)
+  - Regression and other stories (Gelman, Hill, & Vehtari, 2020)
+  - Statistical Rethinking (McElreath, 2015, 2020)
+]
+
+---
+background-image: url(https://images.tandf.co.uk/common/jackets/amazon/978148225/9781482253443.jpg)
+background-position: 90% 50%
+
+# Moving forward
+
+.pull-left[
+
+- Getting help
+  - stackoverflow.com
+  - coursera.con
+  - datacamp.com
+
+<p></p>
+
+- Coding (things to learn)
+  - functional programming
+  - leaving the tidyverse...
+
+<p></p>
+
+- Useful links for mixed effects models
+  - [Getting started](http://www.bodowinter.com/tutorial/bw_LME_tutorial1.pdf)
+  - [Intro](https://ourcodingclub.github.io/2017/03/15/mixed-models.html)
+  - [Conceptual understanding](http://mfviz.com/hierarchical-models/)
+  - [Logistic regression](http://www.karlin.mff.cuni.cz/~pesta/NMFM404/mixed.html)
+  - [Specifying random effects](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#model-specification)
+  - [More links](https://socialbyselection.wordpress.com/2015/07/14/mixed-effect-models/)
+
+]
+
+---
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/rstats_stackoverflow.png)
+background-size: 500px
+
+---
+exclude: true
+
+`r AutoCite(bib, c("wickham2016r", "qass93_ch2", "qass93_ch3", "qass93_ch4"))`
+
+---
+layout: false
+class: title-slide-final
+background-image: url(https://github.com/jvcasillas/ru_xaringan/raw/master/img/logo/ru_shield.png)
+background-size: 55px
+background-position: 9% 15%
+
+</br></br></br>
+
+# Data Science for Linguists
+
+## www.ds4ling.jvcasillas.com/workshops/
+
+
+</br>
+
+|                                                                                                            |                                   |
+| :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
+| <a href="mailto:joseph.casillas@rutgers.edu">.RUred[<i class="fa fa-paper-plane fa-fw"></i>]               | joseph.casillas@rutgers.edu       |
+| <a href="http://twitter.com/jvcasill">.RUred[<i class="fa fa-twitter fa-fw"></i>]                          | @jvcasill                         |
+| <a href="http://github.com/jvcasillas">.RUred[<i class="fa fa-github fa-fw"></i>]                          | @jvcasillas                       |
+
+# Thanks!

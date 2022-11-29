@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Statistics for Linguists</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Joseph V. Casillas, PhD" />
+    <script src="assets/header-attrs/header-attrs.js"></script>
+    <link href="assets/remark-css/hygge.css" rel="stylesheet" />
+    <link href="assets/remark-css/rutgers.css" rel="stylesheet" />
+    <link href="assets/remark-css/rutgers-fonts.css" rel="stylesheet" />
+    <link href="assets/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="assets/tile-view/tile-view.js"></script>
+    <link href="assets/panelset/panelset.css" rel="stylesheet" />
+    <script src="assets/panelset/panelset.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x9307c3ae4d845c2a4449403f9963454","expires":14}</script>
+    <script src="assets/himalaya/himalaya.js"></script>
+    <script src="assets/js-cookie/js.cookie.js"></script>
+    <link href="assets/editable/editable.css" rel="stylesheet" />
+    <script src="assets/editable/editable.js"></script>
+    <script src="https://use.fontawesome.com/5235085b15.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Statistics for Linguists
+]
+.subtitle[
+## Day 3 - Residuals
+]
+.author[
+### Joseph V. Casillas, PhD
+]
+.date[
+### Rutgers University</br>Last update: 2022-11-29
+]
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+exclude: true
+class: title-slide-section-grey, middle
+
+
+# .white[What is Data Science again?]
+
+---
+exclude: true
+background-image: url("../../sources/img/workflow/data_science1.png")
+background-size: contain
+
+---
+exclude: true
+background-image: url("../../sources/img/workflow/data_science2.png")
+background-size: contain
+
+---
+exclude: true
+background-image: url("../../sources/img/workflow/data_science3.png")
+background-size: contain
+
+---
+exclude: true
+background-image: url("../../sources/img/workflow/datascience_workflow1.png")
+background-size: contain
+
+--
+exclude: true
+
+.center[.big[**You have learned how to version control this process!**]]
+
+---
+exclude: true
+background-image: url("../../sources/img/workflow/datascience_workflow2.png"), url(../../sources/img/workflow/workflow_10.png)
+background-size: 600px, 700px
+background-position: 15% 90%, 95% 40%
+
+--
+exclude: true
+
+.center[.big[**You have learned how to version control this process!**]]
+
+---
+exclude: true
+class: title-slide-section-grey, middle
+
+# .white[So what was version control  
+again?]
+
+--
+exclude: true
+background-image: url("../../sources/img/workflow/final_doc.png")
+background-size: 525px
+background-position: 100% 50%
+
+---
+exclude: true
+background-image: url("../../sources/img/workflow/datascience_workflow3.png")
+background-size: 600px
+background-position: 10% 50%
+
+# Don't forget the stats...
+
+--
+exclude: true
+
+.pull-right[
+
+
+```r
+library(tidyverse)
+ggplot(mtcars, aes(x = disp, y = mpg)) + 
+  geom_point() + 
+*  geom_smooth(method = 'lm')
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-1-1.png" width="504" /&gt;
+
+]
+
+---
+background-image: url("../../sources/img/workflow/datascience_workflow4.png")
+background-size: 500px
+background-position: 90% 50%
+
+# We do literate programming
+
+.pull-left[
+
+- This means we write code in a way that clearly documents 
+what we did.
+
+- Instead of writing code with the purpose of telling the 
+computer what to do, we write code that tells other humans 
+what we told the computer to do and *why*. 
+
+- Importantly, we don't separate our code from the report/essay/manuscript
+we are writing. Everyting is together, in a single document.  
+
+]
+
+---
+exclude: true
+
+class: center, middle
+
+# .black[In this class you have learned to...]
+
+--
+exclude: true
+
+### .big[.RUred[manage version controlled research projects]] in a way that facilitates collaboration and honesty
+
+--
+exclude: true
+
+### get and .big[.blue[tidy]] data
+
+--
+exclude: true
+
+### transform and .big[.RUred[visualize]] your data
+
+--
+exclude: true
+
+### fit statistical .big[.blue[models]] to your data and test hypotheses
+
+--
+exclude: true
+
+### .big[.black[communicate]] your results using .big[.RUred[literate programming]]
+
+---
+exclude: true
+
+class: center, middle
+
+## This is .big[**reproducible research**]
+
+---
+exclude: true
+
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/philosophy_of_science_stats.png)
+background-size: contain
+
+---
+layout: true
+
+# What we've seen
+
+- MRC
+
+- Linear regression
+
+- General linear model
+
+- Generalized linear model
+
+---
+
+background-image: url(./assets/img/lm_ex1.png)
+background-position: 100% 50%
+background-size: 750px
+
+---
+
+background-image: url(./assets/img/lm_ex2.png)
+background-position: 100% 50%
+background-size: 750px
+
+---
+
+background-image: url(./assets/img/lm_ex4.png)
+background-position: 100% 50%
+background-size: 750px
+
+---
+layout: false
+background-color: black
+background-image: url(./assets/img/lm_ex5.png)
+background-position: 100% 50%
+background-size: 750px
+
+# What we've seen
+
+.white[
+~~Frequentist~~  
+
+- **Bayesian** MRC
+
+- **Bayesian** Linear regression
+
+- **Bayesian** General linear model
+
+- **Bayesian** Generalized linear model
+
+]
+
+---
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/rstats_knowledge.png)
+background-size: contain
+
+---
+class: title-slide-section-grey, middle
+
+# Next steps
+
+---
+background-image: url(./assets/img/gelman_hill.png)
+background-position: 90% 50%
+
+# Moving forward
+
+.pull-left[
+- Unfortunately we don't have enough time to go into more detail
+
+- Your journey with programming and statistics is just getting started
+
+- Use your knowledge to think critically about what you read and about your own data
+
+- New techniques and methods are constantly coming out, but it 
+seems unlikely we will stray too far from the linear model
+
+&lt;p&gt;&lt;/p&gt;
+
+- Book recommendations
+  - Data Analysis Using Regression and Multlilevel-Hierarchicaal Models (Gelman &amp; Hill, 2007)
+  - Regression and other stories (Gelman, Hill, &amp; Vehtari, 2020)
+  - Statistical Rethinking (McElreath, 2015, 2020)
+]
+
+---
+background-image: url(https://images.tandf.co.uk/common/jackets/amazon/978148225/9781482253443.jpg)
+background-position: 90% 50%
+
+# Moving forward
+
+.pull-left[
+
+- Getting help
+  - stackoverflow.com
+  - coursera.con
+  - datacamp.com
+
+&lt;p&gt;&lt;/p&gt;
+
+- Coding (things to learn)
+  - functional programming
+  - leaving the tidyverse...
+
+&lt;p&gt;&lt;/p&gt;
+
+- Useful links for mixed effects models
+  - [Getting started](http://www.bodowinter.com/tutorial/bw_LME_tutorial1.pdf)
+  - [Intro](https://ourcodingclub.github.io/2017/03/15/mixed-models.html)
+  - [Conceptual understanding](http://mfviz.com/hierarchical-models/)
+  - [Logistic regression](http://www.karlin.mff.cuni.cz/~pesta/NMFM404/mixed.html)
+  - [Specifying random effects](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#model-specification)
+  - [More links](https://socialbyselection.wordpress.com/2015/07/14/mixed-effect-models/)
+
+]
+
+---
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/rstats_stackoverflow.png)
+background-size: 500px
+
+---
+exclude: true
+
+(Wickham and Grolemund, 2016; Hardy, 1993b; Hardy, 1993c; Hardy, 1993d)
+
+---
+layout: false
+class: title-slide-final
+background-image: url(https://github.com/jvcasillas/ru_xaringan/raw/master/img/logo/ru_shield.png)
+background-size: 55px
+background-position: 9% 15%
+
+&lt;/br&gt;&lt;/br&gt;&lt;/br&gt;
+
+# Data Science for Linguists
+
+## www.ds4ling.jvcasillas.com/workshops/
+
+
+&lt;/br&gt;
+
+|                                                                                                            |                                   |
+| :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
+| &lt;a href="mailto:joseph.casillas@rutgers.edu"&gt;.RUred[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | joseph.casillas@rutgers.edu       |
+| &lt;a href="http://twitter.com/jvcasill"&gt;.RUred[&lt;i class="fa fa-twitter fa-fw"&gt;&lt;/i&gt;]                          | @jvcasill                         |
+| &lt;a href="http://github.com/jvcasillas"&gt;.RUred[&lt;i class="fa fa-github fa-fw"&gt;&lt;/i&gt;]                          | @jvcasillas                       |
+
+# Thanks!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "default",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Statistics for Linguists</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Joseph V. Casillas, PhD" />
+    <script src="assets/header-attrs/header-attrs.js"></script>
+    <link href="assets/remark-css/hygge.css" rel="stylesheet" />
+    <link href="assets/remark-css/rutgers.css" rel="stylesheet" />
+    <link href="assets/remark-css/rutgers-fonts.css" rel="stylesheet" />
+    <link href="assets/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="assets/tile-view/tile-view.js"></script>
+    <link href="assets/panelset/panelset.css" rel="stylesheet" />
+    <script src="assets/panelset/panelset.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x000da3391304a26aaeac216c84b4750","expires":14}</script>
+    <script src="assets/himalaya/himalaya.js"></script>
+    <script src="assets/js-cookie/js.cookie.js"></script>
+    <link href="assets/editable/editable.css" rel="stylesheet" />
+    <script src="assets/editable/editable.js"></script>
+    <script src="https://use.fontawesome.com/5235085b15.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Statistics for Linguists
+]
+.subtitle[
+## Day 2 - Multilevel models
+]
+.author[
+### Joseph V. Casillas, PhD
+]
+.date[
+### Rutgers University</br>Last update: 2022-11-29
+]
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+class: title-slide-section-grey, middle
+
+# Next steps
+
+---
+layout: true
+
+# What we've seen
+
+- MRC
+
+- Linear regression
+
+- General linear model
+
+- Generalized linear model
+
+---
+
+background-image: url(./assets/img/lm_ex1.png)
+background-position: 90% 50%
+background-size: 750px
+
+---
+
+background-image: url(./assets/img/lm_ex2.png)
+background-position: 90% 50%
+background-size: 750px
+
+---
+layout: false
+
+# What about repeated measures designs?
+
+- Whenever we have more than one data point from the same 
+participant we are dealing with a type of repeated measures 
+design
+  - between subjects factor
+  - within subjects factor
+
+&lt;p&gt;&lt;/p&gt;
+
+- Everything we have done this semester has been under the 
+assumption that we have one data point per participant (i.e., 
+no within subjects factors)
+
+- This is because one of the assumptions of our models was that 
+there was no autocorrelation, i.e., that the data were independent 
+
+- Repeated measures designs introduce autocorrelation into the 
+model. Why?
+
+---
+
+# What's the big deal?
+
+- Disregarding lack of independence = pseudo-replication
+
+- In other words, replicating the data as though they were 
+independent when they aren’t
+
+- This will inflate your degrees of freedom, completely bias your 
+parameter estimates and make your p-values meaningless
+
+---
+
+# What does a repeated measures design look like?
+
+.pull-left[
+- This dataset has the weight of 50 different chicks at 12 
+different time points
+
+- Notice that the first 12 rows come from the same `chick` (chick 
+1)
+
+- In other words, `Time` can be thought of as a continuous time series 
+variable (within-subjects) that would violate our assumptions of independence
+
+- `Diet`, on the other hand, is a between-subjects factor (you 
+can't be on more than one diet at a time)
+
+- Notice that both `Time` and `Diet` appear in this dataset as 
+numeric values. 
+
+- You have to *think* about your data to make sure you understand 
+what type of variables you have.
+]
+
+.pull-right[
+
+```r
+head(ChickWeight, 20)
+```
+
+```
+## Grouped Data: weight ~ Time | Chick
+##    weight Time Chick Diet
+## 1      42    0     1    1
+## 2      51    2     1    1
+## 3      59    4     1    1
+## 4      64    6     1    1
+## 5      76    8     1    1
+## 6      93   10     1    1
+## 7     106   12     1    1
+## 8     125   14     1    1
+## 9     149   16     1    1
+## 10    171   18     1    1
+## 11    199   20     1    1
+## 12    205   21     1    1
+## 13     40    0     2    1
+## 14     49    2     2    1
+## 15     58    4     2    1
+## 16     72    6     2    1
+## 17     84    8     2    1
+## 18    103   10     2    1
+## 19    122   12     2    1
+## 20    138   14     2    1
+```
+]
+
+---
+
+# What can we do?
+
+- Currently, the most popular solution is to use a multi-level or 
+hierarchical model
+
+- These models are commonly referred to as mixed effects models 
+
+- They include both fixed effects and random effects
+
+- They provide a flexible framework that allows us to account for 
+the hierarchical structure of our data (within-subjects variables, 
+time-series data, etc.)
+
+- Building on our knowledge of the linear model, understanding 
+the basic idea of mixed effects models is trivial
+
+---
+
+# How does it work? 
+
+### Standard linear model
+
+- Recall our formula for fitting a linear model
+
+--
+
+.Large[$$\hat{y} = \alpha + \beta X + \epsilon$$]
+
+--
+
+.Large[$$response = intercept + slope * predictor + error$$]
+
+--
+
+- We fit these models in R using `lm()` or `glm()`  
+##.center[
+```
+lm(criterion ~ predictor, data = my_data)
+```
+]
+
+- In a mixed effects model, what we know as *predictors* are 
+called **fixed effects**
+
+--
+
+- The novel aspect of a mixed effects model is that it also 
+includes .blue[random effects]
+
+- Random effects allow us to account for non-independence
+
+---
+
+# How does it work? 
+
+### Mixed effects model
+
+- A mixed effects model *mixes* both fixed effects and random effects
+
+--
+
+.Large[$$\hat{y} = \alpha + \color{red}{\beta}\color{blue}{X} + \color{green}{u}\color{purple}{Z} + \epsilon $$]
+
+--
+
+.Large[$$response = intercept + \color{red}{slope} \times \color{blue}{FE} + \color{green}{u} \times \color{purple}{RE} + error$$]
+
+--
+
+- We fit these models in R using `lmer()` or `glmer()` from the `lme4` package (there are other options as well)
+
+.center[
+```
+lmer(criterion ~ fixed_effect + (1|random_effect), data = my_data)
+```
+]
+
+---
+
+# What is a random effect? 
+
+- This is actually a really nuanced question and nobody has a good 
+answer
+
+- Some people use descriptions like the following:
+
+| fixed                     | random                 |
+| :------------------------ | :--------------------- |
+| repeatable                | non repeatable         |
+| systematic influence      | random influence       |
+| exhaust the pop.          | sample the pop.        |
+| generally of interest     | often not of interest  |
+| continuous or categorical | have to be categorical |
+
+- ...but you will always find exceptions to this
+
+- Most of the time you will see subjects and items as random effects 
+(things that are repeated in the design)
+
+- This typically implies that the model includes **random intercepts**, 
+and/or .blue[random slopes]
+
+- Instead of trying to define random effects, let's try to 
+understand what they do
+
+---
+
+&lt;img src="index_files/figure-html/lmem_plot_raw-1.png" width="1008" /&gt;
+
+---
+class: middle
+
+.pull-left[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; subjects &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; time &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; response &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.996419 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.175372 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.929944 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.546444 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 26.201509 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24.145782 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 25.547781 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.658040 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 27.613654 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 34.990204 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42.634632 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 35.865828 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40.808584 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40.159724 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 34.220197 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 41.992587 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 44.116814 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 48.126674 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 57.082707 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 57.061609 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 23.216578 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24.683550 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 32.385500 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p_02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 33.543699 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+&lt;/br&gt;&lt;/br&gt;&lt;/br&gt;&lt;/br&gt;
+
+.pull-right[
+- The dataframe includes values of the `response` variable at 20 
+different time points for each participant (n = 10)
+
+- We could model this as:  
+```
+lm(response ~ time, data = my_df)
+```
+
+- But this would violate our assumption of independence (and would 
+produce a terribly misspecified model)
+]
+
+---
+
+&lt;img src="index_files/figure-html/lmem_plot_lm-1.png" width="1008" /&gt;
+
+---
+
+# Let's include `subjects` as a random effect
+
+- We will do this by giving subjects a random intercept
+
+- In other words, we will allow the intercepts to vary for each 
+participant (as opposed to modeling just 1 intercept)
+
+.center[
+```
+lmer(response ~ time + (1|subjects), data = my_df)
+```
+]
+
+- What would this look like?
+
+---
+
+&lt;img src="index_files/figure-html/lmem_plot_subj-1.png" width="1008" /&gt;
+
+---
+
+&lt;img src="index_files/figure-html/lmem_plot_ranInt-1.png" width="1008" /&gt;
+
+---
+background-image: url(../assets/img/pensar2.png)
+background-position: 90% 50%
+
+# What did we do?
+
+.pull-left[
+- We are taking into account the idiosyncratic differences 
+associated with each individual subject
+
+- By giving each subject its own intercept we are informing the 
+model that each individual has a different starting point in 
+the time course (when `time` = 0)
+
+&lt;p&gt;&lt;/p&gt;
+
+- In general this makes sense because some people...
+  - are faster/slower responders
+  - speak faster/slower
+  - have higher/lower pitched voices
+
+&lt;p&gt;&lt;/p&gt;
+
+- We can also take into account the fact that some people...
+  - slow down during an experiment
+  - respond more/less accurately over time
+  - learn at different rates
+]
+
+---
+
+&lt;img src="index_files/figure-html/lmem_plot_ranSlopes-1.png" width="1008" /&gt;
+
+---
+background-image: url(../assets/img/pensar2.png)
+background-position: 90% 50%
+
+# What did we do?
+
+.pull-left[
+- The model now allows the random intercepts to vary for each 
+individual for the effect `time`
+
+- This means we included a random slope for each participant
+
+- By adding a random slope for the effect `time` we take into 
+account the fact that `response` change for each individual at 
+a different rate
+
+- Under the hood, the model uses this information to calculate 
+the best fit line for all of the data
+
+- This method is called partial pooling and represents one of 
+the most important (and least understood) aspects of mixed 
+effects modeling
+]
+
+---
+
+.pull-left[
+&lt;/br&gt;&lt;/br&gt;&lt;/br&gt;&lt;/br&gt;
+
+```
+lmer(response ~ time + (1 + time|subjects), data = my_df)
+```
+
+- Again, `(1 + time|subjects)` represents the random structure 
+of the model
+
+- Anything to the right of `|` is a random intercept
+
+- Anything to the left of `|` is given a random slope for the 
+effect specified to the right
+
+- Thus, `(1 + time|subjects)` means random slopes for the effect `time` for each subject
+
+- It is rarely a good idea to only use random intercepts
+]
+
+.pull-right[
+&lt;img src="index_files/figure-html/lmem_plot_ranSlopes2-1.png" width="504" /&gt;
+]
+
+---
+
+# Great news!
+
+- We have spent the entire semester building up our knowledge 
+of the linear model so that we would be prepared to understand 
+mixed effects models 
+
+- Why? They are the standard in speech sciences now
+
+--
+
+&lt;p&gt;&lt;/p&gt;
+
+- Everything that you have learned in this class applies 
+to a mixed effects model 
+  - model interpretation
+  - nested model comparisons
+  - treatment of categorical factors
+  - centering, standardizing, and other transformations
+
+--
+
+&lt;p&gt;&lt;/p&gt;
+
+- What about GLMs?
+  - Them too!
+  - You can fit mixed effects models for count data and 
+  binary outcomes using `glmer()`
+  - All you have to do is specify the distribution and the 
+  linking function
+
+--
+
+```
+glmer(response ~ fixed_effect + (1 + fixed_effect|participant), family = binomial(link = "logit"))
+```
+
+```
+glmer(counts   ~ fixed_effect + (1 + fixed_effect|participant), family = poisson(link = "log"))
+```
+
+
+
+---
+
+&lt;iframe src="http://mfviz.com/hierarchical-models/" height="100%" width="100%" title="mlm" style="border:none;"&gt;&lt;/iframe&gt;
+
+---
+class: title-slide-section-grey, middle
+
+# Understanding partial pooling
+
+.footnote[
+
+Based on [Bates (2011)](http://lme4.r-forge.r-project.org/slides/2011-03-16-Amsterdam/2Longitudinal.pdf) and [Mahr (2017)](https://www.tjmahr.com/plotting-partial-pooling-in-mixed-effects-models/)
+
+]
+
+---
+
+# Partial pooling
+
+### `sleepstudy` dataset
+
+.pull-left[
+
+- Part of `lme4` package
+
+- Criterion = reaction time (`Reaction`)
+
+- Predictor = \# of days of sleep deprivation (`Days`)
+
+- 10 observations per participant
+
+- \+2 fake participants w/ incomplete data
+
+]
+
+.pull-right[
+
+
+
+
+```r
+str(df_sleep)
+```
+
+```
+## tibble [183 × 3] (S3: tbl_df/tbl/data.frame)
+##  $ Reaction: num [1:183] 250 259 251 321 357 ...
+##  $ Days    : num [1:183] 0 1 2 3 4 5 6 7 8 9 ...
+##  $ Subject : chr [1:183] "308" "308" "308" "308" ...
+```
+
+```r
+head(df_sleep)
+```
+
+```
+## # A tibble: 6 × 3
+##   Reaction  Days Subject
+##      &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  
+## 1     250.     0 308    
+## 2     259.     1 308    
+## 3     251.     2 308    
+## 4     321.     3 308    
+## 5     357.     4 308    
+## 6     415.     5 308
+```
+
+]
+
+---
+class: middle
+
+&lt;img src="index_files/figure-html/ss-plot0-1.png" width="1008" /&gt;
+
+---
+class: middle
+
+&lt;img src="index_files/figure-html/ss-plot1-1.png" width="1008" /&gt;
+
+---
+
+# No pooling
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Subject &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Intercept &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Slope_Days &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Model &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 308 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 244.1927 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.764702 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 309 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 205.0549 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.261785 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 310 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 203.4842 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.114899 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 330 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 289.6851 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.008073 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 331 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 285.7390 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.266019 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 332 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 264.2516 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.566768 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 275.0191 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.142046 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 334 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 240.1629 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.253141 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 335 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 263.0347 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.881034 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 337 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 290.1041 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.025974 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 349 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 215.1118 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13.493933 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 350 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 225.8346 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.504017 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 351 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 261.1470 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.433498 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 352 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 276.3721 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13.566549 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 369 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 254.9681 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.348109 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 370 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 210.4491 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.056151 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 371 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 253.6360 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.188445 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 372 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 267.0448 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.298073 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 374 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 286.0000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.000000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; No pooling &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+???
+
+This is the same as fitting a separate line for each cluster of data
+
+The models are unaware that any of the other participants exist. 
+
+---
+class: middle
+
+&lt;img src="index_files/figure-html/ss-plot2-1.png" width="1008" /&gt;
+
+---
+
+# Complete pooling
+
+
+```r
+summary(m_pooled)
+```
+
+```
+## 
+## Call:
+## lm(formula = Reaction ~ Days, data = df_sleep)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -110.646  -27.951    1.829   26.388  139.875 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  252.321      6.406  39.389  &lt; 2e-16 ***
+## Days          10.328      1.210   8.537 5.48e-15 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 47.43 on 181 degrees of freedom
+## Multiple R-squared:  0.2871,	Adjusted R-squared:  0.2831 
+## F-statistic: 72.88 on 1 and 181 DF,  p-value: 5.484e-15
+```
+
+---
+class: middle
+
+&lt;img src="index_files/figure-html/ss-plot3-1.png" width="1008" /&gt;
+
+???
+
+Complete pooling is the same line for each subject, sometimes it is a good fit, sometimes it is way off (i.e., 309)
+
+---
+class: middle
+
+&lt;img src="index_files/figure-html/ss-plot4-1.png" width="1008" /&gt;
+
+???
+
+Complete pooling is the same line for each subject, sometimes it is a good fit, sometimes it is way off (i.e., 309)
+
+subj 373 is interesting... when you know very little, best guess is complete pooling estimate
+
+no pooling model follows the data, steep slope for 308, negative slope for 335.
+but... moving from one cluster (subj) to another, they forget everything about the previous clusters (no pooling = model with amnesia)
+
+---
+background-color: black
+class: center, middle
+
+# Can we improve estimates with partial pooling?
+
+???
+
+The mixed effects model will pool information from all the lines to improve estimates of each individual line. 
+
+after seeing data from participants with complete data, the model makes an informed guess about the lines for the participants with incomplete data
+
+---
+class: middle
+
+.center[
+### `Reaction ~ 1 + Days + (1 + Days | Subject)`
+]
+
+&lt;br&gt;
+
+--
+
+- We allow the effect of `Days` to vary for each `Subject`
+
+--
+
+- By-subject random intercepts with random slope for `Days`
+
+- `lmer(Reaction ~ 1 + Days + (1 + Days | Subject), data = df_sleep)`
+
+---
+class: middle
+
+.pull-left[
+
+
+```
+## Linear mixed model fit by REML ['lmerMod']
+## Formula: Reaction ~ 1 + Days + (1 + Days | Subject)
+##    Data: df_sleep
+## 
+## REML criterion at convergence: 1771.4
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -3.9707 -0.4703  0.0276  0.4594  5.2009 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev. Corr
+##  Subject  (Intercept) 582.72   24.140       
+##           Days         35.03    5.919   0.07
+##  Residual             649.36   25.483       
+## Number of obs: 183, groups:  Subject, 20
+## 
+## Fixed effects:
+##             Estimate Std. Error t value
+## (Intercept)  252.543      6.433  39.257
+## Days          10.452      1.542   6.778
+## 
+## Correlation of Fixed Effects:
+##      (Intr)
+## Days -0.137
+```
+
+]
+
+.pull-right[
+
+- Most of this will look familiar
+
+- Fixed effects estimates (and interpretations) work just like lm, glm, etc. 
+
+- What's new? The random effects estimates
+
+]
+
+---
+
+### **Partial pooling**
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Subject &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Intercept &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Slope_Days &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Model &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 308 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 253.9478 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.6264337 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 309 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 211.7331 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.7319161 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 310 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 213.1582 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.9061511 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 330 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 275.1425 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.6436007 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 331 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 273.7286 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.3862730 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 332 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 260.6504 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.1632571 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 268.3683 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.2246059 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 334 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 244.5524 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.4837802 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 335 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 251.3702 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.3355788 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 337 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 286.2319 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.1090424 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 349 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 226.7663 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.5531844 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 350 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 238.7807 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.0156827 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 351 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 256.2344 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.4119456 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 352 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 272.3511 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13.9920878 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 369 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 254.9484 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.2985770 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 370 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 226.3701 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.2027877 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 371 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 252.5051 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.4335409 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 372 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 263.8916 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.7253429 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 373 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 248.9753 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.3915288 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 374 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 271.1450 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.0782516 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Partial pooling &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+&lt;img src="index_files/figure-html/plot-all-pooling-types-1.png" width="1008" /&gt;
+
+---
+class: middle
+
+&lt;img src="index_files/figure-html/plot-all-pooling-types-subset-1.png" width="1008" /&gt;
+
+???
+
+no pooling and partial pooling estimates are generally similar
+
+if they differ, the partial pooling model estimate is pulled slightly towards the complete-pooling line (shrinkage).
+
+---
+background-image: url(https://i.pinimg.com/originals/65/8b/7c/658b7c3e1ace3cb6fc6bf7a6fa7748b9.jpg)
+background-size: contain
+
+&lt;!-- costanza shirnkage meme --&gt;
+
+---
+background-color: black
+
+
+```
+## Inverted geom defaults of fill and color/colour.
+## To change them back, use invert_geom_defaults().
+```
+
+&lt;img src="index_files/figure-html/topo-map-1.png" width="1008" /&gt;
+
+---
+class: middle, center
+background-color: black
+
+
+&lt;img src="index_files/figure-html/partial-pooling-summary-1.png" width="864" /&gt;
+
+---
+class: middle
+background-color: black
+
+.pull-left[
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+.white[
+- Multilevel models use the grouping variables to learn about the nested structure of the data
+
+- The model can use this information to make educated guesses when there is incomplete information
+
+- The model takes advantage of partial pooling, producing shrinkage
+
+- This builds skepticism into the model with regard to extreme values 
+]
+]
+
+.pull-right[
+
+&lt;img src="index_files/figure-html/partial-pooling-summary2-1.png" width="504" /&gt;
+]
+
+---
+exclude: true
+
+(Wickham and Grolemund, 2016; Hardy, 1993b; Hardy, 1993c; Hardy, 1993d)
+
+---
+layout: false
+class: title-slide-final, left
+
+# References
+
+[1] W. Berry and S. Feldman. "Multicollinearity". In: _Multiple
+Regression in Practice_. Ed. by W. Berry and S. Feldman. Sage University
+Paper Series on Quantitative Applications in the Social Sciences - 50.
+Newbury Park, CA: Sage, 1985, pp. 37-50. ISBN: 9780803920545.
+
+[2] W. Berry and S. Feldman. "Specification Error". In: _Multiple
+Regression in Practice_. Ed. by W. Berry and S. Feldman. Sage University
+Paper Series on Quantitative Applications in the Social Sciences - 50.
+Newbury Park, CA: Sage, 1985, pp. 18-25. ISBN: 9780803920545.
+
+[3] M. Hardy. "Assessing Group Differences in Effects". In: _Regression
+with Dummy Variables_. Ed. by M. Hardy. Sage University Paper Series on
+Quantitative Applications in the Social Sciences - 93. Newbury Park, CA:
+Sage, 1993, pp. 29-63. ISBN: 9780803951280.
+
+[4] M. Hardy. "Creating Dummy Variables". In: _Regression with Dummy
+Variables_. Ed. by M. Hardy. Sage University Paper Series on Quantitative
+Applications in the Social Sciences - 93. Newbury Park, CA: Sage, 1993,
+pp. 7-17. ISBN: 9780803951280.
+
+[5] M. Hardy. "Using Dummy Variables as Regressors". In: _Regression with
+Dummy Variables_. Ed. by M. Hardy. Sage University Paper Series on
+Quantitative Applications in the Social Sciences - 93. Newbury Park, CA:
+Sage, 1993, pp. 18-28. ISBN: 9780803951280.
+
+[6] M. Lewis-Beck. "Multiple Regression". In: _Applied Regression: An
+Introduction_. Ed. by M. Lewis-Beck. Sage University Paper Series on
+Quantitative Applications in the Social Sciences - 22. Newbury Park, CA:
+Sage, 1980, pp. 47-74. ISBN: 9781483381497.
+
+[7] L. Schroeder, D. Sjoquist, and P. Stephan. "Multiple Linear
+Regression". In: _Understanding Regression Analysis: An Introductory
+Guide_. Ed. by L. Schroeder, D. Sjoquist and P. Stephan. Sage University
+Paper Series on Quantitative Applications in the Social Sciences - 57.
+Newbury Park, CA: Sage, 1986, pp. 29-35. ISBN: 9780803927582.
+
+[8] L. Schroeder, D. Sjoquist, and P. Stephan. "Problems and Issues of
+Linear Regression". In: _Understanding Regression Analysis: An
+Introductory Guide_. Ed. by L. Schroeder, D. Sjoquist and P. Stephan.
+Sage University Paper Series on Quantitative Applications in the Social
+Sciences - 57. Newbury Park, CA: Sage, 1986, pp. 65-80. ISBN:
+9780803927582.
+
+[9] H. Wickham and G. Grolemund. _R for Data Science: Import, Tidy,
+Transform, Visualize, and Model Data_. O'Reilly Media, 2016.
+
+[5] Bates, D. (2011). *Mixed models in R using the lme4 package Part 2: Longitudinal data, modeling interactions*. http://lme4.r-forge.r-project.org/slides/2011-03-16-Amsterdam/2Longitudinal.pdf
+
+[6] Mahr, T. (2017). *Plotting partial pooling in mixed-effects models*. https://www.tjmahr.com/plotting-partial-pooling-in-mixed-effects-models/
+
+[7] Mahr, T. (2019). *Another mixed effects model visualization*. https://www.tjmahr.com/another-mixed-effects-model-visualization/
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "default",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

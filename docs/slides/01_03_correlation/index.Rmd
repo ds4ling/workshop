@@ -1,0 +1,921 @@
+---
+title   : 'Statistics for Linguists'
+subtitle: 'Day 1 - Bivariate correlation'
+author  : "Joseph V. Casillas, PhD"
+date    : "Rutgers University</br>Last update: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: assets
+    css: ["hygge", "rutgers", "rutgers-fonts"]
+    nature:
+      beforeInit: ["https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js", "https://platform.twitter.com/widgets.js"]
+      highlightStyle: default
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+    includes:
+      in_header: "../assets/partials/header.html"
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra-all-the-things, echo=FALSE}
+xaringanExtra::use_xaringan_extra(
+  c("tile_view", "panelset", "editable", "animate", "tachyons", "webcam")
+)
+```
+
+```{r, 'helpers', echo=FALSE, message=F, warning=F}
+source(here::here("slides", "assets", "scripts", "helpers.R"))
+read_chunk(here::here("slides", "01_03_correlation", "assets", "scripts", "correlation.R"))
+```
+
+
+
+
+class: inverse, middle
+
+<blockquote align='center' class="twitter-tweet" data-lang="de">
+<a href="https://twitter.com/juliomayol/status/960242979171717123"></a>
+</blockquote>
+
+---
+exclude: true
+class: center, middle
+
+# But first...
+
+---
+exclude: true
+
+layout: true
+
+# Statistical Assumptions
+
+---
+exclude: true
+
+background-image: url(../assets/img/pensar2.png)
+background-size: 400px
+background-position: 90% 50%
+
+<!-- Figueroa - NEWTONIAN WORLDVIEW -->
+
+### Statistics are about more than just mathematics...
+
+.pull-left[
+
+- Where do statistical assumptions come from?
+
+- Who made these statistical assumptions and why?
+
+- Are statistical assumptions truly consistent with the nature of reality?
+
+]
+
+---
+exclude: true
+
+### Where do mathematical concepts in general come from?
+
+- They are influenced by worldviews/paradigms/research traditions
+
+  - Choices are informed, and they need to be logically thought out
+
+- Statistics can be mathematically valid without answering the original research 
+question (what you really want to know)
+
+  - We need conceptual as well as mathematical validity
+
+---
+exclude: true
+
+layout: false
+background-image: url(https://afajournal.org/media/2370/072017worldview.jpg)
+background-size: 1500px
+
+---
+exclude: true
+
+background-image: url(https://visualunit.files.wordpress.com/2010/12/worldview_survey2.png)
+background-position: 100% 50%
+background-size: 600px
+
+# Statistical World-Views
+
+.pull-left[
+
+### Two major world views (Weltanschauungen) have historically influenced the field of Statistics:
+
+1. The Newtonian Worldview
+
+2. The Darwinian Worldview
+
+]
+
+---
+exclude: true
+
+background-image: url(https://theancientwebgreece.files.wordpress.com/2017/09/bc284-bob5_just2.jpg?w=337&zoom=2)
+background-size: contain
+background-position: 100%
+
+.pull-left[
+
+### Plato (380 BC) The Republic
+
+- Believed in absolute God-given categories
+- Things possess an essence of a type (e.g., species)
+- Individual variations are “imperfect reflections” of ideal types (eidolon)... 
+therefore <u>not important</u>
+- We can't trust our sensory perceptions... we can only arrive at truth using 
+pure reason
+
+### Aristotle (350 BC) De Partibus Animalium
+
+- Different idea of categories than Plato
+- Tried to create a taxonomy of animals
+- Taxonomy based on specific parts of animals that define them as a part of 
+group
+- Category membership defined by having a specific feature that members of 
+other groups don’t possess
+  - Birds have wings, but monkeys don’t, so only winged animals could be 
+  considered birds
+
+]
+
+---
+exclude: true
+
+class: middle
+
+### Both philosophers believed in categories:
+
+- But their definition of what categories were and where they came from was 
+discrepant
+
+--
+exclude: true
+
+.pull-left[
+
+### Aristotle
+
+- Categories are inherent in the individual
+- Individuals need to have some identifiable, visible feature to be classified
+- It is the possession of certain observable features that puts individuals in 
+categories
+
+]
+
+--
+exclude: true
+
+.pull-right[
+
+### Plato
+
+- Categories are God-given
+- Things possess an essence of a type
+- Observable features are not reliable because they are based on sense 
+perceptions
+
+]
+
+--
+exclude: true
+
+</br>
+
+#### .RUred[To Aristotle the individual was ultimate reality, but to Plato the individual was an imperfect reflection of the perfect category or its “ideal type” (= eidolon)]
+
+---
+exclude: true
+
+class: center, middle
+
+# What about Newton and Darwin?
+
+---
+exclude: true
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/f/fe/Alfonso_X_el_Sabio_%28Jos%C3%A9_Alcoverro%29_01.jpg)
+background-size: contain
+background-position: 100%
+
+# Alfonso X “El Sabio” of Castile</br>to the rescue!
+
+.pull-left[
+
+- Rendered Arabic scientific, had philosophical texts translated into Castilian, 
+restoring long-lost classical knowledge to Christian Europe
+
+- The Arabic translation of *De Partibus Animalium* (Aristotle, 350 BC) 
+comprises treatises 11-14 of the Kitāb al-Hayawān by Yahyà bin al-Bitrīq
+
+- “El libro de los animales”
+
+- Has lasting effect on 14th Century (Medieval) Scholastic Philosophy 
+  - Essentialism
+  - Nominalism
+]
+
+---
+exclude: true
+
+# Newton and Darwin
+
+### Essentialists were Platonists:
+
+- Believed that categories are real and God-given
+- The essentialist (platonic) worldview is highly influential: Isaac Newton was 
+an essentialist
+- The work of Newton directly influences big names responsible for introducing 
+statistical methods to the social sciences
+  - .blue[Laplace]: Leplace-Guass distribution, least squares estimation
+  - .blue[Quételet]: *L'homme moyen* (the "average man") is characterized by the mean 
+  values of measured variables that follow a normal distribution (golden mean)
+
+--
+exclude: true
+
+### Nominalists were Aristotelians:
+
+- Like Aristotle, but much more radical
+- They thought categories didn’t really exist in nature
+- Darwin was a nominalist
+- We create categories because we see common features and we arbitrarily try to 
+sort individuals into these categories
+
+---
+exclude: true
+
+background-image: url(./assets/img/bullseye.png)
+background-size: 1050px
+background-position: 190% 50%
+
+# Newtonian Thinking:
+
+### The “Golden Mean” as Target?
+
+---
+exclude: true
+
+# Newtonian Thinking Applied to Social Science
+
+- Wanted to base the Social Sciences on purely physical principles
+
+- Normal distribution was developed to explain the measurement of error:
+  - The normal distribution is the shape of error
+  
+  - Found that many traits were normally distributed
+  
+  - So was there a “golden mean” that nature aimed at, and was the distribution 
+  around this mean just “error”?
+
+- Wanted to create a set of universal laws to govern all human behavior using 
+the golden mean:
+
+  - Standard deviation was just “error”
+
+  - In Structuralist psychology, Wundt and others were looking for universal 
+  principles of human behavior
+
+  - They also saw individual differences as error
+
+---
+exclude: true
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/3/39/GodfreyKneller-IsaacNewton-1689.jpg)
+background-size: contain
+background-position: 100%
+
+# Persistent Influences of the</br>Newtonian World-View
+
+### Later development: the Analysis of Variance (ANOVA)</br>characterizes all individual differences (variance) as error
+
+.pull-left[
+
+- This comes from the dominance of the Newtonian worldview within experimental 
+psychology
+
+- Many statistical procedures just manipulate people in an attempt to discover 
+some “truth” about some aspect of human behavior
+
+- This still a common approach today
+
+]
+
+---
+exclude: true
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/6/6f/Editorial_cartoon_depicting_Charles_Darwin_as_an_ape_%281871%29.jpg)
+background-size: contain
+background-position: 100%
+
+# The Nominalists
+
+### Charles Robert Darwin, FRS (1809 –1882)
+
+.pull-left[
+
+- (1859) On the Origin of Species
+
+- Also addressed the nature of social and behavioral sciences
+
+- Clearly a Nominalist
+  - Species are transitory
+  - They grade into one another
+  - They have no objective or permanent existence
+
+- Species are mental constructs we invent to conceptualize populations
+  - Individuals are what are important, not species 
+  - Principles of continuum and contiguity
+
+]
+
+---
+exclude: true
+
+background-image: url(https://cdn.dnaindia.com/sites/default/files/styles/full/public/2018/01/22/644225-599073-525821-evolution.jpg)
+background-size: 700px
+background-position: 50% 100%
+
+# Nominalist Implications
+
+- If frequencies of heritable traits within populations of individuals change 
+over time then the entire species, and the definition of the species, changes 
+with them:
+
+	- No strict Biblical “bringing forth living creatures after their kind”
+
+	- Species are mental constructs that we invent to help us conceptualize 
+	“snapshots” of evolving populations at a 	single point in time
+
+---
+exclude: true
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Darwin%27s_finches_by_Gould.jpg/1200px-Darwin%27s_finches_by_Gould.jpg)
+background-size: contain
+background-position: 100%
+
+# The Darwinian</br>Worldview
+
+---
+exclude: true
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/e/ec/Francis_Galton_1850s.jpg)
+background-size: contain
+background-position: 100%
+
+# The Darwinians: Sir Francis Galton
+
+.pull-left[
+
+- (1869) Hereditary Genius
+
+- Strongly influenced by his cousin: Charles Robert Darwin
+
+- English Victorian polymath
+
+- Founder of:
+	- Biological Psychology 
+	- Differential Psychology 
+	- Eugenics Movement
+
+- Wanted to investigate the heritability and realized that Quételet’s methods 
+and statistical models wouldn’t work for this purpose
+
+]
+
+---
+exclude: true
+
+background-image: url(https://images-na.ssl-images-amazon.com/images/I/81uocBLhwOL._SL1500_.jpg)
+background-size: 500px
+background-position: 100%
+
+# Attack of the Clones
+
+.pull-left[
+
+- If we were all clones, when we reproduced there would be no significant 
+difference between my offspring and yours:
+  - So my kids would be no more like me than they would be like you
+
+- Any differences between individuals would be random error:
+	- i.e., A deviation from the “golden mean”
+	- It would be deviation from the general traits of humans not unique 
+	heritable differences
+
+- But we know this is not the case
+	- My kids are more like me than like you 
+	- How do we show this?
+
+]
+
+---
+exclude: true
+
+# The Darwinians: Sir Francis Galton
+
+### Twin and Adoption Studies
+
+- Galton invented both twin studies and adoption studies to 
+investigate this:
+	- Differences between MZ twins should reflect environmental 
+	differences, and differences between adopted siblings reflected 
+	genetic differences
+- These were purely observational studies
+
+--
+exclude: true
+
+### Deviations from the Mean
+
+- Galton needed Karl Pearson to develop the mathematical 
+tools to analyze these data
+- Key was the deviation from the mean:
+	- Individuality defined as the deviation from the mean
+	- My deviation and my offspring’s deviation should be similar
+	- My kids don’t start back at the “ideal human” (“l’homme moyen”) mean and 
+	then make deviations from there
+	- They start from my genetic contributions and make deviations from there
+- He wanted to compare deviations from the mean among individuals, and then use 
+these to measure the deviations of the group
+
+---
+exclude: true
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Karl_Pearson%3B_Sir_Francis_Galton.jpg)
+background-size: contain
+background-position: 100%
+
+# The Darwinians: Karl Pearson
+
+.pull-left[
+
+- Established the discipline of mathematical statistics
+
+- Founded the world's first university statistics department at University 
+College London in 1911
+
+- Controversial proponent of eugenics
+
+- Protégé and biographer of Sir Francis Galton
+
+- Not a “Sir”
+
+- Galton and Pearson jointly developed the correlation coefficient 
+(r) in 1895
+
+- Also invented the chi-squared test: 
+	- Started feud with Sir Ronald Fisher about it
+
+]
+
+---
+
+# "The Coefficient of Co-relation"
+
+### Correlation coefficient (r)
+
+- The descriptive statistic that measures the degree of linear association 
+between any two variables:
+	- Ranges in value from -1 to +1
+	- When r = 0 there is no correlation
+	- Can be used to compare two people on same variable
+	- Can be used to compare two variables within one person
+
+--
+
+### Individual Differences
+
+- The correlation coefficient is (was) about comparing individual differences
+  - Recall that z-scores let us compare two different variables and see how they 
+  deviate from the mean
+  - You can compare weight and IQ, or “apples and oranges”, by using 
+  standardized scores
+  - The correlation coefficient is about the association between two variables
+
+---
+
+# Z-Scores & Correlation Coefficients
+
+### The Z-Scores:
+
+## $$z_x = \frac{(x_i - \bar{x})} {s_x} \qquad \qquad z_y = \frac{(y_i - \bar{y})} {s_y}$$  
+--
+
+### Pearson’s "Coefficient of Co-relation":
+
+## $$r_{xy} = \frac{\sum (z_x) (z_y)}{n - 1}$$
+
+---
+
+# Correlation coefficient
+
+### Details
+
+- A Perfect Correlation: r<sub>xy</sub> = 1
+
+- An Imperfect Correlation: r<sub>xy</sub> < 1
+
+- Mismatch between z<sub>x</sub> and z<sub>y</sub> produces correlation 
+coefficients lower than 1
+
+--
+
+### Requirements for Pearson's correlation coefficient
+
+- Scale of measurement should be interval or ratio
+
+- Variables should be approximately normally distributed
+
+- The association should be linear
+
+- There should be no outliers in the data
+
+---
+
+# Examples
+
+</br>
+
+```{r, 'cor_examples', echo=FALSE, fig.retina=2, fig.width=15, fig.height=5, fig.align='center'}
+
+# Create linear data for plots
+cor_data <- data.frame(x = rnorm(100, 0, 1), y = rnorm(100, 0, 1)) %>% 
+  mutate(., y_linear = 0 + x * 1.2 + rnorm(100, mean = 0, sd = 0.5), 
+            y_pos = y_linear - mean(y_linear), 
+            y_neg = y_linear * -1, 
+            y_poly = 2 + -(x * 1.1)^2 + rnorm(100, mean = 0, sd = 0.25), 
+            y_cube = 0.5 + (x * 0.45)^3 + rnorm(100, mean = 0, sd = 0.1))
+
+# Calculate correlations
+cor_y     <- cor(cor_data$x, cor_data$y) %>% round(., 2)
+cor_ypos  <- cor(cor_data$x, cor_data$y_pos) %>% round(., 2)
+cor_yneg  <- cor(cor_data$x, cor_data$y_neg) %>% round(., 2)
+cor_ypoly <- cor(cor_data$x, cor_data$y_poly) %>% round(., 2)
+cor_ycube <- cor(cor_data$x, cor_data$y_cube) %>% round(., 2)
+
+
+# Set template for plots
+cor_plots <- function(plot_title, ylab = "y", r_xpos = 2, r_label) {
+  list(
+    geom_vline(xintercept = 0, color = "grey40", size = 0.5), 
+    geom_hline(yintercept = 0, color = "grey40", size = 0.5),  
+    geom_point(pch = 21, fill = "darkred"), 
+    coord_cartesian(ylim = c(-3, 3), xlim = c(-3, 3)), 
+    labs(y = ylab, title = plot_title), 
+    annotate("text", x = r_xpos, y = 2.5, size = 6, label = r_label, parse = T),
+    ds4ling_bw_theme(base_family = "Times", base_size = 18)
+  )
+}
+
+no_cor <- cor_data %>%
+  ggplot(., aes(x = x, y = y)) + 
+    cor_plots("No correlation", r_label = deparse(bquote(~r ==~  .(cor_y)))) 
+
+
+pos_cor <- cor_data %>%
+  ggplot(., aes(x = x, y = y_pos)) + 
+    cor_plots("Positive correlation", r_xpos = -2, 
+              r_label = deparse(bquote(~r ==~  .(cor_ypos)))) 
+
+
+neg_cor <- cor_data %>%
+  ggplot(., aes(x = x, y = y_neg)) + 
+    cor_plots("Negative correlation", 
+              r_label = deparse(bquote(~r ==~  .(cor_yneg)))) 
+
+no_cor + pos_cor + neg_cor + plot_annotation(tag_levels = '1', tag_suffix = ".")
+```
+
+---
+class: middle
+
+```{r, 'cor-non-linear', echo=FALSE, fig.width=14, fig.retina=2}
+poly_cor <- cor_data %>%
+  ggplot(., aes(x = x, y = y_poly)) + 
+    cor_plots("Non-linear data", 
+              r_label = deparse(bquote(~r ==~  .(cor_ypoly)))) 
+
+cube_cor <- cor_data %>%
+  ggplot(., aes(x = x, y = y_cube)) + 
+    cor_plots("Non-linear data", 
+              r_label = deparse(bquote(~r ==~  .(cor_ycube)))) 
+
+poly_cor + cube_cor + plot_annotation(tag_levels = '1', tag_suffix = ".")
+```
+
+---
+
+<iframe src="https://richarddmorey.shinyapps.io/standardizing_and_correlations/" style="border:none;" height="600" width="100%"></iframe>
+
+---
+
+<iframe src="https://gallery.shinyapps.io/correlation_game/" style="border:none;" height="600" width="100%"></iframe>
+
+---
+class: middle
+
+```{r, 'vocab_plot', echo=FALSE, fig.width=13, fig.retina=2, fig.align='center'}
+
+# plot it
+vocab_data %>% 
+  mutate(., vocab_1k = vocab / 1000) %>% 
+  dplyr::filter(., vocab_1k >= 4) %>% 
+  ggplot(., aes(x = ages, y = vocab_1k)) + 
+    geom_point(color = 'black', fill = 'blue', 
+               alpha = 1/2, pch = 21, size = 1.5) + 
+    ylim(0, 30) + 
+    labs(x = "Age", y = "Vocabulary size (1k)", 
+         title = "Vocabulary size as a function of age.") +
+    theme_classic(base_size = 20, base_family = 'Times')
+
+```
+
+---
+
+# Bivariate correlation
+
+- Average native test-takers of age 4 already know approx. 5,000 words
+
+- Average native test-takers of age 8 already know approx. 10,000 words
+
+- Average native test-takers of age 15 already know approx. 18,000 words
+
+- Most adult native test-takers range from 20,000–35,000 words
+
+</br>
+
+.footnote[http://testyourvocab.com/blog/]
+
+--
+
+### Let's sample the data and calculate Pearson's correlation coeficient for age <br>and vocabulary size
+
+---
+
+.big[
+
+$$\frac{\sum_{i}^{n} \left ( \frac{x_i - \bar{x}}{s_x} \right ) \left ( \frac{y_i - \bar{y}}{s_y} \right )}{n - 1} = \frac{\sum_{i}^{n} \left ( z_x \right ) \left ( z_y \right )}{n - 1} = {r_{xy}}$$
+
+]
+
+---
+
+.big[ 
+
+$$\frac{\sum_{i}^{n} \left ( \frac{x_i - \bar{x}}{s_x} \right ) \left ( \frac{y_i - \bar{y}}{s_y} \right )}{n - 1} = \frac{\sum_{i}^{n} \left ( z_x \right ) \left ( z_y \right )}{n - 1} = {r_{xy}}$$
+
+]
+
+```{r, 'create_vocab_table', echo=FALSE, warning=FALSE}
+```
+
+```{r, 'vocab_table0', results='asis', echo=FALSE}
+vocab_table1 %>%
+  select(., 1:3) %>% 
+  slice(., 1:12) %>% 
+  kable(., format = 'html', full_width = T, escape = FALSE, align = 'r') 
+```
+
+---
+
+.big[ 
+
+$$\frac{\sum_{i}^{n} \left ( \frac{\color{red}{x_i} - \bar{x}}{s_x} \right ) \left ( \frac{\color{blue}{y_i} - \bar{y}}{s_y} \right )}{n - 1} = \frac{\sum_{i}^{n} \left ( z_x \right ) \left ( z_y \right )}{n - 1} = {r_{xy}}$$
+
+]
+
+```{r, 'vocab_table1', results='asis', echo=FALSE}
+vocab_table1 %>%
+  select(., 1:3) %>% 
+  slice(., 1:12) %>% 
+  kable(., format = 'html', full_width = T, escape = FALSE, align = 'r') %>% 
+  column_spec(2, color = "#cc0033") %>% 
+  column_spec(3, color = "blue")
+```
+
+---
+
+.big[ 
+
+$$\frac{\sum_{i}^{n} \left ( \frac{x_i - \color{red}{\bar{x}}}{\color{blue}{s_x}} \right ) \left ( \frac{y_i - \color{red}{\bar{y}}}{\color{blue}{s_y}} \right )}{n - 1} = \frac{\sum_{i}^{n} \left ( z_x \right ) \left ( z_y \right )}{n - 1} = {r_{xy}}$$
+
+]
+
+```{r, 'vocab_table2', results='asis', echo=FALSE, warning=FALSE}
+vocab_table2 %>%
+  select(., 1:3) %>% 
+  kable(., format = 'html', full_width = T, escape = FALSE, align = 'r') %>% 
+  row_spec(13, bold = T, color = "white", background = "white") %>%
+  row_spec(14, bold = T) %>% 
+  row_spec(15, bold = T, color = "#cc0033") %>% 
+  row_spec(16, bold = T, color = "blue")
+```
+
+---
+
+.big[
+
+$$\frac{\sum_{i}^{n} \color{red}{\left ( \frac{x_i - \bar{x}}{s_x} \right )} \left ( \frac{y_i - \bar{y}}{s_y} \right )}{n - 1} = \frac{\sum_{i}^{n} \color{red}{\left ( z_x \right )} \left ( z_y \right )}{n - 1} = {r_{xy}}$$
+
+]
+
+```{r, 'vocab_table3', results='asis', echo=FALSE, warning=FALSE}
+vocab_table1 %>%
+  select(., 1:4) %>% 
+  slice(., 1:12) %>% 
+  kable(., format = 'html', full_width = T, escape = FALSE, align = 'r') %>% 
+  column_spec(2, color = "#cc0033") %>% 
+  column_spec(4, color = "#cc0033")
+```
+
+---
+
+.big[
+
+$$\frac{\sum_{i}^{n} \left ( \frac{x_i - \bar{x}}{s_x} \right ) \color{blue}{\left ( \frac{y_i - \bar{y}}{s_y} \right )}}{n - 1} = \frac{\sum_{i}^{n} \left ( z_x \right ) \color{blue}{\left ( z_y \right )}}{n - 1} = {r_{xy}}$$
+
+]
+
+```{r, 'vocab_table4', results='asis', echo=FALSE, warning=FALSE}
+vocab_table1 %>%
+  select(., 1:5) %>% 
+  slice(., 1:12) %>% 
+  kable(., format = 'html', full_width = T, escape = FALSE, align = 'r') %>% 
+  column_spec(3, color = "blue") %>% 
+  column_spec(5, color = "blue")
+```
+
+---
+
+.big[
+
+$$\frac{\sum_{i}^{n} \color{purple}{\left ( \frac{x_i - \bar{x}}{s_x} \right ) \left ( \frac{y_i - \bar{y}}{s_y} \right )}}{n - 1} = \frac{\sum_{i}^{n} \color{purple}{\left ( z_x \right ) \left ( z_y \right )}}{n - 1} = {r_{xy}}$$
+
+]
+
+```{r, 'vocab_table5', results='asis', echo=FALSE, warning=FALSE}
+vocab_table1 %>%
+  select(., 1:6) %>% 
+  slice(., 1:12) %>% 
+  kable(., format = 'html', full_width = T, escape = FALSE, align = 'r') %>% 
+  column_spec(4, color = "purple") %>% 
+  column_spec(5, color = "purple") %>%
+  column_spec(6, color = "purple")
+```
+
+---
+
+.big[
+
+$$\frac{\color{green}{\sum_{i}^{n} \left ( \frac{x_i - \bar{x}}{s_x} \right ) \left ( \frac{y_i - \bar{y}}{s_y} \right )}}{n - 1} = \frac{\color{green}{\sum_{i}^{n} \left ( z_x \right ) \left ( z_y \right )}}{n - 1} = {r_{xy}}$$
+
+]
+
+```{r, 'vocab_table6', results='asis', echo=FALSE, warning=FALSE}
+vocab_table2 %>%
+  kable(., format = 'html', full_width = T, escape = FALSE, align = 'r') %>% 
+  row_spec(13, bold = T, color = "white", background = "white") %>%
+  row_spec(14:16, bold = T, color = "black") %>% 
+  row_spec(14, background = "green")
+```
+
+---
+
+.big[
+
+$$\frac{\sum_{i}^{n} \left ( \frac{x_i - \bar{x}}{s_x} \right ) \left ( \frac{y_i - \bar{y}}{s_y} \right )}{n - 1} = \frac{\sum_{i}^{n} \left ( z_x \right ) \left ( z_y \right )}{n - 1} = {\color{red}{r_{xy}}}$$
+
+]
+
+```{r, 'hand_calc_r', echo=TRUE}
+my_sum <- sum(vocab_sample$`(z_x)(z_y)`) 
+my_n <- (nrow(vocab_sample) - 1)
+my_r <- my_sum / my_n
+my_r
+```
+
+or 
+
+```{r, 'simple-calc'}
+10.18 / (12 - 1)
+```
+
+Pearson's correlation coefficient = **`r my_r`**.
+
+---
+
+# Doing it in R
+
+### There are two useful functions: 
+
+.pull-left[
+
+1. ```cor()```
+
+2. ```cor.test()```
+
+```{r, 'simple-cor-ex-plot', echo=FALSE, fig.retina=2, fig.width=6.5, fig.height=4.5}
+ggplot(mtcars, aes(x = disp, y = mpg)) + 
+  geom_point(size = 2) + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+```
+
+]
+
+--
+
+.pull-right[
+
+```{r, 'simple-cor-ex-val'}
+cor(mtcars$mpg, mtcars$disp)
+```
+
+```{r, 'simple-cor-ex-test'}
+cor.test(mtcars$mpg, mtcars$disp)
+```
+
+]
+
+---
+class: center, middle
+
+# A word of warning...
+
+---
+
+<iframe src="https://www.tylervigen.com/spurious-correlations" style="border:none;" height="600" width="100%"></iframe>
+
+---
+class: center, middle
+
+# Correlation $\neq$ causation
+
+--
+
+background-image: url(https://i.pinimg.com/736x/e8/eb/f2/e8ebf268abd01f28ab1dc56bf801dc84--inner-arm-tattoos-bicep-tattoo.jpg)
+background-size: 1250px
+background-position: 50% 70%
+
+<!-- bicepts tatoo -->
+
+---
+
+# Practice
+
+Load the `test_scores_rm` dataset from the `ds4ling` package. 
+
+```{r, 'test-scores-rm'}
+data(test_scores_rm)
+test_scores_rm
+```
+
+---
+class: title-slide-final, left
+
+# References
+
+```{r, load_refs, echo=FALSE, message=F}
+bib <- ReadBib(here("slides", "assets", "bib", "ds4ling_refs.bib"), check = FALSE)
+ui <- "- "
+```
+
+```{r, print_refs, results='asis', echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
+writeLines(ui)
+print(bib[key = "wickham2016r"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+writeLines(ui)
+print(bib[key = "qml_ch1"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+writeLines(ui)
+print(bib[key = "qml_ch2"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+writeLines(ui)
+print(bib[key = "manga2009"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+```
+
+
+- Figueredo, A. J. (2013).  The Newtonian Worldview in Statistics. Statistical 
+Methods in Psychological Research.
+
+- Figueredo, A. J. (2013).  The Darwinian Worldview in Statistics. Statistical 
+Methods in Psychological Research.
+
+

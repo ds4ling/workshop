@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Statistics for Linguists</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Joseph V. Casillas, PhD" />
+    <script src="assets/header-attrs/header-attrs.js"></script>
+    <link href="assets/remark-css/hygge.css" rel="stylesheet" />
+    <link href="assets/remark-css/rutgers.css" rel="stylesheet" />
+    <link href="assets/remark-css/rutgers-fonts.css" rel="stylesheet" />
+    <link href="assets/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="assets/tile-view/tile-view.js"></script>
+    <link href="assets/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="assets/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="assets/panelset/panelset.css" rel="stylesheet" />
+    <script src="assets/panelset/panelset.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"d9735d4be99040a49eaf28042ea592df","expires":14}</script>
+    <script src="assets/himalaya/himalaya.js"></script>
+    <script src="assets/js-cookie/js.cookie.js"></script>
+    <link href="assets/editable/editable.css" rel="stylesheet" />
+    <script src="assets/editable/editable.js"></script>
+    <script src="assets/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="assets/kePrint/kePrint.js"></script>
+    <link href="assets/lightable/lightable.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/5235085b15.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Statistics for Linguists
+]
+.subtitle[
+## Day 1 - The linear model:</br>.lightgrey[Assumptions, diagnostics, and interpretation]
+]
+.author[
+### Joseph V. Casillas, PhD
+]
+.date[
+### Rutgers University</br>Last update: 2022-11-29
+]
+
+---
+
+
+
+
+
+
+
+
+class: inverse, middle
+
+&lt;blockquote align='center' class="twitter-tweet" data-lang="de"&gt;
+&lt;a href="https://twitter.com/thomasp85/status/963836721866661889"&gt;&lt;/a&gt;
+&lt;/blockquote&gt;
+
+---
+class: title-slide-section-grey, middle
+
+# Assumptions
+
+---
+layout: true
+
+# Assumptions
+
+---
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/lm_assumptions.png)
+background-size: 400px
+background-position: 95% 50%
+
+
+
+### Statistical assumptions
+
+- Every model has assumptions that need  
+to be met in  order for the model to work  
+properly and be trustworthy
+
+- It is not standard practice to report  
+whether all assumptions have been met when  
+writing up your results... 
+--
+.RUred[but it should be].
+
+- Make a habit of assessing your models and  
+incorporating the relevant information in  
+your writing. 
+
+---
+
+### Regression assumptions
+
+We can break the assumptions up into 3 areas: 
+
+1. Model specification
+
+2. Measurement error
+
+3. The error term
+
+---
+
+### Model specification
+
+There should be no specification error
+
+- The relationship between x&lt;sub&gt;i&lt;/sub&gt; and y&lt;sub&gt;i&lt;/sub&gt; is linear: 
+`\(y_i = \alpha + \beta x_i + \epsilon _i\)`
+
+- Including irrelevant variables 🤷🏽
+
+- Omitting relevant variables 👎🏽
+
+--
+
+### Importance: **HIGH**
+
+---
+background-image: url(./assets/img/sin.png)
+background-size: 400px
+background-position: 95% 50%
+
+### Including an irrelevant variable (sin of commission): 🤷🏽
+
+.pull-left[
+
+- Similar to a Type I error
+
+- Adds to the error of prediction, but it does not bias the parameter estimates 
+
+- If model includes multiple predictors, other estimates are not influenced by 
+the irrelevant variable
+
+- Though the parameter estimates won't be biased, the standard error terms 
+around each beta weight will increase (this affects t-ratio and p-value)
+
+]
+
+---
+background-image: url(./assets/img/sin.png)
+background-size: 400px
+background-position: 95% 50%
+
+### Including an irrelevant variable (sin of commission): 🤷🏽
+
+.pull-left[
+
+- For example, imagine a situation in which you model employee performance as a 
+function of a bunch of good predictors
+
+- Adding the variable of astrological horoscope sign will not bias the other 
+estimates
+
+- You are considering something that doesn't matter, i.e., astrology
+
+]
+
+---
+background-image: url(./assets/img/sin.png)
+background-size: 400px
+background-position: 95% 50%
+
+### Excluding a relevant variable (sin of omission): 👎🏽
+
+.pull-left[
+
+- Similar to a Type II error
+
+- This is much more serious!
+
+- This will bias your parameter estimates
+
+- You are leaving something important out (variance left unexplained)
+
+]
+
+---
+background-image: url(./assets/img/sin.png)
+background-size: 400px
+background-position: 95% 50%
+
+### Excluding a relevant variable (sin of omission): 👎🏽
+
+.pull-left[
+
+- For example, if you want to model RT as a function of working memory but you 
+forget to look at age
+
+- Then your prediction might be wrong
+
+- You don’t know which way you are biasing things either!
+
+- You could be either overestimating or underestimating the other regression 
+parameters
+
+]
+
+---
+
+### What to Do
+
+#### After including an irrelevant predictor:
+
+- Drop the irrelevant variable
+
+- Not much of a problem
+
+--
+
+#### After excluding a relevant predictor:
+
+- Look at data again to see if it is in there
+
+- Hope and Pray!
+
+- If it’s not in you data, you are SOL
+
+- You need to repeat the study!
+
+- There is a problem in your design and there is no mathematical solution to 
+fix this problem
+
+---
+
+### Measurement error
+
+There should be no measurement error
+
+- Variables x&lt;sub&gt;i&lt;/sub&gt; and y&lt;sub&gt;i&lt;/sub&gt; should be as accurate as possible
+
+--
+
+### Importance: .RUred[high]
+
+---
+
+### About the error term
+
+#### The error term should meet the following characteristics...
+
+- Mean = 0
+
+- Homoskedasticity
+
+- No autocorrelation
+
+- Predictor not correlated with error term
+
+- Error is normally distributed 
+
+---
+
+### About the error term
+
+#### Mean of 0
+
+- Slope estimates will not be biased
+
+- Intercept can be biased
+
+--
+
+### Importance: .blue[low]... unless you are interested in the intercept.
+
+---
+
+### About the error term
+
+#### Homoskedasticity
+
+- Variance around predicted values should be consistent
+
+- Common simple inspection is to look at scatter plot of fitted vs. x-values 
+(should look like blob with no interesting patterns)
+
+- If variance is heteroskedastic you will typically see fan-like patterns
+
+- Will not bias parameter estimates
+
+- Will increase confidence intervals, thus affects t-ratios and p-values
+
+--
+
+### Importance: .orange[medium/high]
+
+---
+
+### About the error term
+
+#### No autocorrelation
+
+- If the residuals are autocorrelated, it means that the prediction error of a 
+given observation depends on that of the previous observation
+
+- This shows up as a clear unexplained pattern in the y variable 
+
+- Most common in repeated measures and longitudinal data
+
+- Will not bias parameter estimates
+
+- Will affect confidence intervals, t-ratios, p-values
+
+- Increased chance of Type II error
+
+--
+
+### Importance: .RUred[High], but uncommon in standard regression
+
+---
+
+### Predictor not correlated with error term
+
+- Typically the result of omitting a relevant variable (sin of omission)
+
+- Will bias parameter estimates
+
+- Solution: include missing variable
+
+--
+
+### Importance: .RUred[high]
+
+---
+
+### Normally Distributed Errors 
+
+- There is no a priori reason for error to be anything but normally distributed 
+
+- It should become standard practice for you to examine your residuals to see 
+if they are normally distributed or not
+
+- If they aren't normally distributed there is a substantial possibility of 
+Type II error
+
+- If this is the case, then the residuals may not be "pure" error, and you may 
+have omitted a relevant variable from the equation that is making the residuals 
+not be normally distributed
+
+- In other words, the residuals may contain systematic variance that can still 
+be explained by something else
+
+- You cannot conclude with 100% certainty that a Type II error has been 
+committed, but you might strongly suspect it
+
+---
+
+### Summarizing
+
+1. Model specification
+  - The relationship between x&lt;sub&gt;i&lt;/sub&gt; and y&lt;sub&gt;i&lt;/sub&gt; is linear
+  - Including irrelevant variables 
+  - Omitting relevant variables
+
+2. Measurement error
+
+3. The error term
+  - Mean = 0
+  - Homoskedasticity
+  - No autocorrelation
+  - Predictor not correlated with error term
+  - Error is normally distributed 
+
+---
+
+
+
+
+
+
+
+
+
+class: title-slide-section-grey, middle
+layout: false
+
+# Diagnostics
+
+---
+layout: true
+
+# Diagnostics
+
+---
+
+### Remember those "residuals"?
+
+- A residual represents prediction error in our model with regard 
+to a single point. 
+  - Our `mtcars` model predicted that a 6 ton car should get 5.22 mpg. 
+  - If in reality it gets 10.22 mpg, then the residual for that specific 
+data point would be 5 mpg. 
+
+--
+
+- Remember: All models are wrong. 
+
+--
+
+- Our models will always be off by at least a little bit for most 
+of the observations we try to fit. 
+
+- Nonetheless, it is good practice to examine the residuals of 
+your models in order to help assess how well it fits your data.
+
+- Specifically, we need to make sure that there aren't any unexpected 
+patterns because that would suggest that our model does not properly 
+fit our data.
+
+---
+background-image: url(https://www.realitybytesinc.com/images/sick-computer.jpg)
+background-size: 400px
+background-position: 95% 50%
+
+### 1. Model assumptions
+
+### 2. Outliers
+
+---
+
+### The relationship between x&lt;sub&gt;i&lt;/sub&gt; and y&lt;sub&gt;i&lt;/sub&gt; is linear.
+
+1. Double check linear specification
+2. Eyeball it
+
+
+
+.pull-left[
+
+&lt;img src="index_files/figure-html/assumptions_linear_plot-1.png" width="504" /&gt;
+
+]
+
+.pull-right[
+
+&lt;img src="index_files/figure-html/assumptions_quadratic_plot-1.png" width="504" /&gt;
+
+]
+
+---
+
+### The mean of residuals is zero
+
+1. Check model summary
+2. Test manually
+
+.pull-left[
+
+
+```r
+# Fit model
+mod1 &lt;- lm(y ~ x, data = assumptions_data)
+
+# Print summary
+summary(mod1)
+```
+
+&lt;table class="table table-striped" style="font-size: 13px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Min. &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1st Qu. &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Median &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 3rd Qu. &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Max. &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; -5.36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.35 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.09 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.65 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+```r
+# Test manually
+mean(mod1$residuals)
+```
+
+```
+## [1] -9.506965e-18
+```
+
+]
+
+.pull-right[
+
+
+```r
+# Fit mod
+mod2 &lt;- lm(y_quad ~ x, data = assumptions_data)
+
+# Print summary
+summary(mod2)
+```
+
+&lt;table class="table table-striped" style="font-size: 13px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Min. &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1st Qu. &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Median &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 3rd Qu. &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Max. &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; -3.34 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.39 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.46 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.84 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.87 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+```r
+# Test manually
+mean(mod2$residuals)
+```
+
+```
+## [1] -6.612868e-16
+```
+
+]
+
+---
+
+### Homoskedasticity of residuals
+
+&lt;img src="index_files/figure-html/homoskedasticity_linear-1.png" width="1008" /&gt;
+
+.footnote[mod1]
+
+---
+
+### Homoskedasticity of residuals
+
+&lt;img src="index_files/figure-html/homoskedasticity_quadratic-1.png" width="1008" /&gt;
+
+.footnote[mod2]
+
+---
+
+### No autocorrelation of residuals
+
+&lt;img src="index_files/figure-html/linear_autocorrelation-1.png" width="468" style=float:right /&gt;
+
+1. Visual inspection
+2. Durbin-Watson test
+
+
+```
+
+	Durbin-Watson test
+
+data:  mod1
+DW = 1.119, p-value = 0.0002656
+alternative hypothesis: true autocorrelation is greater than 0
+```
+
+.footnote[mod1]
+
+---
+
+### No autocorrelation of residuals
+
+&lt;img src="index_files/figure-html/quadratic_autocorrelation-1.png" width="468" style=float:right /&gt;
+
+1. Visual inspection
+2. Durbin-Watson test
+
+
+```
+
+	Durbin-Watson test
+
+data:  mod2
+DW = 0.26212, p-value &lt; 2.2e-16
+alternative hypothesis: true autocorrelation is greater than 0
+```
+
+.footnote[mod2]
+
+---
+
+### No autocorrelation of residuals - Correction
+
+&lt;img src="index_files/figure-html/auto_cor_fix-1.png" width="468" style=float:right /&gt;
+
+
+```
+
+	Durbin-Watson test
+
+data:  mod2_fix
+DW = 2.6825, p-value = 0.9875
+alternative hypothesis: true autocorrelation is greater than 0
+```
+
+.footnote[mod2]
+
+---
+
+### Predictors and residuals are uncorrelated
+
+- Test for correlation
+- Think about your study
+
+
+```r
+cor.test(assumptions_data$x, mod1$residuals) # do correlation test 
+```
+
+```
+## 
+## 	Pearson's product-moment correlation
+## 
+## data:  assumptions_data$x and mod1$residuals
+## t = 2.6324e-16, df = 49, p-value = 1
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.2755837  0.2755837
+## sample estimates:
+##          cor 
+## 3.760527e-17
+```
+
+.footnote[mod1]
+
+---
+
+### Predictors and residuals are uncorrelated
+
+- Test for correlation
+- Think about your study
+
+
+```r
+cor.test(assumptions_data$x, mod2$residuals) # do correlation test 
+```
+
+```
+## 
+## 	Pearson's product-moment correlation
+## 
+## data:  assumptions_data$x and mod2$residuals
+## t = -3.4581e-17, df = 49, p-value = 1
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.2755837  0.2755837
+## sample estimates:
+##          cor 
+## -4.94017e-18
+```
+
+.footnote[mod2]
+
+---
+
+### Normality of residuals
+
+- QQplots
+
+--
+
+&lt;img src="index_files/figure-html/normal_resids_linear-quadratic-1.png" width="864" style="display: block; margin: auto;" /&gt;
+
+
+---
+layout: false
+class: title-slide-section-grey, middle
+
+# Dealing with influential data points
+
+---
+layout: true
+
+# Diagnostics
+
+---
+
+### Outliers/influential data points
+
+- An influential point is one that would significantly change the fit if 
+removed from the data 
+
+- .blue[Cook’s distance] is a commonly used influence measure 
+
+#### Leverage
+
+- The leverage of an observation measures its ability to move the regression 
+line by simply moving up/down along the y-axis.
+
+- The measurement represents the amount by which the predicted value would 
+change if the observation was shifted one unit in the y-direction.
+
+- The leverage always takes values between 0 and 1.
+
+- A point with 0 leverage does not effect the regression line.
+
+---
+
+### Influential data points
+
+.pull-left[
+
+&lt;img src="index_files/figure-html/cooks_distance_linear-1.png" width="504" /&gt;
+
+]
+
+.pull-right[
+
+&lt;img src="index_files/figure-html/cooks_distance_quadratic-1.png" width="504" /&gt;
+
+]
+
+---
+
+### Influential data points
+
+&lt;img src="index_files/figure-html/leverage_linear_quadratic2-1.png" width="864" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Influential data points
+
+.pull-left[
+
+&lt;img src="index_files/figure-html/mod1_with_outlier-1.png" width="504" /&gt;
+
+]
+
+.pull-right[
+
+#### .RUred[Mod1 with influential data point]:
+
+.content-box-red[
+
+`$$y = -0.07 + -1.71 x$$`
+
+]
+
+#### .blue[Mod1 without influential data point]: 
+
+.content-box-blue[
+
+`$$y = 0.07 + -2.04 x$$`
+
+]
+]
+
+---
+
+### Global test of model assumptions
+
+- It is also possible to use the package `gvlma` to test model assumptions. 
+
+- It seems rather conservative
+
+- I don't know too much about it. 
+
+---
+
+
+```
+## 
+## Call:
+## lm(formula = y ~ x, data = assumptions_data)
+## 
+## Coefficients:
+## (Intercept)            x  
+##    -0.06577     -1.71081  
+## 
+## 
+## ASSESSMENT OF THE LINEAR MODEL ASSUMPTIONS
+## USING THE GLOBAL TEST ON 4 DEGREES-OF-FREEDOM:
+## Level of Significance =  0.05 
+## 
+## Call:
+##  gvlma(x = mod1) 
+## 
+##                      Value   p-value                   Decision
+## Global Stat        557.334 0.000e+00 Assumptions NOT satisfied!
+## Skewness            73.855 0.000e+00 Assumptions NOT satisfied!
+## Kurtosis           457.890 0.000e+00 Assumptions NOT satisfied!
+## Link Function        6.284 1.218e-02 Assumptions NOT satisfied!
+## Heteroscedasticity  19.304 1.115e-05 Assumptions NOT satisfied!
+```
+
+---
+
+
+```
+## 
+## Call:
+## lm(formula = y ~ x, data = assumptions_data[1:50, ])
+## 
+## Coefficients:
+## (Intercept)            x  
+##     0.07471     -2.04296  
+## 
+## 
+## ASSESSMENT OF THE LINEAR MODEL ASSUMPTIONS
+## USING THE GLOBAL TEST ON 4 DEGREES-OF-FREEDOM:
+## Level of Significance =  0.05 
+## 
+## Call:
+##  gvlma(x = noOut) 
+## 
+##                     Value p-value                Decision
+## Global Stat        2.4877  0.6468 Assumptions acceptable.
+## Skewness           0.6541  0.4186 Assumptions acceptable.
+## Kurtosis           0.3175  0.5731 Assumptions acceptable.
+## Link Function      0.9478  0.3303 Assumptions acceptable.
+## Heteroscedasticity 0.5683  0.4509 Assumptions acceptable.
+```
+
+---
+
+
+```
+## 
+## Call:
+## lm(formula = y_quad ~ x, data = assumptions_data)
+## 
+## Coefficients:
+## (Intercept)            x  
+##       2.838       -1.600  
+## 
+## 
+## ASSESSMENT OF THE LINEAR MODEL ASSUMPTIONS
+## USING THE GLOBAL TEST ON 4 DEGREES-OF-FREEDOM:
+## Level of Significance =  0.05 
+## 
+## Call:
+##  gvlma(x = mod2) 
+## 
+##                     Value   p-value                   Decision
+## Global Stat        87.100 0.000e+00 Assumptions NOT satisfied!
+## Skewness           25.674 4.042e-07 Assumptions NOT satisfied!
+## Kurtosis           14.082 1.750e-04 Assumptions NOT satisfied!
+## Link Function      45.552 1.487e-11 Assumptions NOT satisfied!
+## Heteroscedasticity  1.793 1.806e-01    Assumptions acceptable.
+```
+
+---
+layout: false
+class: middle, center
+
+&lt;iframe src="https://gallery.shinyapps.io/slr_diag/" style="border:none;" height="600" width="1300"&gt;&lt;/iframe&gt;
+
+---
+layout: false
+class: title-slide-section-grey, middle
+
+# Interpretation
+
+---
+layout: true
+
+# Interpretation
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+
+```
+
+Call:
+lm(formula = mpg ~ wt, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5432 -2.3647 -0.1252  1.4096  6.8727 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.046 on 30 degrees of freedom
+Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7446 
+F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
+```
+
+]
+
+.pull-right[
+
+1. Function call
+2. Model residuals
+3. Model coefficients
+4. Significance codes
+5. Variance explained
+6. F-ratio
+
+]
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+
+```r
+summary(cars_mod)$call
+```
+
+```
+lm(formula = mpg ~ wt, data = mtcars)
+```
+
+]
+
+.pull-right[
+
+1. Function .RUred[call]
+2. Model residuals
+3. Model coefficients
+4. Significance codes
+5. Variance explained
+6. F-ratio
+
+.content-box-blue[
+- This is the model you fit using `lm()`. 
+- It is the exact same code you typed into R. 
+- Use to double check to see if you made any typos.
+]
+
+]
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+
+```r
+summary(cars_mod$residuals)
+```
+
+```
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-4.5432 -2.3647 -0.1252  0.0000  1.4096  6.8727 
+```
+
+]
+
+.pull-right[
+
+1. Function call
+2. Model .RUred[residuals]
+3. Model coefficients
+4. Significance codes
+5. Variance explained
+6. F-ratio
+
+.content-box-blue[
+- Should be normally distributed
+- Absolute values of 1Q and 3Q should be similar
+- Mean = 0, median close to 0
+- If anything is off you can see it here, but check residual plots
+]
+
+]
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+
+```r
+summary(cars_mod)$coef
+```
+
+```
+             Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept) 37.285126   1.877627 19.857575 8.241799e-19
+wt          -5.344472   0.559101 -9.559044 1.293959e-10
+```
+
+]
+
+.pull-right[
+
+1. Function call
+2. Model residuals
+3. Model .RUred[coefficients]
+4. Significance codes
+5. Variance explained
+6. F-ratio
+
+.content-box-blue[
+- Meat and potatoes of the output
+- Parameter estimates of intercept and predictor(s)
+- Expresses strength of relationship between predictor(s) and outcome variable
+- One unit change in predictor will change outcome by...
+]
+
+]
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+
+```r
+summary(cars_mod)
+```
+
+```
+
+Call:
+lm(formula = mpg ~ wt, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5432 -2.3647 -0.1252  1.4096  6.8727 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.046 on 30 degrees of freedom
+Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7446 
+F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
+```
+
+]
+
+.pull-right[
+
+1. Function call
+2. Model residuals
+3. Model coefficients
+4. .RUred[Significance codes]
+5. Variance explained
+6. F-ratio
+
+.content-box-blue[
+- Assessment of statistical significance of predictor(s) and the intercept 
+- Everything except "." is probably "good"
+]
+]
+
+---
+
+### Statistical Significance
+
+- As long as the effect is not statistically equivalent to 0 it is called 
+statistically significant
+
+- It may be an effect of trivial magnitude
+
+- Basically, it means that this prediction is better than nothing
+
+- It doesn’t really mean it is really “significant” in the terms that we 
+  think of as significance
+
+- It doesn’t indicate importance
+
+---
+
+### Significance versus Importance 
+
+#### How do we know if the “significant” effect we found is actually important?
+
+- The coefficient of determination (r-squared) tells you how much of the 
+variance you have explained
+
+- It tells us how big the effect is and not just that it is not equal to zero
+
+- You want to know if your predictions are better than chance alone (F-ratio) 
+but you also want to know how explanatory your predictions are (r-squared)
+
+#### How important are the chosen predictors?
+
+- The numerators in both ratios are similar
+
+- They represent the predicted portion of the variance
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+
+```r
+summary(cars_mod)
+```
+
+```
+
+Call:
+lm(formula = mpg ~ wt, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5432 -2.3647 -0.1252  1.4096  6.8727 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.046 on 30 degrees of freedom
+Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7446 
+F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
+```
+
+]
+
+.pull-right[
+
+1. Function call
+2. Model residuals
+3. Model coefficients
+4. Significance codes
+5. .RUred[Variance explained]
+6. F-ratio
+
+.content-box-blue[
+- Assessment of R&lt;sup&gt;2&lt;/sup&gt;
+- More variance explained is better
+- Should pretty much always be reported
+]
+]
+
+---
+
+### Make sense of it all
+
+.pull-left[
+
+
+```r
+summary(cars_mod)
+```
+
+```
+
+Call:
+lm(formula = mpg ~ wt, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5432 -2.3647 -0.1252  1.4096  6.8727 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.046 on 30 degrees of freedom
+Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7446 
+F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
+```
+
+]
+
+.pull-right[
+
+1. Function call
+2. Model residuals
+3. Model coefficients
+4. Significance codes
+5. Variance explained
+6. .RUred[F-ratio]
+
+.content-box-blue[
+- Assesses overall significance... omnibus model
+- If F-ratio is significant, at least one predictor or intercept is too
+- If F-ratio is not significant your experiment is over
+]
+]
+
+---
+
+### A note about F-ratios
+
+#### If you have an ANOVA background... Mean Squared Deviations
+
+`$$MS_{Total} = \frac{\sum{(y_i - \bar{y})^2}}{n-1}$$`  
+
+`$$MS_{Predicted} = \frac{\sum{(\hat{y}_i - \bar{y})^2}}{k}$$`  
+
+`$$MS_{Error} = \frac{\sum{(y_i - \hat{y}_i)^2}}{n - k - 1}$$`
+
+.content-box-green[
+#### `$$F_{(k),(n-k-1)} = \frac{\sum{(\hat{y}_i - \bar{y})^2} / (k)}{\sum{(y_i - \hat{y}_i)^2} / (n - k - 1)}$$`
+]
+
+---
+
+### A note about F-ratios
+
+#### If you have an ANOVA background... Mean Squared Deviations
+
+`$$MS_{Total} = \frac{SS_{Total}}{df_{Total}}$$`
+
+`$$MS_{Predicted} = \frac{SS_{Predicted}}{df_{Predicted}}$$`
+
+`$$MS_{Error} = \frac{SS_{Error}}{df_{Error}}$$`
+
+.content-box-green[
+#### `$$F = \frac{MS_{Predicted}}{MS_{Error}}$$`
+]
+
+---
+
+### Degrees of Freedom
+
+#### Derived from the number of sample statistics used in your computation:
+
+- e.g., for a standard deviation, you subtract all the raw scores from the mean
+
+- Since you used the sample mean, you used up 1 df
+
+- df = n - 1
+
+---
+
+### Degrees of Freedom
+
+#### In the denominator of the standard deviation, you are using a sample statistic, not a population parameter, so you have df = n - 1:
+
+- n - 1 reflects the fact that you used a statistic and if you know one number 
+(the mean) there is less uncertainty remaining
+- If you know the mean and you have 10 scores, then you only need 9 of the 
+remaining scores to predict all 10 of them
+
+#### Usually we have an F-table with associated degrees of freedom to show us whether the F-ratio is "statistically significant":
+
+- Numerator df = k 
+- Denominator df = n - k - 1
+
+---
+
+### Degrees of Freedom
+
+### `$$df_{Total} = n - 1$$` 
+
+### `$$df_{Predicted} = k$$` 
+
+### `$$df_{Error} = n - k - 1$$`
+
+## `$$df_{Total} = df_{Predicted} + df_{Error}$$`
+
+---
+layout: false
+class: middle
+
+<blockquote class="tiktok-embed" cite="https://www.tiktok.com/@chelseaparlettpelleriti/video/6811647290709757189" data-video-id="6811647290709757189" data-embed-from="oembed" style="max-width: 605px;min-width: 325px;" > <section> <a target="_blank" title="@chelseaparlettpelleriti" href="https://www.tiktok.com/@chelseaparlettpelleriti?refer=embed">@chelseaparlettpelleriti</a> <p>Always check your assumptions 📈<a title="statistics" target="_blank" href="https://www.tiktok.com/tag/statistics?refer=embed">#statistics</a> <a title="math" target="_blank" href="https://www.tiktok.com/tag/math?refer=embed">#math</a> <a title="linearregression" target="_blank" href="https://www.tiktok.com/tag/linearregression?refer=embed">#linearregression</a> <a title="fyp" target="_blank" href="https://www.tiktok.com/tag/fyp?refer=embed">#fyp</a></p> <a target="_blank" title="♬ is it me, Jesus? - Mackenzie Lee" href="https://www.tiktok.com/music/is-it-me-Jesus-6732518990188415749?refer=embed">♬ is it me, Jesus? - Mackenzie Lee</a> </section> </blockquote> 
+<!--SHINY.SINGLETON[e123f97525dee37cc53ba5b9f17fd3caf1b72842]-->
+<script async data-external="1" src="https://www.tiktok.com/embed.js"></script>
+<style>blockquote.tiktok-embed {border:unset;padding:unset;}</style>
+<!--/SHINY.SINGLETON[e123f97525dee37cc53ba5b9f17fd3caf1b72842]-->
+
+---
+layout: false
+class: title-slide-final, left
+
+# References
+
+
+
+- 
+&lt;p&gt;&lt;cite&gt;Wickham, H. and G. Grolemund
+(2016).
+&lt;em&gt;R for Data Science: Import, Tidy, Transform, Visualize, and Model Data&lt;/em&gt;.
+O'Reilly Media.&lt;/cite&gt;&lt;/p&gt;
+- 
+&lt;p&gt;&lt;cite&gt;Lewis-Beck, M.
+(1980).
+&amp;ldquo;Bivariate Regression: Assumptions and Inferences&amp;rdquo;.
+In: 
+&lt;em&gt;Applied Regression: An Introduction&lt;/em&gt;.
+Ed. by M. Lewis-Beck.
+Sage University Paper Series on Quantitative Applications in the Social Sciences - 22.
+Newbury Park, CA: Sage, pp. 26&amp;ndash;46.
+ISBN: 9781483381497.&lt;/cite&gt;&lt;/p&gt;
+- 
+&lt;p&gt;&lt;cite&gt;Schroeder, L., D. Sjoquist, and P. Stephan
+(1986).
+&amp;ldquo;Linear Regression&amp;rdquo;.
+In: 
+&lt;em&gt;Understanding Regression Analysis: An Introductory Guide&lt;/em&gt;.
+Ed. by L. Schroeder, D. Sjoquist and P. Stephan.
+Sage University Paper Series on Quantitative Applications in the Social Sciences - 57.
+Newbury Park, CA: Sage, pp. 11&amp;ndash;28.
+ISBN: 9780803927582.&lt;/cite&gt;&lt;/p&gt;
+
+- Figueredo, A. J. (2013).  Multiple Regression. *Statistical 
+Methods in Psychological Research*.
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "default",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

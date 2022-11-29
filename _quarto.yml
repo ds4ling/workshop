@@ -18,11 +18,11 @@ website:
         text: Set-up
       - text: Slides
         menu:
-          - href: "slides/00_coming_soon/"
+          - href: "01.qmd"
             text: "Day 1"
-          - href: "slides/00_coming_soon/"
+          - href: ""
             text: "Day 2"
-          - href: "slides/00_coming_soon/"
+          - href: ""
             text: "Day 3"
 
 format:
