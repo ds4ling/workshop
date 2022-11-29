@@ -1454,6 +1454,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 ```
 
 ---
+include: false
 layout: false
 class: inverse, middle
 
