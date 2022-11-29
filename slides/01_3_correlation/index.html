@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Statistics for Linguists</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Joseph V. Casillas, PhD" />
+    <script src="assets/header-attrs/header-attrs.js"></script>
+    <link href="assets/remark-css/hygge.css" rel="stylesheet" />
+    <link href="assets/remark-css/rutgers.css" rel="stylesheet" />
+    <link href="assets/remark-css/rutgers-fonts.css" rel="stylesheet" />
+    <link href="assets/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="assets/tile-view/tile-view.js"></script>
+    <link href="assets/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="assets/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="assets/panelset/panelset.css" rel="stylesheet" />
+    <script src="assets/panelset/panelset.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x68446589d094803b6ce7bc4598dd123","expires":14}</script>
+    <script src="assets/himalaya/himalaya.js"></script>
+    <script src="assets/js-cookie/js.cookie.js"></script>
+    <link href="assets/editable/editable.css" rel="stylesheet" />
+    <script src="assets/editable/editable.js"></script>
+    <script src="assets/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="assets/kePrint/kePrint.js"></script>
+    <link href="assets/lightable/lightable.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/5235085b15.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Statistics for Linguists
+]
+.subtitle[
+## Day 1 - Bivariate correlation
+]
+.author[
+### Joseph V. Casillas, PhD
+]
+.date[
+### Rutgers University</br>Last update: 2022-11-28
+]
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+class: inverse, middle
+
+&lt;blockquote align='center' class="twitter-tweet" data-lang="de"&gt;
+&lt;a href="https://twitter.com/juliomayol/status/960242979171717123"&gt;&lt;/a&gt;
+&lt;/blockquote&gt;
+
+---
+exclude: true
+class: center, middle
+
+# But first...
+
+---
+exclude: true
+
+layout: true
+
+# Statistical Assumptions
+
+---
+exclude: true
+
+background-image: url(../assets/img/pensar2.png)
+background-size: 400px
+background-position: 90% 50%
+
+&lt;!-- Figueroa - NEWTONIAN WORLDVIEW --&gt;
+
+### Statistics are about more than just mathematics...
+
+.pull-left[
+
+- Where do statistical assumptions come from?
+
+- Who made these statistical assumptions and why?
+
+- Are statistical assumptions truly consistent with the nature of reality?
+
+]
+
+---
+exclude: true
+
+### Where do mathematical concepts in general come from?
+
+- They are influenced by worldviews/paradigms/research traditions
+
+  - Choices are informed, and they need to be logically thought out
+
+- Statistics can be mathematically valid without answering the original research 
+question (what you really want to know)
+
+  - We need conceptual as well as mathematical validity
+
+---
+exclude: true
+
+layout: false
+background-image: url(https://afajournal.org/media/2370/072017worldview.jpg)
+background-size: 1500px
+
+---
+exclude: true
+
+background-image: url(https://visualunit.files.wordpress.com/2010/12/worldview_survey2.png)
+background-position: 100% 50%
+background-size: 600px
+
+# Statistical World-Views
+
+.pull-left[
+
+### Two major world views (Weltanschauungen) have historically influenced the field of Statistics:
+
+1. The Newtonian Worldview
+
+2. The Darwinian Worldview
+
+]
+
+---
+exclude: true
+
+background-image: url(https://theancientwebgreece.files.wordpress.com/2017/09/bc284-bob5_just2.jpg?w=337&amp;zoom=2)
+background-size: contain
+background-position: 100%
+
+.pull-left[
+
+### Plato (380 BC) The Republic
+
+- Believed in absolute God-given categories
+- Things possess an essence of a type (e.g., species)
+- Individual variations are “imperfect reflections” of ideal types (eidolon)... 
+therefore &lt;u&gt;not important&lt;/u&gt;
+- We can't trust our sensory perceptions... we can only arrive at truth using 
+pure reason
+
+### Aristotle (350 BC) De Partibus Animalium
+
+- Different idea of categories than Plato
+- Tried to create a taxonomy of animals
+- Taxonomy based on specific parts of animals that define them as a part of 
+group
+- Category membership defined by having a specific feature that members of 
+other groups don’t possess
+  - Birds have wings, but monkeys don’t, so only winged animals could be 
+  considered birds
+
+]
+
+---
+exclude: true
+
+class: middle
+
+### Both philosophers believed in categories:
+
+- But their definition of what categories were and where they came from was 
+discrepant
+
+--
+exclude: true
+
+.pull-left[
+
+### Aristotle
+
+- Categories are inherent in the individual
+- Individuals need to have some identifiable, visible feature to be classified
+- It is the possession of certain observable features that puts individuals in 
+categories
+
+]
+
+--
+exclude: true
+
+.pull-right[
+
+### Plato
+
+- Categories are God-given
+- Things possess an essence of a type
+- Observable features are not reliable because they are based on sense 
+perceptions
+
+]
+
+--
+exclude: true
+
+&lt;/br&gt;
+
+#### .RUred[To Aristotle the individual was ultimate reality, but to Plato the individual was an imperfect reflection of the perfect category or its “ideal type” (= eidolon)]
+
+---
+exclude: true
+
+class: center, middle
+
+# What about Newton and Darwin?
+
+---
+exclude: true
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/f/fe/Alfonso_X_el_Sabio_%28Jos%C3%A9_Alcoverro%29_01.jpg)
+background-size: contain
+background-position: 100%
+
+# Alfonso X “El Sabio” of Castile&lt;/br&gt;to the rescue!
+
+.pull-left[
+
+- Rendered Arabic scientific, had philosophical texts translated into Castilian, 
+restoring long-lost classical knowledge to Christian Europe
+
+- The Arabic translation of *De Partibus Animalium* (Aristotle, 350 BC) 
+comprises treatises 11-14 of the Kitāb al-Hayawān by Yahyà bin al-Bitrīq
+
+- “El libro de los animales”
+
+- Has lasting effect on 14th Century (Medieval) Scholastic Philosophy 
+  - Essentialism
+  - Nominalism
+]
+
+---
+exclude: true
+
+# Newton and Darwin
+
+### Essentialists were Platonists:
+
+- Believed that categories are real and God-given
+- The essentialist (platonic) worldview is highly influential: Isaac Newton was 
+an essentialist
+- The work of Newton directly influences big names responsible for introducing 
+statistical methods to the social sciences
+  - .blue[Laplace]: Leplace-Guass distribution, least squares estimation
+  - .blue[Quételet]: *L'homme moyen* (the "average man") is characterized by the mean 
+  values of measured variables that follow a normal distribution (golden mean)
+
+--
+exclude: true
+
+### Nominalists were Aristotelians:
+
+- Like Aristotle, but much more radical
+- They thought categories didn’t really exist in nature
+- Darwin was a nominalist
+- We create categories because we see common features and we arbitrarily try to 
+sort individuals into these categories
+
+---
+exclude: true
+
+background-image: url(./assets/img/bullseye.png)
+background-size: 1050px
+background-position: 190% 50%
+
+# Newtonian Thinking:
+
+### The “Golden Mean” as Target?
+
+---
+exclude: true
+
+# Newtonian Thinking Applied to Social Science
+
+- Wanted to base the Social Sciences on purely physical principles
+
+- Normal distribution was developed to explain the measurement of error:
+  - The normal distribution is the shape of error
+  
+  - Found that many traits were normally distributed
+  
+  - So was there a “golden mean” that nature aimed at, and was the distribution 
+  around this mean just “error”?
+
+- Wanted to create a set of universal laws to govern all human behavior using 
+the golden mean:
+
+  - Standard deviation was just “error”
+
+  - In Structuralist psychology, Wundt and others were looking for universal 
+  principles of human behavior
+
+  - They also saw individual differences as error
+
+---
+exclude: true
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/3/39/GodfreyKneller-IsaacNewton-1689.jpg)
+background-size: contain
+background-position: 100%
+
+# Persistent Influences of the&lt;/br&gt;Newtonian World-View
+
+### Later development: the Analysis of Variance (ANOVA)&lt;/br&gt;characterizes all individual differences (variance) as error
+
+.pull-left[
+
+- This comes from the dominance of the Newtonian worldview within experimental 
+psychology
+
+- Many statistical procedures just manipulate people in an attempt to discover 
+some “truth” about some aspect of human behavior
+
+- This still a common approach today
+
+]
+
+---
+exclude: true
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/6/6f/Editorial_cartoon_depicting_Charles_Darwin_as_an_ape_%281871%29.jpg)
+background-size: contain
+background-position: 100%
+
+# The Nominalists
+
+### Charles Robert Darwin, FRS (1809 –1882)
+
+.pull-left[
+
+- (1859) On the Origin of Species
+
+- Also addressed the nature of social and behavioral sciences
+
+- Clearly a Nominalist
+  - Species are transitory
+  - They grade into one another
+  - They have no objective or permanent existence
+
+- Species are mental constructs we invent to conceptualize populations
+  - Individuals are what are important, not species 
+  - Principles of continuum and contiguity
+
+]
+
+---
+exclude: true
+
+background-image: url(https://cdn.dnaindia.com/sites/default/files/styles/full/public/2018/01/22/644225-599073-525821-evolution.jpg)
+background-size: 700px
+background-position: 50% 100%
+
+# Nominalist Implications
+
+- If frequencies of heritable traits within populations of individuals change 
+over time then the entire species, and the definition of the species, changes 
+with them:
+
+	- No strict Biblical “bringing forth living creatures after their kind”
+
+	- Species are mental constructs that we invent to help us conceptualize 
+	“snapshots” of evolving populations at a 	single point in time
+
+---
+exclude: true
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Darwin%27s_finches_by_Gould.jpg/1200px-Darwin%27s_finches_by_Gould.jpg)
+background-size: contain
+background-position: 100%
+
+# The Darwinian&lt;/br&gt;Worldview
+
+---
+exclude: true
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/e/ec/Francis_Galton_1850s.jpg)
+background-size: contain
+background-position: 100%
+
+# The Darwinians: Sir Francis Galton
+
+.pull-left[
+
+- (1869) Hereditary Genius
+
+- Strongly influenced by his cousin: Charles Robert Darwin
+
+- English Victorian polymath
+
+- Founder of:
+	- Biological Psychology 
+	- Differential Psychology 
+	- Eugenics Movement
+
+- Wanted to investigate the heritability and realized that Quételet’s methods 
+and statistical models wouldn’t work for this purpose
+
+]
+
+---
+exclude: true
+
+background-image: url(https://images-na.ssl-images-amazon.com/images/I/81uocBLhwOL._SL1500_.jpg)
+background-size: 500px
+background-position: 100%
+
+# Attack of the Clones
+
+.pull-left[
+
+- If we were all clones, when we reproduced there would be no significant 
+difference between my offspring and yours:
+  - So my kids would be no more like me than they would be like you
+
+- Any differences between individuals would be random error:
+	- i.e., A deviation from the “golden mean”
+	- It would be deviation from the general traits of humans not unique 
+	heritable differences
+
+- But we know this is not the case
+	- My kids are more like me than like you 
+	- How do we show this?
+
+]
+
+---
+exclude: true
+
+# The Darwinians: Sir Francis Galton
+
+### Twin and Adoption Studies
+
+- Galton invented both twin studies and adoption studies to 
+investigate this:
+	- Differences between MZ twins should reflect environmental 
+	differences, and differences between adopted siblings reflected 
+	genetic differences
+- These were purely observational studies
+
+--
+exclude: true
+
+### Deviations from the Mean
+
+- Galton needed Karl Pearson to develop the mathematical 
+tools to analyze these data
+- Key was the deviation from the mean:
+	- Individuality defined as the deviation from the mean
+	- My deviation and my offspring’s deviation should be similar
+	- My kids don’t start back at the “ideal human” (“l’homme moyen”) mean and 
+	then make deviations from there
+	- They start from my genetic contributions and make deviations from there
+- He wanted to compare deviations from the mean among individuals, and then use 
+these to measure the deviations of the group
+
+---
+exclude: true
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Karl_Pearson%3B_Sir_Francis_Galton.jpg)
+background-size: contain
+background-position: 100%
+
+# The Darwinians: Karl Pearson
+
+.pull-left[
+
+- Established the discipline of mathematical statistics
+
+- Founded the world's first university statistics department at University 
+College London in 1911
+
+- Controversial proponent of eugenics
+
+- Protégé and biographer of Sir Francis Galton
+
+- Not a “Sir”
+
+- Galton and Pearson jointly developed the correlation coefficient 
+(r) in 1895
+
+- Also invented the chi-squared test: 
+	- Started feud with Sir Ronald Fisher about it
+
+]
+
+---
+
+# "The Coefficient of Co-relation"
+
+### Correlation coefficient (r)
+
+- The descriptive statistic that measures the degree of linear association 
+between any two variables:
+	- Ranges in value from -1 to +1
+	- When r = 0 there is no correlation
+	- Can be used to compare two people on same variable
+	- Can be used to compare two variables within one person
+
+--
+
+### Individual Differences
+
+- The correlation coefficient is (was) about comparing individual differences
+  - Recall that z-scores let us compare two different variables and see how they 
+  deviate from the mean
+  - You can compare weight and IQ, or “apples and oranges”, by using 
+  standardized scores
+  - The correlation coefficient is about the association between two variables
+
+---
+
+# Z-Scores &amp; Correlation Coefficients
+
+### The Z-Scores:
+
+## `$$z_x = \frac{(x_i - \bar{x})} {s_x} \qquad \qquad z_y = \frac{(y_i - \bar{y})} {s_y}$$`  
+--
+
+### Pearson’s "Coefficient of Co-relation":
+
+## `$$r_{xy} = \frac{\sum (z_x) (z_y)}{n - 1}$$`
+
+---
+
+# Correlation coefficient
+
+### Details
+
+- A Perfect Correlation: r&lt;sub&gt;xy&lt;/sub&gt; = 1
+
+- An Imperfect Correlation: r&lt;sub&gt;xy&lt;/sub&gt; &lt; 1
+
+- Mismatch between z&lt;sub&gt;x&lt;/sub&gt; and z&lt;sub&gt;y&lt;/sub&gt; produces correlation 
+coefficients lower than 1
+
+--
+
+### Requirements for Pearson's correlation coefficient
+
+- Scale of measurement should be interval or ratio
+
+- Variables should be approximately normally distributed
+
+- The association should be linear
+
+- There should be no outliers in the data
+
+---
+
+# Examples
+
+&lt;/br&gt;
+
+&lt;img src="index_files/figure-html/cor_examples-1.png" width="1080" style="display: block; margin: auto;" /&gt;
+
+---
+class: middle
+
+&lt;img src="index_files/figure-html/cor-non-linear-1.png" width="1008" /&gt;
+
+---
+
+&lt;iframe src="https://richarddmorey.shinyapps.io/standardizing_and_correlations/" style="border:none;" height="600" width="100%"&gt;&lt;/iframe&gt;
+
+---
+
+&lt;iframe src="https://gallery.shinyapps.io/correlation_game/" style="border:none;" height="600" width="100%"&gt;&lt;/iframe&gt;
+
+---
+class: middle
+
+&lt;img src="index_files/figure-html/vocab_plot-1.png" width="936" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Bivariate correlation
+
+- Average native test-takers of age 4 already know approx. 5,000 words
+
+- Average native test-takers of age 8 already know approx. 10,000 words
+
+- Average native test-takers of age 15 already know approx. 18,000 words
+
+- Most adult native test-takers range from 20,000–35,000 words
+
+&lt;/br&gt;
+
+.footnote[http://testyourvocab.com/blog/]
+
+--
+
+### Let's sample the data and calculate Pearson's correlation coeficient for age &lt;br&gt;and vocabulary size
+
+---
+
+.big[
+
+`$$\frac{\sum_{i}^{n} \left ( \frac{x_i - \bar{x}}{s_x} \right ) \left ( \frac{y_i - \bar{y}}{s_y} \right )}{n - 1} = \frac{\sum_{i}^{n} \left ( z_x \right ) \left ( z_y \right )}{n - 1} = {r_{xy}}$$`
+
+]
+
+---
+
+.big[ 
+
+`$$\frac{\sum_{i}^{n} \left ( \frac{x_i - \bar{x}}{s_x} \right ) \left ( \frac{y_i - \bar{y}}{s_y} \right )}{n - 1} = \frac{\sum_{i}^{n} \left ( z_x \right ) \left ( z_y \right )}{n - 1} = {r_{xy}}$$`
+
+]
+
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Vocab_sample &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; y &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.44 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.58 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.45 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.71 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.94 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.69 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.47 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.59 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.71 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.77 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.24 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.39 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.95 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.73 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.99 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.99 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13.63 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.92 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.69 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.29 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.57 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+.big[ 
+
+`$$\frac{\sum_{i}^{n} \left ( \frac{\color{red}{x_i} - \bar{x}}{s_x} \right ) \left ( \frac{\color{blue}{y_i} - \bar{y}}{s_y} \right )}{n - 1} = \frac{\sum_{i}^{n} \left ( z_x \right ) \left ( z_y \right )}{n - 1} = {r_{xy}}$$`
+
+]
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Vocab_sample &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; y &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 9.50 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 12.44 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 4.25 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 3.58 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 6.45 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 9.71 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 6.94 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 7.69 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 5.47 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 5.59 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 10.71 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 14.77 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 11.07 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 10.24 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 8.39 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 7.95 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 14.73 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 21.99 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 9.99 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 13.63 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 12.92 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 15.69 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 4.29 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 6.57 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+.big[ 
+
+`$$\frac{\sum_{i}^{n} \left ( \frac{x_i - \color{red}{\bar{x}}}{\color{blue}{s_x}} \right ) \left ( \frac{y_i - \color{red}{\bar{y}}}{\color{blue}{s_y}} \right )}{n - 1} = \frac{\sum_{i}^{n} \left ( z_x \right ) \left ( z_y \right )}{n - 1} = {r_{xy}}$$`
+
+]
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Vocab_sample &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; y &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.44 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;2&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.58 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;3&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.45 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.71 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;4&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.94 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.69 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;5&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.47 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.59 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;6&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.71 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.77 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;7&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.24 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;8&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.39 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.95 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;9&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.73 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.99 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;10&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.99 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13.63 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;11&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.92 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.69 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;12&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.29 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.57 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: white !important;background-color: white !important;"&gt; &lt;span style="     color: white !important;"&gt;NA&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: white !important;background-color: white !important;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: white !important;background-color: white !important;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;font-weight: bold;"&gt; &lt;span style="     color: black !important;"&gt;Sum&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;"&gt; 104.71 &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;"&gt; 129.85 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: #cc0033 !important;"&gt; &lt;span style="     color: black !important;"&gt;Mean&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: #cc0033 !important;"&gt; 8.73 &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: #cc0033 !important;"&gt; 10.82 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: blue !important;"&gt; &lt;span style="     color: black !important;"&gt;SD&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: blue !important;"&gt; 3.36 &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: blue !important;"&gt; 5.15 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+.big[
+
+`$$\frac{\sum_{i}^{n} \color{red}{\left ( \frac{x_i - \bar{x}}{s_x} \right )} \left ( \frac{y_i - \bar{y}}{s_y} \right )}{n - 1} = \frac{\sum_{i}^{n} \color{red}{\left ( z_x \right )} \left ( z_y \right )}{n - 1} = {r_{xy}}$$`
+
+]
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Vocab_sample &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; y &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; z_x &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 9.50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.44 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 0.23 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 4.25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.58 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; -1.33 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 6.45 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.71 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; -0.68 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 6.94 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.69 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; -0.53 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 5.47 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.59 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; -0.97 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 10.71 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.77 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 0.59 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 11.07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.24 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 0.70 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 8.39 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.95 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; -0.10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 14.73 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.99 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 1.79 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 9.99 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13.63 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 0.38 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 12.92 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.69 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 1.25 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 4.29 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.57 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; -1.32 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+.big[
+
+`$$\frac{\sum_{i}^{n} \left ( \frac{x_i - \bar{x}}{s_x} \right ) \color{blue}{\left ( \frac{y_i - \bar{y}}{s_y} \right )}}{n - 1} = \frac{\sum_{i}^{n} \left ( z_x \right ) \color{blue}{\left ( z_y \right )}}{n - 1} = {r_{xy}}$$`
+
+]
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Vocab_sample &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; y &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; z_x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; z_y &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.50 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 12.44 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.23 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 0.31 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.25 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 3.58 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.33 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; -1.41 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.45 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 9.71 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.68 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; -0.22 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.94 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 7.69 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.53 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; -0.61 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.47 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 5.59 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.97 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; -1.02 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.71 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 14.77 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.59 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 0.77 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.07 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 10.24 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.70 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; -0.11 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.39 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 7.95 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.10 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; -0.56 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.73 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 21.99 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.79 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 2.17 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.99 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 13.63 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.38 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 0.55 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.92 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 15.69 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.25 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 0.94 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.29 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 6.57 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.32 &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; -0.82 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+.big[
+
+`$$\frac{\sum_{i}^{n} \color{purple}{\left ( \frac{x_i - \bar{x}}{s_x} \right ) \left ( \frac{y_i - \bar{y}}{s_y} \right )}}{n - 1} = \frac{\sum_{i}^{n} \color{purple}{\left ( z_x \right ) \left ( z_y \right )}}{n - 1} = {r_{xy}}$$`
+
+]
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Vocab_sample &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; y &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; z_x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; z_y &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; (z_x)(z_y) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.44 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.23 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.31 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.07 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.58 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -1.33 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -1.41 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 1.88 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.45 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.71 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -0.68 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -0.22 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.15 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.94 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.69 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -0.53 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -0.61 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.32 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.47 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.59 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -0.97 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -1.02 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.99 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.71 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.77 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.59 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.77 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.45 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.24 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.70 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -0.11 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -0.08 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.39 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.95 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -0.10 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -0.56 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.06 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.73 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.99 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 1.79 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 2.17 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 3.88 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.99 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13.63 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.38 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.55 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.21 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.92 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.69 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 1.25 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 0.94 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 1.17 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.29 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.57 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -1.32 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; -0.82 &lt;/td&gt;
+   &lt;td style="text-align:right;color: purple !important;"&gt; 1.08 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+.big[
+
+`$$\frac{\color{green}{\sum_{i}^{n} \left ( \frac{x_i - \bar{x}}{s_x} \right ) \left ( \frac{y_i - \bar{y}}{s_y} \right )}}{n - 1} = \frac{\color{green}{\sum_{i}^{n} \left ( z_x \right ) \left ( z_y \right )}}{n - 1} = {r_{xy}}$$`
+
+]
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Vocab_sample &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; y &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; z_x &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; z_y &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; (z_x)(z_y) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.44 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.23&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.31&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.07&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;2&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.58 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-1.33&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-1.41&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;1.88&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;3&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.45 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.71 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-0.68&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-0.22&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.15&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;4&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.94 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.69 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-0.53&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-0.61&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.32&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;5&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.47 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.59 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-0.97&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-1.02&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.99&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;6&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.71 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.77 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.59&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.77&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.45&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;7&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.24 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.7&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-0.11&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-0.08&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;8&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.39 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.95 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-0.1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-0.56&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.06&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;9&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.73 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.99 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;1.79&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;2.17&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;3.88&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;10&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.99 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13.63 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.38&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.55&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.21&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;11&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.92 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.69 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;1.25&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;0.94&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;1.17&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;12&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.29 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.57 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-1.32&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;-0.82&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;span style="     color: black !important;"&gt;1.08&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: white !important;background-color: white !important;"&gt; &lt;span style="     color: white !important;"&gt;NA&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: white !important;background-color: white !important;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: white !important;background-color: white !important;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: white !important;background-color: white !important;"&gt; &lt;span style="     color: white !important;"&gt;NA&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: white !important;background-color: white !important;"&gt; &lt;span style="     color: white !important;"&gt;NA&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: white !important;background-color: white !important;"&gt; &lt;span style="     color: white !important;"&gt;NA&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;background-color: green !important;"&gt; &lt;span style="     color: black !important;"&gt;Sum&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;background-color: green !important;"&gt; 104.71 &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;background-color: green !important;"&gt; 129.85 &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;background-color: green !important;"&gt; &lt;span style="     color: black !important;"&gt;0&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;background-color: green !important;"&gt; &lt;span style="     color: black !important;"&gt;0&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;background-color: green !important;"&gt; &lt;span style="     color: black !important;"&gt;10.18&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;"&gt; &lt;span style="     color: black !important;"&gt;Mean&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;"&gt; 8.73 &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;"&gt; 10.82 &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;"&gt; &lt;span style="     color: black !important;"&gt;0&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;"&gt; &lt;span style="     color: black !important;"&gt;0&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;"&gt; &lt;span style="     color: white !important;"&gt;NA&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;"&gt; &lt;span style="     color: black !important;"&gt;SD&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;"&gt; 3.36 &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;"&gt; 5.15 &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;"&gt; &lt;span style="     color: black !important;"&gt;1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;"&gt; &lt;span style="     color: black !important;"&gt;1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;color: black !important;"&gt; &lt;span style="     color: white !important;"&gt;NA&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+.big[
+
+`$$\frac{\sum_{i}^{n} \left ( \frac{x_i - \bar{x}}{s_x} \right ) \left ( \frac{y_i - \bar{y}}{s_y} \right )}{n - 1} = \frac{\sum_{i}^{n} \left ( z_x \right ) \left ( z_y \right )}{n - 1} = {\color{red}{r_{xy}}}$$`
+
+]
+
+
+```r
+my_sum &lt;- sum(vocab_sample$`(z_x)(z_y)`) 
+my_n &lt;- (nrow(vocab_sample) - 1)
+my_r &lt;- my_sum / my_n
+my_r
+```
+
+```
+## [1] 0.9254545
+```
+
+or 
+
+
+```r
+10.18 / (12 - 1)
+```
+
+```
+## [1] 0.9254545
+```
+
+Pearson's correlation coefficient = **0.9254545**.
+
+---
+
+# Doing it in R
+
+### There are two useful functions: 
+
+.pull-left[
+
+1. ```cor()```
+
+2. ```cor.test()```
+
+&lt;img src="index_files/figure-html/simple-cor-ex-plot-1.png" width="468" /&gt;
+
+]
+
+--
+
+.pull-right[
+
+
+```r
+cor(mtcars$mpg, mtcars$disp)
+```
+
+```
+## [1] -0.8475514
+```
+
+
+```r
+cor.test(mtcars$mpg, mtcars$disp)
+```
+
+```
+## 
+## 	Pearson's product-moment correlation
+## 
+## data:  mtcars$mpg and mtcars$disp
+## t = -8.7472, df = 30, p-value = 9.38e-10
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.9233594 -0.7081376
+## sample estimates:
+##        cor 
+## -0.8475514
+```
+
+]
+
+---
+class: center, middle
+
+# A word of warning...
+
+---
+
+&lt;iframe src="https://www.tylervigen.com/spurious-correlations" style="border:none;" height="600" width="100%"&gt;&lt;/iframe&gt;
+
+---
+class: center, middle
+
+# Correlation `\(\neq\)` causation
+
+--
+
+background-image: url(https://i.pinimg.com/736x/e8/eb/f2/e8ebf268abd01f28ab1dc56bf801dc84--inner-arm-tattoos-bicep-tattoo.jpg)
+background-size: 1250px
+background-position: 50% 70%
+
+&lt;!-- bicepts tatoo --&gt;
+
+---
+
+# Practice
+
+Load the `test_scores_rm` dataset from the `ds4ling` package. 
+
+
+```r
+data(test_scores_rm)
+test_scores_rm
+```
+
+```
+## # A tibble: 16 × 4
+##    id     spec  test1 test2
+##    &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 span01 g1_lo  64.3  69.2
+##  2 span02 g1_lo  59.8  63.7
+##  3 span03 g1_hi  66.1  70.9
+##  4 span04 g1_hi  72.8  79.2
+##  5 span05 g2_lo  68.3  75.4
+##  6 span06 g2_lo  69.2  76.7
+##  7 span07 g2_hi  71.4  77.2
+##  8 span08 g2_hi  80.4  88.9
+##  9 cata01 g1_lo  75.6  83.6
+## 10 cata02 g1_lo  71.2  78.8
+## 11 cata03 g1_hi  69.1  74.6
+## 12 cata04 g1_hi  72.4  80.7
+## 13 cata05 g2_lo  71.7  77.9
+## 14 cata06 g2_lo  69.0  75  
+## 15 cata07 g2_hi  69.9  76  
+## 16 cata08 g2_hi  77.3  85.6
+```
+
+---
+class: title-slide-final, left
+
+# References
+
+
+
+- 
+&lt;p&gt;&lt;cite&gt;Wickham, H. and G. Grolemund
+(2016).
+&lt;em&gt;R for Data Science: Import, Tidy, Transform, Visualize, and Model Data&lt;/em&gt;.
+O'Reilly Media.&lt;/cite&gt;&lt;/p&gt;
+- 
+&lt;p&gt;&lt;cite&gt;Johnson, K.
+(2011).
+&amp;ldquo;Fundamentals of Quantitative Analysis&amp;rdquo;.
+In: 
+&lt;em&gt;Quantitative Methods In Linguistics&lt;/em&gt;.
+Ed. by K. Johnson.
+Wiley, pp. 1&amp;ndash;33.&lt;/cite&gt;&lt;/p&gt;
+- 
+&lt;p&gt;&lt;cite&gt;Johnson, K.
+(2011).
+&amp;ldquo;Patterns and Tests&amp;rdquo;.
+In: 
+&lt;em&gt;Quantitative Methods In Linguistics&lt;/em&gt;.
+Ed. by K. Johnson.
+Wiley, pp. 34&amp;ndash;69.&lt;/cite&gt;&lt;/p&gt;
+- 
+&lt;p&gt;&lt;cite&gt;Takahashi, S.
+(2009).
+&lt;em&gt;The Manga Guide to Statistics&lt;/em&gt;.
+Trend-Pro CO., LTD.&lt;/cite&gt;&lt;/p&gt;
+
+
+- Figueredo, A. J. (2013).  The Newtonian Worldview in Statistics. Statistical 
+Methods in Psychological Research.
+
+- Figueredo, A. J. (2013).  The Darwinian Worldview in Statistics. Statistical 
+Methods in Psychological Research.
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "default",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

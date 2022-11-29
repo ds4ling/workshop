@@ -1,0 +1,1493 @@
+---
+title   : 'Statistics for Linguists'
+subtitle: 'Day 1 - The linear model:</br>.lightgrey[Bivariate regression]'
+author  : "Joseph V. Casillas, PhD"
+date    : "Rutgers University</br>Last update: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: assets
+    css: ["hygge", "rutgers", "rutgers-fonts"]
+    nature:
+      beforeInit: ["https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js", "https://platform.twitter.com/widgets.js"]
+      highlightStyle: default
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+    includes:
+      in_header: "../assets/partials/header.html"
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(fig.retina=2, cache=FALSE)
+```
+
+```{r xaringan-extra-all-the-things, echo=FALSE}
+xaringanExtra::use_xaringan_extra(
+  c("tile_view", "panelset", "editable", "animate", "tachyons", "webcam")
+)
+```
+
+```{r, 'helpers', echo=FALSE, message=F, warning=F}
+source(here::here("slides", "assets", "scripts", "helpers.R"))
+```
+
+
+class: inverse, middle
+
+<blockquote align='center' class="twitter-tweet" data-lang="de">
+<a href="https://twitter.com/ChelseaParlett/status/1352717277976694784"></a>
+</blockquote>
+
+---
+class: title-slide-section-grey, middle
+
+# The linear model
+
+---
+layout: true
+
+# The linear model
+
+---
+
+- What it encompasses... a lot. It's everywhere.
+- The linear model allows us to test for a linear 
+relationship between 2 (or more) variables
+- It can be used to 
+  1. quantify the strength of a relationship 
+  2. predict
+
+### Some examples
+
+- weight ~ height
+--
+
+- IQ ~ age
+--
+
+- RT ~ group
+--
+
+- F1 ~ vowel
+--
+
+- vocab size ~ age
+--
+
+- vowel duration ~ stress
+- etc. 
+
+.footnote[We interpret the `~` as "as a function of".]
+
+---
+background-image: url("./assets/img/lm_ex1.png")
+background-size: contain
+
+---
+background-image: url("./assets/img/lm_ex2.png")
+background-size: contain
+
+---
+layout: true
+
+# Linear algebra
+
+---
+
+### Remember middle school?
+
+- It really is the same thing. 
+
+- You probably saw something like this:
+
+$$y = a + bx$$
+
+- ...or maybe some other variation (i.e., y = mx + b) where **bx** is 
+the *slope* and .blue[a] is the point where the line crosses the 
+y-axis when x = 0, i.e. the *y-intercept*.
+
+- If you know two of the variables, you can solve for the third... 
+assume x = 2. Solve for y.
+
+$$y = 50 + 10x$$
+
+--
+
+$$y = 50 + 10 \times 2$$
+
+--
+
+$$y = 50 + 20$$
+
+--
+
+$$y = 70$$
+
+---
+
+### Cartesian coordinates
+
+.pull-left[
+
+```{r, cartesian_coord_plot1, echo=FALSE, fig.height=6}
+y_hashes <- data.frame(
+  x = -0.15, 
+  x_end = 0.15, 
+  y_axis = seq(-5, 5, 1), 
+  label = 'y-axis'
+)
+
+x_hashes <- data.frame(
+  y = -0.15, 
+  y_end = 0.15, 
+  x_axis = seq(-5, 5, 1), 
+  label = 'x-axis'
+)
+
+coords_p1 <- tribble(~'x', ~'y', ~'label', 
+          1,    4,   'y-axis', 
+          4,   -1,   'x-axis') %>%
+ggplot(data = ., aes(x = x, y = y, label = label, color = label)) + 
+  geom_text(size = 6, show.legend = FALSE) + 
+  scale_x_continuous(breaks = seq(-5, 5, 1), 
+                     labels = seq(-5, 5, 1)) + 
+  scale_y_continuous(breaks = seq(-5, 5, 1), 
+                     labels = seq(-5, 5, 1)) + 
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) + 
+  geom_segment(data = y_hashes, show.legend = FALSE, 
+               aes(x = x, xend = x_end, 
+                   y = y_axis, yend = y_axis, 
+                   label = NULL, color = NULL)) + 
+  geom_segment(data = x_hashes, show.legend = FALSE, 
+               aes(x = x_axis, xend = x_axis, 
+                   y = y, yend = y_end, 
+                   label = NULL, color = NULL)) + 
+  scale_color_brewer(palette = "Set1") + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+coords_p1
+```
+
+]
+
+--
+
+.pull-right[
+
+```{r, cartesian_coord_plot2, echo=FALSE, fig.height=6}
+coords_p1 + geom_abline(intercept = 0, 
+                        slope = 1, 
+                        size = 1.5,
+                        lty = 1, 
+                        color = "darkred")
+```
+
+]
+
+---
+
+### Cartesian coordinates
+
+.pull-left[
+
+```{r, cartesian_coord_plot3, echo=FALSE, fig.height=6}
+coords_p1 + geom_abline(intercept = 1, 
+                        slope = 3, 
+                        size = 1.5,
+                        lty = 1, 
+                        color = "darkred")
+```
+
+]
+
+.pull-right[
+
+```{r, cartesian_coord_plot4, echo=FALSE, fig.height=6}
+coords_p1 + geom_abline(intercept = 2, 
+                        slope = -1, 
+                        size = 1.5,
+                        lty = 1, 
+                        color = "darkred")
+```
+
+]
+
+---
+layout: false
+class: title-slide-section-grey, middle
+
+# The linear model
+
+### **Bivariate regression**
+
+---
+layout: true
+
+# Bivariate regression
+
+---
+
+- The linear model is basically the same as linear algebra, with two subtle differences
+  1. We fit the line through data points (measurements, observations)
+  2. We use slightly different terminology
+
+### $$\color{blue}{response} \sim intercept + (slope * \color{red}{predictor})$$
+
+--
+
+### $$\color{blue}{\hat{y}} = a + b\color{red}{x}$$
+
+--
+
+- We call our dependent variable the .blue[response variable] (or criterion)
+
+- Our independent variables are called **predictors**
+
+- The intercept and the slope are *coefficients*
+  - These are the meat and potatoes of the linear model
+  - They are also called *parameter estimates*
+
+--
+
+### How do we know the line of best fit?
+
+---
+
+.pull-left[
+
+```{r, best_fit1, echo=FALSE, fig.height=6}
+
+coords_p2_labels <- tribble(
+  ~'x', ~'y', ~'label', 
+    1,    4,   'y-axis', 
+    4,   -1,   'x-axis')
+
+coords_p2_points <- tribble(
+  ~'x', ~'y',
+    1,    1,
+    2,    2, 
+    3,    3)
+
+coords_p2 <- ggplot(coords_p2_labels, aes(x = x, y = y, label = label)) + 
+  geom_text(size = 6, show.legend = FALSE) + 
+  geom_point(data = coords_p2_points, 
+             aes(x = x, y = y, label = NULL), 
+             color = "blue", size = 3) + 
+  scale_x_continuous(breaks = seq(-5, 5, 1), 
+                     labels = seq(-5, 5, 1)) + 
+  scale_y_continuous(breaks = seq(-5, 5, 1), 
+                     labels = seq(-5, 5, 1)) + 
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) + 
+  geom_segment(data = y_hashes, show.legend = FALSE, 
+               aes(x = x, xend = x_end, 
+                   y = y_axis, yend = y_axis, 
+                   label = NULL, color = NULL)) + 
+  geom_segment(data = x_hashes, show.legend = FALSE, 
+               aes(x = x_axis, xend = x_axis, 
+                   y = y, yend = y_end, 
+                   label = NULL, color = NULL)) + 
+  scale_color_brewer(palette = "Set1") + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+coords_p2
+```
+
+]
+
+--
+
+.pull-right[
+
+```{r, best_fit2, echo=FALSE, fig.height=6}
+
+coords_p2 + geom_abline(intercept = 0, slope = 1, color = "darkred")
+
+```
+
+]
+
+---
+
+.pull-left[
+
+```{r, best_fit3, echo=FALSE, fig.height=6}
+
+ggplot(coords_p2_points, aes(x = x, y = y)) + 
+  coord_cartesian(xlim = c(0, 4), ylim = c(0, 4)) + 
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) + 
+  geom_hline(yintercept = mean(coords_p2_points$y), 
+             lty = 1, color = 'blue', size = 1.5) +
+  geom_abline(intercept = 0, slope = 1, lty = 2, color = "darkred") + 
+  geom_segment(aes(x = 1, xend = 1, y = 1, yend = 2), lty = 3, size = 1) + 
+  geom_segment(aes(x = 3, xend = 3, y = 2, yend = 3), lty = 3, size = 1) + 
+  geom_point(color = 'blue', fill = 'grey70', pch = 21, size = 6) + 
+  annotate("text", x = 0.5, y = 1, label = "(1, 1)", 
+           size = 6, color = 'darkgrey') + 
+  annotate("text", x = 3.5, y = 3, label = "(3, 3)", 
+           size = 6, color = 'darkgrey') + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+```
+
+]
+
+.pull-right[
+
+```{r, best_fit_table1, results='asis', echo=FALSE}
+kable(coords_p2_points, format = "html")
+```
+
+- If we tried to predict using just the .blue[mean of ```y```] we would be 
+right once, but we would miss badly for .grey[(1, 1)] and .grey[(3, 3)].
+
+- The .RUred[line of best fit] is that which reduces the distance between the 
+*predicted values* of `y` and the *observed values* of `y`. 
+
+]
+---
+
+### Measurement error
+
+- We rarely (never) find a perfectly linear relationship in our data
+  - Most relationships are not perfectly linear
+  - Our measurements are not perfect (VOT, formants, durations, RT)
+  - There is error in everything (normal distribution)
+
+- We account for .RUred[error] in our models
+
+### $$\hat{y} = a + bx + \color{red}{\epsilon}$$
+
+---
+
+.pull-left[
+
+```{r, best_fit4, echo=FALSE}
+imperf_points1 <- tribble(
+  ~'x', ~'y', ~'fitted1', ~'fitted2', 
+    1,    2,    1.6,        0.75, 
+    2,    1,    2.7,        1.25, 
+    3,    3,    3.8,        1.75
+)
+
+ggplot(imperf_points1, aes(x = x, y = y)) + 
+  coord_cartesian(xlim = c(0, 4), ylim = c(0, 4)) + 
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) + 
+  geom_hline(yintercept = mean(imperf_points1$y), 
+             lty = 1, color = 'blue', size = 1.5, alpha = 0.3) +
+  geom_point(color = 'blue', fill = 'grey70', pch = 21, size = 6) + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+```
+
+]
+
+.pull-right[
+
+- Again, we can see that the .blue[mean of ```y```] isn't the best solution. 
+  - It can summarize the ```y``` data
+  - It cannot explain the relationship between ```x``` and ```y```.
+
+- We need a method to assess how well a given line fits the data
+
+- We need a method to determine the optimal intercept and slope (the line 
+of best fit)
+
+]
+
+---
+
+```{r, best_fit5, echo=FALSE, fig.height=5, fig.width=14}
+
+imperf_plot1 <- ggplot(imperf_points1, aes(x = x, y = y)) + 
+  coord_cartesian(xlim = c(0, 4), ylim = c(0, 4)) + 
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) + 
+  geom_hline(yintercept = mean(imperf_points1$y), 
+             lty = 1, color = 'blue', size = 1.5, alpha = 0.1) +
+  geom_abline(intercept = 0.5, slope = 1.1, 
+              lty = 2, color = "darkred") + 
+  geom_segment(aes(xend = x, yend = fitted1), lty = 3, size = 1) +
+  geom_point(color = 'blue', fill = 'grey70', pch = 21, size = 6) + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+imperf_plot2 <- ggplot(imperf_points1, aes(x = x, y = y)) + 
+  coord_cartesian(xlim = c(0, 4), ylim = c(0, 4)) + 
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) + 
+  geom_hline(yintercept = mean(imperf_points1$y), 
+             lty = 1, color = 'blue', size = 1.5, alpha = 0.1) +
+  geom_abline(intercept = 0.25, slope = 0.5, 
+              lty = 2, color = "darkred") + 
+  geom_segment(aes(xend = x, yend = fitted2), lty = 3, size = 1) +
+  geom_point(color = 'blue', fill = 'grey70', pch = 21, size = 6) + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+imperf_mod <- lm(y ~ x, data = imperf_points1)
+
+imperf_plot3 <- ggplot(imperf_points1, aes(x = x, y = y)) + 
+  coord_cartesian(xlim = c(0, 4), ylim = c(0, 4)) + 
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) + 
+  geom_hline(yintercept = mean(imperf_points1$y), 
+             lty = 1, color = 'blue', size = 1.5, alpha = 0.1) +
+  geom_abline(intercept = coef(imperf_mod)[1], slope = coef(imperf_mod)[2], 
+              lty = 2, color = "darkred") + 
+  geom_segment(aes(xend = x, yend = fitted(imperf_mod)), lty = 3, size = 1) +
+  geom_point(color = 'blue', fill = 'grey70', pch = 21, size = 6) + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+imperf_plot1 + imperf_plot2 + imperf_plot3 + 
+  plot_annotation(tag_levels = '1', tag_suffix = ".")
+
+```
+
+- One way to do this is to calculate the 'distance' between predicted 
+y (.RUred[ŷ, y-hat]) and observed y (.blue[y<sub>i</sub>]). 
+- If we add up this distance for each observation we can compare it to other 
+lines (i.e., other distances). 
+- The line that produces the shortest distance is the best. 
+
+---
+
+.pull-left[
+
+
+```{r, best_fit6, echo=FALSE}
+
+imperf_plot1
+
+```
+
+]
+
+.pull-right[
+
+- The difference between $\hat{y}$ and $y_i$ is called *prediction error*
+
+- The *total prediction error* (TPE) is the sum of the prediction error of all 
+observations
+
+- This measurement is not ideal because negative values cancel out the positive 
+ones, thus we square them. 
+
+- We call this the sum of square of the errors (SSE)
+
+]
+
+---
+
+.pull-left[
+
+```{r, best_fit7, echo=FALSE}
+
+imperf_plot1 + annotate("text", x = 0.85, y = 1.85, label = "[", 
+                        size = 14, color = 'grey70') + 
+               geom_segment(aes(x = 2.17, xend = 2.17, y = 1, yend = 2.7), 
+                        size = 1.7, color = 'grey70') + 
+               geom_segment(aes(x = 2.1, xend = 2.19, y = 1, yend = 1), 
+                        size = 1.7, color = 'grey70') +
+               geom_segment(aes(x = 2.1, xend = 2.19, y = 2.7, yend = 2.7), 
+                        size = 1.7, color = 'grey70') +
+               geom_segment(aes(x = 3.17, xend = 3.17, y = 3, yend = 3.8), 
+                        size = 1.7, color = 'grey70') + 
+               geom_segment(aes(x = 3.1, xend = 3.19, y = 3, yend = 3), 
+                        size = 1.7, color = 'grey70') +
+               geom_segment(aes(x = 3.1, xend = 3.19, y = 3.8, yend = 3.8), 
+                        size = 1.7, color = 'grey70') 
+```
+
+]
+
+.pull-right[
+
+</br>
+
+```{r, best_fit_table2, echo=FALSE, results='asis'}
+imperf_table1 <- imperf_points1 %>% 
+  select(x_i = x, y_i = y, y_hat = fitted1) %>% 
+  mutate(., pred.error = y_i - y_hat, 
+            sqrd.error = pred.error ^ 2)
+
+pred_error1 <- sum(imperf_table1$pred.error)
+sqrd_error1 <- sum(imperf_table1$sqrd.error)
+
+imperf_table1 %>% 
+  add_row(., y_hat = NA) %>% 
+  add_row(., y_hat = NA, 
+             pred.error = pred_error1, 
+             sqrd.error = sqrd_error1) %>% 
+  mutate(., x_i = cell_spec(x_i, "html", 
+            color = if_else(is.na(x_i), "white", "black")), 
+            y_i = cell_spec(y_i, "html", 
+            color = if_else(is.na(y_i), "white", "black")), 
+            y_hat = cell_spec(y_hat, "html", 
+            color = if_else(is.na(y_hat), "white", "black"))) %>% 
+  kable(., format = "html", escape = F) %>% 
+  row_spec(4, color = "white") %>% 
+  row_spec(5, color = "#cc0033")
+```
+
+- This line is not the best fit for these data because it does not *minimize the 
+sum of the squares of the errors*. 
+
+]
+
+---
+
+.pull-left[
+
+```{r, best_fit8, echo=FALSE}
+imperf_plot2
+```
+
+]
+
+.pull-right[
+
+</br>
+
+```{r, best_fit_table3, echo=FALSE, results='asis'}
+imperf_table2 <- imperf_points1 %>% 
+  select(x_i = x, y_i = y, y_hat = fitted2) %>% 
+  mutate(., pred.error = y_i - y_hat, 
+            sqrd.error = pred.error ^ 2)
+
+pred_error2 <- sum(imperf_table2$pred.error)
+sqrd_error2 <- sum(imperf_table2$sqrd.error)
+
+imperf_table2 %>% 
+  add_row(., y_hat = NA) %>% 
+  add_row(., y_hat = NA, 
+             pred.error = pred_error2, 
+             sqrd.error = sqrd_error2) %>% 
+  mutate(., x_i = cell_spec(x_i, "html", 
+            color = if_else(is.na(x_i), "white", "black")), 
+            y_i = cell_spec(y_i, "html", 
+            color = if_else(is.na(y_i), "white", "black")), 
+            y_hat = cell_spec(y_hat, "html", 
+            color = if_else(is.na(y_hat), "white", "black"))) %>% 
+  kable(., format = "html", escape = F) %>% 
+  row_spec(4, color = "white") %>% 
+  row_spec(5, color = "#cc0033")
+```
+
+- This line is not the best fit for these data because it does not *minimize the 
+sum of the squares of the errors*. 
+
+]
+
+---
+
+.pull-left[
+
+```{r, best_fit9, echo=FALSE}
+
+imperf_mod <- lm(y ~ x, data = imperf_points1)
+
+imperf_plot_bestfit <- ggplot(imperf_points1, aes(x = x, y = y)) + 
+  coord_cartesian(xlim = c(0, 4), ylim = c(0, 4)) + 
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) + 
+  geom_hline(yintercept = mean(imperf_points1$y), 
+             lty = 1, color = 'blue', size = 1.5, alpha = 0.3) +
+  geom_abline(intercept = coef(imperf_mod)[1], slope = coef(imperf_mod)[2], 
+              lty = 2, color = "darkred") + 
+  geom_segment(aes(xend = x, yend = fitted(imperf_mod)), lty = 3, size = 1) +
+  geom_point(color = 'blue', fill = 'grey70', pch = 21, size = 6) + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+imperf_plot_bestfit
+```
+
+]
+
+.pull-right[
+
+</br>
+
+```{r, best_fit_table4, echo=FALSE, results='asis'}
+imperf_table3 <- imperf_points1 %>% 
+  select(x_i = x, y_i = y) %>% 
+  mutate(., y_hat = fitted(imperf_mod), 
+            pred.error = y_i - y_hat, 
+            sqrd.error = pred.error ^ 2)
+
+pred_error3 <- sum(imperf_table3$pred.error)
+sqrd_error3 <- sum(imperf_table3$sqrd.error)
+
+imperf_table3 %>% 
+  add_row(., y_hat = NA) %>% 
+  add_row(., y_hat = NA, 
+             pred.error = pred_error3, 
+             sqrd.error = sqrd_error3) %>% 
+  mutate(., x_i = cell_spec(x_i, "html", 
+            color = if_else(is.na(x_i), "white", "black")), 
+            y_i = cell_spec(y_i, "html", 
+            color = if_else(is.na(y_i), "white", "black")), 
+            y_hat = cell_spec(y_hat, "html", 
+            color = if_else(is.na(y_hat), "white", "black"))) %>% 
+  kable(., format = "html", escape = F) %>% 
+  row_spec(4, color = "white") %>% 
+  row_spec(5, color = "#cc0033")
+```
+
+</br>
+
+- This line represents a much better fit (1.50 is lower than the SSE of the 
+other lines)
+- So how do we calculate the line the minimizes the sum of squares of the 
+errors?
+
+]
+
+---
+
+### Least squares estimate
+
+## $$b = \frac{\sum{(x_i - \bar{x})(y_i - \bar{y})}}{\sum{(x_i - \bar{x})^2}}$$
+
+## $$a = \bar{y} - b\bar{x}$$
+
+---
+
+```{r, slope_table, echo=FALSE}
+exp_table <- imperf_points1 %>% 
+  mutate(., obs = row_number()) %>% 
+  select(., obs, x, y) %>% 
+  mutate(., `x - xbar` = x - mean(x), 
+            `y - ybar` = y - mean(y), 
+            `(x-xbar)(y-ybar)` = `x - xbar` * `y - ybar`, 
+            `x - xbar^2` = `x - xbar` ^ 2)
+
+x_sum     <- sum(exp_table$x)
+y_sum     <- sum(exp_table$y)
+x_bar     <- mean(exp_table$x)
+y_bar     <- mean(exp_table$y)
+xprod_sum <- sum(exp_table$`(x-xbar)(y-ybar)`)
+xdev_sum  <- sum(exp_table$`x - xbar^2`)
+
+exp_table %>% 
+  mutate(obs = as.character(obs)) %>% 
+  add_row(., obs = NA) %>% 
+  add_row(., obs = "Sum", 
+             x = x_sum, 
+             y = y_sum, 
+            `(x-xbar)(y-ybar)` = xprod_sum, 
+            `x - xbar^2` = xdev_sum) %>% 
+  add_row(., obs = "Mean", x = x_bar, y = y_bar) %>% 
+  mutate(., 
+    obs = cell_spec(obs, "html", 
+                    color = if_else(is.na(obs), "white", "black")), 
+    x = cell_spec(x, "html", 
+                  color = if_else(is.na(x), "white", "black")), 
+    y = cell_spec(y, "html", 
+                  color = if_else(is.na(y), "white", "black")), 
+    `x - xbar` = cell_spec(`x - xbar`, "html", 
+                  color = if_else(is.na(`x - xbar`), "white", "black")), 
+    `y - ybar` = cell_spec(`y - ybar`, "html", 
+                  color = if_else(is.na(`y - ybar`), "white", "black")), 
+    `(x-xbar)(y-ybar)` = cell_spec(`(x-xbar)(y-ybar)`, "html", 
+                  color = if_else(is.na(`(x-xbar)(y-ybar)`), "white", "#cc0033")), 
+    `x - xbar^2` = cell_spec(`x - xbar^2`, "html", 
+                  color = if_else(is.na(`x - xbar^2`), "white", "blue"))) %>% 
+  kable(., format = "html", escape = F, align = rep("r", 7))
+```
+
+--
+
+.pull-left[
+
+### Slope
+
+$$b = \frac{\sum{\color{red}{(x_i - \bar{x})(y_i - \bar{y})}}}{\sum{\color{blue}{(x_i - \bar{x})^2}}}$$
+
+$$b = \frac{\color{red}{1}}{\color{blue}{2}}$$
+
+]
+
+--
+
+.pull-right[
+
+### Intercept 
+
+$$a = \bar{y} - b\bar{x}$$
+
+$$a = 2 - (0.5 \times 2)$$
+
+$$a = 1$$
+
+]
+
+--
+
+</br>
+
+$$\hat{y} = 1 + 0.5x$$
+
+---
+
+```{r, imperf_plot_bestfit, echo=FALSE, fig.width=14, fig.height=7, warning=FALSE}
+imperf_plot_bestfit + 
+  annotate("text", x = 1, y = 3, size = 7, parse = T, 
+    label = TeX("$\\hat{y} = 1 + 0.5x$", output = "character"))
+```
+
+---
+class: middle
+
+<iframe src="https://gallery.shinyapps.io/simple_regression/" style="border:none;" height="600" width="1300"></iframe>
+
+---
+
+### Technical stuff - Terminology review
+
+- The *best fit line* is determined using the **ordinary least squares** method 
+--
+
+- In other words, we try to find the best line that minimizes 
+the distance between the *predicted values* (the line, $\color{red}{\hat{y}}$) 
+and the observed data, $\color{blue}{y_{i}}$
+--
+
+- These distances represent deviations from the regression line are called 
+**residuals**
+--
+
+- The best fit line is the one that reduces the *sum of squares* of the error 
+term (this is a measure of the variability around the best fit line)
+--
+
+- We never measure anything perfectly... there is <u>always</u> error
+
+--
+
+### Fitting a model 
+
+$$y_i = \beta_0 + \beta_1 X_i + \epsilon_i$$
+
+- Coefficients (parameter estimates)
+  - $\beta_0$: intercept
+  - $\beta_1$: slope 
+- $\epsilon$: error
+
+---
+
+### A concrete example
+
+- Using the `mtcars` dataset, we can fit a model with the 
+following variables:
+  - **response variable**: `mpg`
+  - <blue>predictor</blue>: `wt`
+
+```{r, echo=TRUE}
+str(mtcars)
+```
+
+---
+
+### A concrete example
+
+- So we will fit the data using the linear equation...
+
+$$mpg_i = \beta_0 + \beta_1 wt_i + \epsilon_i$$
+
+--
+
+- To do this in R, we use the `lm()` function
+
+```{r, mtcars_mod, eval=FALSE}
+model <- lm(mpg ~ wt, data = mtcars)
+summary(model)
+```
+
+--
+
+- `lm()` will use the *ordinary least squares* method to obtain 
+parameter estimates, i.e., β<sub>0</sub> (intercept) and 
+β<sub>1</sub> (slope)
+
+- In essence, it will estimate the parameters we need to predict 
+`mpg` for a given `weight`
+
+---
+class: middle
+
+```{r, mtcars_p1, message=FALSE, echo=FALSE, fig.width=13, fig.height=7}
+
+# Basic plot to demonstrate 'y ~ x'
+ggplot(mtcars, aes(x = wt, y = mpg)) + 
+  geom_smooth(method = 'lm', se = F, color = 'white') + 
+  geom_point(size = 4) + 
+  geom_point(size = 3, color = 'lightblue') + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+```
+
+---
+class: middle
+
+```{r, mtcars_p2, echo=FALSE, fig.width=13, fig.height=7}
+
+# Show that mean isnt useful
+ggplot(mtcars, aes(x = wt, y = mpg)) + 
+  geom_smooth(method = 'lm', se = F, color = 'white', formula = 'y ~ x') + 
+  geom_point(size = 4) + 
+  geom_point(size = 3, color = 'lightblue') + 
+  geom_hline(yintercept = mean(mtcars$mpg), lwd = 2, 
+             color = 'darkred') + 
+  annotate('text', x = (mean(mtcars$wt) + 1), 
+           y = (mean(mtcars$mpg) + 1), size = 6,
+           label = 'Mean mpg', color = 'darkred') +
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+```
+
+---
+class: middle
+
+```{r, mtcars_p3, echo=FALSE, fig.width=13, fig.height=7}
+
+mod <- lm(mpg ~ wt, data = mtcars)
+
+# show what ordinary least squares means
+ggplot(mtcars, aes(x = wt, y = mpg)) + 
+  geom_point(size = 4) + 
+  geom_point(size = 3, color = 'lightblue') + 
+  geom_hline(yintercept = mean(mtcars$mpg), lwd = 2, 
+             color = 'darkred') + 
+  annotate('text', x = (mean(mtcars$wt) + 1), 
+           y = (mean(mtcars$mpg) + 1), size = 6,
+           label = 'Mean mpg', color = 'darkred') + 
+  stat_smooth(method = 'lm', se = F, color = 'darkblue', 
+              lwd = 2, fullrange = TRUE, formula = 'y ~ x') + 
+  annotate('text', x = (mean(mtcars$wt) + 1), 
+           y = (mean(mtcars$mpg) - 2), size = 6,
+           label = 'Best linear fit', color = 'darkblue') +
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+```
+
+---
+class: middle
+
+```{r, mtcars_p4b, echo=FALSE, fig.width=13, fig.height=7}
+
+ggplot(mtcars, aes(x = wt, y = mpg)) + 
+  geom_hline(yintercept = mean(mtcars$mpg), lwd = 2, 
+             color = 'darkred') + 
+  geom_segment(aes(xend = wt, y = fitted(mod), yend = mpg), 
+               color = "darkred") +
+  stat_smooth(method = 'lm', se = F, color = 'darkblue', 
+              lwd = 2, fullrange = TRUE, formula = 'y ~ x') + 
+  geom_point(size = 4) + 
+  geom_point(size = 3, color = 'lightblue') + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+```
+
+---
+class: middle
+
+```{r, mtcars_p4, echo=FALSE, fig.width=13, fig.height=7}
+
+ggplot(mod, aes(x = fitted(mod), y = residuals(mod))) + 
+  geom_hline(yintercept = 0, color = 'darkblue', lwd = 2) + 
+  annotate('text', x = 10, y = -1, size = 6, color = 'darkblue', 
+           label = 'Best linear fit\nLeast squares estimate\n(sideways)') +
+  geom_segment(aes(xend = fitted(mod), yend = 0), 
+               color = "darkred") +
+  geom_point(size = 4) + 
+  geom_point(size = 3, color = 'lightblue') + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+```
+
+---
+
+### Interpreting model output
+
+.left-column[
+
+- Intercept
+- Slope
+- R<sup>2</sup>
+
+]
+
+.right-column[
+
+```{r, mtcars_table1, echo=FALSE}
+mod <- lm(mpg ~ wt, data = mtcars)
+print(summary(mod), digits = 2)
+```
+
+]
+
+---
+
+### Interpreting model output
+
+.left-column[
+
+- **Intercept**
+- Slope
+- R<sup>2</sup>
+
+]
+
+.right-column[
+
+```{r, mtcars_p5, echo=FALSE, fig.width=10, fig.height=4}
+
+ggplot(mtcars, aes(x = wt, y = mpg)) + 
+  geom_vline(xintercept = 0, lty = 2, lwd = 0.8, color = 'black') + 
+  geom_hline(yintercept = coef(mod)[1], lty = 2, lwd = 0.8, color = 'black') + 
+  geom_point(size = 4) + 
+  geom_point(size = 3, color = 'lightblue') + 
+  stat_smooth(method = 'lm', se = F, color = 'darkblue', 
+              lwd = 2, fullrange = TRUE, formula = 'y ~ x') + 
+  xlim(0, 6) + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+```
+
+```{r, mtcars_table2, echo=FALSE}
+print(summary(mod)$coef, digits = 3)
+```
+
+]
+
+---
+
+### Interpreting model output
+
+.left-column[
+
+- **Intercept**
+- Slope
+- R<sup>2</sup>
+
+]
+
+.right-column[
+
+```{r, mtcars_p6, echo=FALSE, fig.width=10, fig.height=4}
+
+ggplot(mtcars, aes(x = wt, y = mpg)) + 
+  geom_vline(xintercept = 0, lty = 2, lwd = 0.8, color = 'black') + 
+  geom_hline(yintercept = coef(mod)[1], lty = 2, lwd = 0.8, color = 'black') + 
+  geom_segment(aes(x = 1, xend = 0, y = 16, yend = coef(mod)[1]), 
+               arrow = arrow(angle = 15, type = "closed"), color = 'darkred') +
+  annotate('text', x = 1.2, y = 15, label = "y-intercept = 37.29", 
+           size = 6, color = 'darkred') + 
+  geom_point(size = 4) + 
+  geom_point(size = 3, color = 'lightblue') + 
+  stat_smooth(method = 'lm', se = F, color = 'darkblue', 
+              lwd = 2, fullrange = TRUE, formula = 'y ~ x') + 
+  xlim(0, 6) + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+```
+
+```{r, mtcars_table3, echo=FALSE}
+print(summary(mod)$coef, digits = 3)
+```
+
+]
+
+---
+
+### Interpreting model output
+
+.left-column[
+
+- Intercept
+- **Slope**
+- R<sup>2</sup>
+
+]
+
+
+.right-column[
+
+```{r, mtcars_p7, echo=FALSE, fig.width=10, fig.height=4}
+
+ggplot(mtcars, aes(x = wt, y = mpg)) + 
+  geom_segment(aes(x = 0, xend = 1, 
+                   y = coef(mod)[1], yend = coef(mod)[1]), 
+                   lty = 2, lwd = 0.8, color = 'black') + 
+  geom_segment(aes(x = 1, xend = 1, 
+                   y = coef(mod)[1], yend = coef(mod)[1] + coef(mod)[2]), 
+                   lty = 2, lwd = 0.8, color = 'black') + 
+  geom_segment(aes(x = 2, xend = 1.1, y = (coef(mod)[1]) - 1), 
+               yend = coef(mod)[1], arrow = arrow(angle = 15, type = "closed"), 
+               color = 'darkred') + 
+  annotate('text', x = 3, y = (coef(mod)[1] - 1), label = "Slope = -5.34", 
+           size = 6, color = 'darkred') + 
+  geom_point(size = 4) + 
+  geom_point(size = 3, color = 'lightblue') + 
+  stat_smooth(method = 'lm', se = F, color = 'darkblue', 
+              lwd = 2, fullrange = TRUE, formula = 'y ~ x') + 
+  xlim(0, 6) + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+```
+
+```{r, mtcars_table4, echo=FALSE}
+print(summary(mod)$coef, digits = 3)
+```
+
+]
+
+---
+
+### Understanding slopes and intercepts
+
+```{r, lm_ex1, echo=FALSE, fig.height=6, fig.width=14}
+lm_ex()
+```
+
+---
+
+### Same intercept, but different slopes
+
+.pull-left[
+
+```{r, lm_ex2, echo=FALSE, fig.height=6, fig.width=7}
+lm_ex(n = 100, slope = 10, intercept = 0, sigma = 0.5) 
+```
+
+]
+
+.pull-right[
+
+```{r, lm_ex3, echo=FALSE, fig.height=6, fig.width=7}
+lm_ex(n = 100, slope = 1, intercept = 0, sigma = 0.5, 
+      custAxis = TRUE, xlim = c(-3, 3), ylim = c(-30, 23)) 
+```
+
+]
+
+---
+
+### Positive and negative slope
+
+.pull-left[
+
+```{r, lm_ex4, echo=FALSE, fig.height=6, fig.width=7}
+lm_ex(n = 300, slope = 10, intercept = 0, sigma = 2.5) 
+```
+
+]
+
+.pull-right[
+
+```{r, lm_ex5, echo=FALSE, fig.height=6, fig.width=7}
+lm_ex(n = 300, slope = -10, intercept = 0, sigma = 2.5) 
+```
+
+]
+
+---
+
+### Different intercepts, but same slopes
+
+.pull-left[
+
+```{r, lm_ex6, echo=FALSE, fig.height=6, fig.width=7}
+lm_ex(n = 300, slope = 1, intercept = 0, sigma = 2.5, 
+      custAxis = TRUE, xlim = c(-4, 4), ylim = c(-10, 30)) 
+```
+
+]
+
+.pull-right[
+
+```{r, lm_ex7, echo=FALSE, fig.height=6, fig.width=7}
+lm_ex(n = 300, slope = 1, intercept = 20, sigma = 2.5, 
+      custAxis = TRUE, xlim = c(-4, 4), ylim = c(-10, 30)) 
+```
+
+]
+
+---
+
+.left-column[
+
+- Intercept
+- Slope
+- **R<sup>2</sup>**
+
+]
+
+.right-column[
+
+### The coefficient of determination
+
+- An overall assessment of model fit
+
+- R<sup>2</sup> is the variance explained by your model
+
+- Ranges from 0 to 1 (1 = 100% variance explained)
+
+- Literally calculated as **r** \* **r** = R<sup>2</sup>
+
+- But what does it mean to explain variance?
+
+]
+
+---
+
+.pull-left[
+```{r, variance_explained1, echo=FALSE}
+
+ggplot(imperf_points1, aes(x = x, y = y)) + 
+  coord_cartesian(xlim = c(0, 4), ylim = c(0, 4)) + 
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) + 
+  geom_point(color = 'blue', fill = 'grey70', pch = 21, size = 6) + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+
+```
+
+]
+
+.pull-right[
+
+- To understand variance we have to think about deviance
+
+- In other words we have to think about the relationship between 
+$\color{red}{y_i}$, $\color{blue}{\bar{y}}$, and $\color{green}{\hat{y}}$
+  - $\color{red}{y_i}$ = An observed, measured value of y
+  - $\color{blue}{\bar{y}}$ = The mean value of y
+  - $\color{green}{\hat{y}}$ = A value of y predicted by our model 
+  <font color="white">......</font>(along the regression line)
+
+]
+
+---
+
+.pull-left[
+
+```{r, variance_explained2, echo=FALSE, warning=FALSE}
+var_exp_p1 <- imperf_points1 %>% 
+  mutate(., varexp = if_else(y == 3, 1, 0)) %>% 
+ggplot(., aes(x = x, y = y, fill = as.factor(varexp))) + 
+  coord_cartesian(xlim = c(0, 4), ylim = c(0, 4)) + 
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) + 
+  geom_hline(yintercept = mean(imperf_points1$y), 
+             lty = 2, color = 'blue', size = 1.5) +
+  geom_abline(intercept = coef(imperf_mod)[1], slope = coef(imperf_mod)[2], 
+              lty = 1, color = "darkolivegreen4", size = 1.5) + 
+  geom_segment(aes(xend = imperf_points1$x, yend = fitted(imperf_mod)), 
+               lty = 3, size = 1) + 
+  geom_point(color = 'black', pch = 21, size = 6, show.legend = F, stroke = 1.5) + 
+  scale_fill_brewer(palette = "Set1", direction = -1) + 
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times') + 
+  annotate("text", x = 1, y = 2.2, label = TeX("$y_1$", output = "character"), 
+    fontface = 5, size = 6, parse = T) + 
+  annotate("text", x = 2, y = 0.8, label = TeX("$y_2$", output = "character"), 
+    fontface = 5, size = 6, parse = T) +
+  annotate("text", x = 3, y = 3.2, label = TeX("$y_3$", output = "character"), 
+    fontface = 5, size = 6, parse = T)
+
+var_exp_p1
+```
+
+]
+
+.pull-right[
+
+$\color{red}{y_i}$ = An observed, measured value of y  
+
+$\color{blue}{\bar{y}}$ = The mean value of y  
+
+$\color{green}{\hat{y}}$ = A value of y predicted by our model
+
+]
+
+---
+
+.pull-left[
+
+```{r, variance_explained3, echo=FALSE, warning=FALSE}
+var_exp_p1 + annotate("text", 
+                      x = 2.7, y = 2.58, 
+                      label = "{", 
+                      fontface = 5, size = 36) + 
+             annotate("text", 
+                      x = 2.1, y = 2.6, 
+                      label = "Total\ndeviation", color = "red",
+                      fontface = 1, size = 6, hjust = 0.5)
+```
+
+]
+
+.pull-right[
+
+$\color{red}{y_i}$ = An observed, measured value of y  
+
+$\color{blue}{\bar{y}}$ = The mean value of y  
+
+$\color{green}{\hat{y}}$ = A value of y predicted by our model 
+
+</br>
+
+Total deviation: $\color{red}{y_i} - \color{blue}{\bar{y}}$  
+
+Ex. $y_3$ = 3 - 2
+
+]
+
+---
+
+.pull-left[
+
+```{r, variance_explained4, echo=FALSE, warning=FALSE}
+var_exp_p1 + annotate("text", 
+                      x = 3.1, y = 2.3, 
+                      label = "}", 
+                      fontface = 5, size = 18) + 
+             annotate("text", 
+                      x = 3.7, y = 2.25, color = "red", 
+                      label = "Predicted\ndeviation", 
+                      fontface = 1, size = 6)
+```
+
+]
+
+.pull-right[
+
+$\color{red}{y_i}$ = An observed, measured value of y  
+
+$\color{blue}{\bar{y}}$ = The mean value of y  
+
+$\color{green}{\hat{y}}$ = A value of y predicted by our model
+
+</br>
+
+Total deviation: $\color{red}{y_i} - \color{blue}{\bar{y}}$
+
+Predicted deviation: $\color{green}{\hat{y}} - \color{blue}{\bar{y}}$ 
+
+Ex. $y_3$ = 2.5 - 2
+
+]
+
+---
+
+.pull-left[
+
+```{r, variance_explained5, echo=FALSE, warning=FALSE}
+var_exp_p1 + annotate("text", 
+                      x = 2.8, y = 2.8, 
+                      label = "{", 
+                      fontface = 5, size = 18) + 
+             annotate("text", 
+                      x = 2.2, y = 2.8, color = "red", 
+                      label = "Error\ndeviation", 
+                      fontface = 1, size = 6)
+```
+
+]
+
+.pull-right[
+
+$\color{red}{y_i}$ = An observed, measured value of y  
+
+$\color{blue}{\bar{y}}$ = The mean value of y  
+
+$\color{green}{\hat{y}}$ = A value of y predicted by our model
+
+
+</br>
+
+Total deviation: $\color{red}{y_i} - \color{blue}{\bar{y}}$
+
+Predicted deviation: $\color{green}{\hat{y}} - \color{blue}{\bar{y}}$ 
+
+Error deviation: $\color{red}{y_i} - \color{blue}{\hat{y}}$
+
+Ex. $y_3$ = 3 - 2.5
+
+]
+
+---
+
+.pull-left[
+
+```{r, variance_explained6, echo=FALSE, warning=FALSE, message=FALSE}
+
+var_exp_p1 + annotate("text", 
+                      x = 2.7, y = 2.58, 
+                      label = "{", 
+                      fontface = 5, size = 70) + 
+             annotate("text", 
+                      x = 2.1, y = 2.58, 
+                      label = "Total\ndeviation", color = "red",
+                      fontface = 2, size = 6, hjust = 0) +
+             annotate("text", 
+                      x = 3.15, y = 2.3, 
+                      label = "}", 
+                      fontface = 5, size = 35) + 
+             annotate("text", 
+                      x = 3.25, y = 2.27, color = "red", 
+                      label = "Predicted\ndeviation", 
+                      fontface = 2, size = 6, hjust = 0) +
+             annotate("text", 
+                      x = 3.15, y = 2.8, 
+                      label = "}", 
+                      fontface = 5, size = 35) + 
+             annotate("text", 
+                      x = 3.25, y = 2.8, color = "red", 
+                      label = "Error\ndeviation", 
+                      fontface = 2, size = 6, hjust = 0) + 
+             coord_cartesian(xlim = c(2, 4), ylim = c(1.5, 3.5)) 
+```
+
+]
+
+.pull-right[
+
+- Again we square these values so that positive values are not canceled out by 
+the negative values
+- We calculate these deviations for all observations
+
+$$SS_{total} = \sum (y_i - \bar{y})^2$$
+
+$$SS_{predicted} = \sum (\hat{y}_i - \bar{y})^2$$
+
+$$SS_{error} = \sum (y_i - \hat{y}_i)^2$$
+
+</br>
+
+### $$SS_{total} = SS_{predicted} + SS_{error}$$
+
+]
+
+---
+background-image: url(./assets/img/nash.gif)
+background-position: 90% 50%
+
+<div style="float:left">
+<h3>$$R^2 = \frac{SS_{predicted}}{SS_{total}}$$</h3>
+</div>
+
+--
+
+</br></br></br></br></br></br></br></br>
+
+### ...or r * r
+
+---
+layout: false
+class: middle, center
+
+<iframe src="https://jvcasillas.shinyapps.io/shiny_bivariate_regression/" style="border:none;" height="600" width="1300"></iframe>
+
+---
+layout: true
+
+# Bivariate regression
+
+---
+
+### Making predictions
+
+- Recall the linear model equation...
+
+$$\hat{y} = \beta_0 + \beta_1 wt_i + \epsilon_i$$
+
+--
+
+- Our `mtcars` model can be summarized as...
+
+```{r, model_print, results='asis', echo=FALSE}
+b <- coef(mod)
+cat(sprintf("$$mpg = %.02f + %.02f wt$$", b[1], b[2]))
+```
+--
+
+- What is the predicted `mpg` for a car that weighs 1 unit?  
+And one that weighs 3? And 6?
+
+--
+
+  - `r round(coef(mod)[2] * 1 + coef(mod)[1], 2)` 
+  $mpg = 37.29 + -5.34 \times 1$
+
+  - `r round(coef(mod)[2] * 3 + coef(mod)[1], 2)` 
+  $mpg = 37.29 + -5.34 \times 3$
+
+  - `r round(coef(mod)[2] * 6 + coef(mod)[1], 2)` 
+  $mpg = 37.29 + -5.34 \times 6$
+
+---
+class: middle
+
+```{r, mtcars_p8, echo=FALSE, fig.width=13, fig.height=7}
+
+ggplot(mtcars, aes(x = wt, y = mpg)) + 
+  geom_smooth(method = 'lm', se = F, color = 'white', formula = 'y ~ x') + 
+  geom_point(size = 4) + 
+  geom_point(size = 3, color = 'lightblue') + 
+  stat_smooth(method = "lm", fullrange = TRUE, formula = 'y ~ x') + 
+  geom_segment(aes(x = 0, xend = 1, 
+               y = round(coef(mod)[2] * 1 + coef(mod)[1], 2), 
+               yend = round(coef(mod)[2] * 1 + coef(mod)[1], 2)), 
+               lwd = 1, lty = 3, color = "darkred") + 
+  geom_segment(aes(x = 0, xend = 3, 
+               y = round(coef(mod)[2] * 3 + coef(mod)[1], 2), 
+               yend = round(coef(mod)[2] * 3 + coef(mod)[1], 2)), 
+               lwd = 1, lty = 3, color = "darkred") + 
+  geom_segment(aes(x = 0, xend = 6, 
+               y = round(coef(mod)[2] * 6 + coef(mod)[1], 2), 
+               yend = round(coef(mod)[2] * 6 + coef(mod)[1], 2)), 
+               lwd = 1, lty = 3, color = "darkred") +   
+  scale_x_continuous(limits=c(0, 6.25), expand = c(0, 0)) +
+  ds4ling_bw_theme(base_size = 20, base_family = 'Times')
+```
+
+---
+layout: false
+class: inverse, middle
+
+<blockquote align='center' class="twitter-tweet" data-lang="de">
+<a href="https://twitter.com/tres_gonzaga/status/910822470927523840"></a>
+</blockquote>
+
+---
+layout: false
+class: title-slide-final, left
+
+# References
+
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=F, message=F}
+bib <- ReadBib(here("slides", "assets", "bib", "ds4ling_refs.bib"), check = FALSE)
+ui <- "- "
+```
+
+```{r, print_refs, results='asis', echo=FALSE, eval=TRUE, cache=FALSE, warning=FALSE, message=FALSE}
+writeLines(ui)
+print(bib[key = "wickham2016r"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+writeLines(ui)
+print(bib[key = "qml_ch2"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+writeLines(ui)
+print(bib[key = "qass22_ch1"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+```
+

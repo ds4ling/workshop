@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Statistics for Linguists</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Joseph V. Casillas, PhD" />
+    <script src="assets/header-attrs/header-attrs.js"></script>
+    <link href="assets/remark-css/hygge.css" rel="stylesheet" />
+    <link href="assets/remark-css/rutgers.css" rel="stylesheet" />
+    <link href="assets/remark-css/rutgers-fonts.css" rel="stylesheet" />
+    <link href="assets/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="assets/tile-view/tile-view.js"></script>
+    <link href="assets/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="assets/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="assets/panelset/panelset.css" rel="stylesheet" />
+    <script src="assets/panelset/panelset.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x6892015fa0e49bbb416d79c9e7b85e2","expires":14}</script>
+    <script src="assets/himalaya/himalaya.js"></script>
+    <script src="assets/js-cookie/js.cookie.js"></script>
+    <link href="assets/editable/editable.css" rel="stylesheet" />
+    <script src="assets/editable/editable.js"></script>
+    <script src="assets/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="assets/kePrint/kePrint.js"></script>
+    <link href="assets/lightable/lightable.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/5235085b15.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Statistics for Linguists
+]
+.subtitle[
+## Day 1 - NHST
+]
+.author[
+### Joseph V. Casillas, PhD
+]
+.date[
+### Rutgers University</br>Last update: 2022-11-28
+]
+
+---
+
+
+
+
+
+
+
+
+class: inverse, middle
+
+&lt;blockquote align='center' class="twitter-tweet" data-lang="de"&gt;
+&lt;a href="https://twitter.com/hadleywickham/status/565516733516349441?ref_src=twsrc%5Etfw"&gt;&lt;/a&gt;
+&lt;/blockquote&gt;
+
+---
+exclude: true
+class: title-slide-section-grey, middle
+
+# More about z-scores
+
+---
+exclude: true
+
+# More about z-scores
+
+&lt;img src="index_files/figure-html/standard-normal-1.png" width="468" style=float:right /&gt;
+
+- The normal distribution is defined by a mean  
+and SD: *N*(μ, σ)  
+--
+exclude: true
+
+i.e., "sample x follows a normal distribution  
+with a mean of 15 and a SD of 2": .RUred[*N*(15, 2)]
+
+--
+exclude: true
+
+- An important case of the normal distribution  
+is the *standard normal distribution* (using  
+z-scores): .blue[*N*(0, 1)]
+
+--
+exclude: true
+
+- Same characteristics as a non-standardized normal:
+  - 68% of the data fall within 1σ of µ
+  - 95% of the data fall within 2σ of µ
+  - 99.7% of the data fall within 3σ of µ
+  - **Sum of area under the curve = 1**
+
+--
+exclude: true
+
+- Thus we can make probability statements  
+about a sample distribution
+
+---
+exclude: true
+
+class: title-slide-section-grey, middle
+
+# Probability
+
+---
+exclude: true
+
+layout: true
+
+# Probability
+
+---
+exclude: true
+
+&lt;img src="index_files/figure-html/standard-normal2-1.png" width="468" style='float:right' /&gt;
+
+- **The total area under the probability density function = 1**
+
+--
+exclude: true
+
+- A portion of the area under the curve is = to  
+some proportion of 1
+
+--
+exclude: true
+
+- area = ratio = probability 
+
+--
+exclude: true
+
+- We can determine the probability of finding a  
+value less than, greater than, or between a  
+value (values) of x
+
+--
+exclude: true
+
+- We can make probability statements about our  
+data if we standardize it and compare it with  
+the normal distribution 
+
+- Let's practice
+
+---
+exclude: true
+
+.pull-left[
+
+Test scores are *N*(80, 5)
+
+1. The shaded **area** in (1) is 0.5
+2. The **ratio** of students who scored 80 points or more is 0.5 (50%)
+3. If we randomly select one score from all students tested, the **probability** 
+that the student's score is 80 or more is 0.5 (50%)
+
+If we standardize the scores: *N*(0, 1)...
+
+1. The shaded **area** in (2) is 0.5
+2. The **ratio** of students w/ a standard score of 0 or more is 0.5 (50%)
+3. When one student is randomly chosen from all students tested, the 
+**probability** that the student's standard score is 0 or more is 0.5 (50%)
+
+]
+
+.pull-right[
+
+&lt;img src="index_files/figure-html/standard-normal3a-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+exclude: true
+
+&lt;img src="index_files/figure-html/standard-normal3b-1.png" width="936" style="display: block; margin: auto;" /&gt;
+
+- Since the total area under the curve is equal to 1 it follows from the 
+symmetry in the curve that the **area** under the curve in the region x &gt; 0 in (1) is equal to 0.5.
+
+--
+exclude: true
+
+- In (2) the shaded area is the probability that `\(Z\)` takes values between 0 and 
+`\(z_1\)`.
+
+--
+exclude: true
+
+- If we know `\(z_1\)` we can look for the value of the shaded area (the 
+probability) in a z-table&lt;sup&gt;1&lt;/sup&gt;.
+
+.footnote[
+&lt;sup&gt;1&lt;/sup&gt; [z-table of standard normal probabilities](https://ds4ling.github.io/slides/03_nhst/assets/img/ztable.pdf)
+]
+
+---
+exclude: true
+
+### What are the probabilities that `\(Z\)`...
+
+1. ...takes values between 0 and 1.9?
+
+2. ...takes values between 0 and 2
+
+3. ...takes values between 0 and 2.33 
+
+4. Find the probability that `\(Z\)` takes values bewteen 1 and 2.
+
+5. What is the probability that `\(Z\)` &gt; 2?
+
+6. What is the probability that `\(Z\)` &lt; 2?
+
+7. What is the probability that −2 &lt; `\(Z\)` &lt; 0?
+
+8. What is the probability that −1 &lt; `\(Z\)` &lt; 2?
+
+---
+exclude: true
+
+### 1. What is the probability that `\(Z\)` takes values between 0 and 1.9?
+
+&lt;img src="index_files/figure-html/q1-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+The probability that `\(Z\)` takes values between 0 and 1.9 is 
+--
+exclude: true
+**0.4712834**
+
+---
+exclude: true
+
+### 2. What is the probability that `\(Z\)` takes values between 0 and 2?
+
+&lt;img src="index_files/figure-html/q2-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+The probability that `\(Z\)` takes values between 0 and 2 is 
+--
+exclude: true
+**0.4772499**
+
+---
+exclude: true
+
+### 3. What is the probability that `\(Z\)` takes values between 0 and 2.33?
+
+&lt;img src="index_files/figure-html/q3-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+The probability that `\(Z\)` takes values between 0 and 2.33 is 
+--
+exclude: true
+**0.4900969**
+
+---
+exclude: true
+
+### 4. Find the probability that `\(Z\)` takes values bewteen 1 and 2.
+
+&lt;img src="index_files/figure-html/q4-1.png" width="936" style="display: block; margin: auto;" /&gt;
+
+The probability that `\(Z\)` takes values between 1 and 2 is 
+--
+exclude: true
+**0.1359051**
+
+--
+exclude: true
+
+Probalitiy of (1) = (2) - (3)
+
+---
+exclude: true
+
+### 5. What is the probability that `\(Z\)` &gt; 2?
+
+&lt;img src="index_files/figure-html/q5-1.png" width="936" style="display: block; margin: auto;" /&gt;
+
+The probability that `\(Z\)` &gt; 2 is 
+--
+exclude: true
+**0.0227501**
+
+--
+exclude: true
+
+Probalitiy of (1) = (2) - (3)
+
+---
+exclude: true
+
+### 6. What is the probability that `\(Z\)` &lt; 2?
+
+&lt;img src="index_files/figure-html/q6-1.png" width="936" style="display: block; margin: auto;" /&gt;
+
+The probability that `\(Z\)` &lt; 2 is 
+--
+exclude: true
+**0.9772499**
+
+--
+exclude: true
+
+Probalitiy of (1) = 0.5 + (3)
+
+---
+exclude: true
+
+### 7. What is the probability that −2 &lt; `\(Z\)` &lt; 0?
+
+&lt;img src="index_files/figure-html/q7-1.png" width="936" style="display: block; margin: auto;" /&gt;
+
+The probability that  −2 &lt; `\(Z\)` &lt; 0 is 
+--
+exclude: true
+**0.4772499**
+
+--
+exclude: true
+
+Probalitiy of (1) = (2)
+
+---
+exclude: true
+
+### 8. What is the probability that −1 &lt; `\(Z\)` &lt; 2?
+
+&lt;img src="index_files/figure-html/q8-1.png" width="936" style="display: block; margin: auto;" /&gt;
+
+The probability that  −1 &lt; `\(Z\)` &lt; 2 is 
+--
+exclude: true
+**0.8185946**
+
+--
+exclude: true
+
+Probalitiy of (1) = (2) + (3)
+
+---
+exclude: true
+
+layout: false
+class: center, middle
+
+### But what is the relationship between a given sample distribution 
+### and the normal distribution?
+
+---
+exclude: true
+
+layout: false
+class: title-slide-section-grey, middle
+
+# .white[Central limit theorem]
+
+---
+exclude: true
+
+layout: true
+
+# Central limit theorem
+
+---
+exclude: true
+
+&lt;ru-blockquote&gt;
+The CLT states that given i.i.d. (independent, identically distributed) 
+samples from a distribution with mean and variance, the sample mean has a 
+distribution that converges to a Gaussian as the number of samples n 
+increases.
+&lt;/ru-blockquote&gt;
+
+--
+exclude: true
+
+### Huh?
+
+--
+exclude: true
+
+...if you take many samples from a population, and calculate the averages of 
+each one, the collection of those averages will be normally distributed... and 
+it doesn’t matter what the shape of the source distribution is.
+
+---
+exclude: true
+
+layout: false
+class: middle, center
+
+&lt;iframe src="https://jvcasillas.shinyapps.io/shiny_clt/" style="border:none;" height="800" width="100%"&gt;&lt;/iframe&gt;
+
+---
+exclude: true
+
+layout: true
+
+# Central limit theorem
+
+---
+exclude: true
+
+### Why is this important/useful?
+
+- If we know the population mean and standard deviation, then we also know that 
+the distribution of means across repeated samples will be normal with a mean 
+equal to the population mean and a standard deviation equal to the population 
+standard deviation divided by the square root of n.
+
+--
+exclude: true
+
+- The CLT allows us to make probability statements about the possible 
+range of values a sample mean can have
+
+--
+exclude: true
+
+- Because we know exactly what the distribution of means will look like for 
+a given population, we can take the mean from a single sample and compare it 
+to the sampling distribution to assess the likelihood that our sample comes 
+from the same population. 
+
+--
+exclude: true
+
+- In other words, the CLT allows us to test the hypothesis that our sample 
+represents a population distinct from the known population.
+
+---
+exclude: true
+
+layout: false
+class: title-slide-section-red
+
+# Ex 1 - IQ 
+
+---
+exclude: true
+
+# Ex 1 - IQ
+
+The population distribution of IQ in the general public is known to have a 
+mean of 100 with a standard deviation of 15.&lt;sup&gt;1&lt;/sup&gt;
+
+.pull-left[
+
+
+```r
+# Our population
+draws    &lt;- 1e+5 
+pop_mean &lt;- 100  # mu
+pop_sd   &lt;- 15   # sigma
+
+# Generate distribution
+pop_iq &lt;- rnorm(n = draws, 
+                mean = pop_mean, 
+                sd = pop_sd)
+```
+
+]
+
+.pull-right[
+
+&lt;img src="index_files/figure-html/p6-1.png" width="504" /&gt;
+
+]
+
+.footnote[https://en.wikipedia.org/wiki/Intelligence_quotient]
+
+---
+exclude: true
+
+class: title-slide-section-grey
+background-image: url(https://cdn.cnn.com/cnnnext/dam/assets/160504160857-03-donald-trump-0504-full-169.jpg)
+background-size: 500px
+background-position: 90% 50%
+
+# Ex 1 - IQ
+
+.pull-left[
+
+- We take a sample of 36 members of the Trump family and would like to determine 
+if these individuals are systematically smarter than the rest of the population. 
+
+- To answer this question, we calculate the mean for our sample and consider how 
+likely it would be to observe this value if the Trumps were actually not any 
+different (the null hypothesis).
+
+- The sample mean IQ we observe is 103.  We know that, even if the Trumps 
+were not any different from the general public, we still might observe a 103 
+due to random chance. 
+
+- Let's test it.
+
+]
+
+???
+
+Example based off of exercise found [here](https://www.methodsconsultants.com/tutorial/the-central-limit-theorem-and-its-implications-for-statistical-inference/)
+
+---
+exclude: true
+
+background-image: url("./index_files/figure-html/p7-1.png")
+background-position: 90% 50%
+background-size: 550px
+
+# Ex 1 - IQ
+
+.pull-left[
+
+- Given the central limit theorem, we know that the distribution of sample means 
+will be normal with a mean of 100 and a standard deviation of 
+```15 / sqrt(36)``` = 2.5. 
+- We can compare our own mean to this distribution as follows:
+
+
+```r
+sample_n    &lt;- 36  # Sample size
+sample_mean &lt;- 103 # xbar (trump family mean)
+dist_mean   &lt;- pop_mean
+sample_sd   &lt;- pop_sd / sqrt(sample_n)
+
+# Generate sample
+trumps &lt;- rnorm(n = draws, 
+                mean = dist_mean, 
+                sd = sample_sd)
+```
+]
+
+.pull-right[
+
+
+
+]
+
+---
+exclude: true
+
+# Ex 1 - IQ
+
+- If the probability of observing our Trump sample mean or something larger is 
+really small (let's say less than .05), then we can reject the hypothesis 
+that the Trumps are just like the general public. 
+- This probability will be equal to the area under the normal curve above our 
+observed sample value, indicated by the .blue[blue] color in the plot.
+- To simplify the process of finding the area in the tail of the distribution, 
+we typically convert our mean to a z-score as follows:
+
+`$$\color{red}{z} = \frac{\color{blue}{\bar{x}} - \color{green}{\mu}}{\color{purple}{\sigma} \div \color{orange}{\sqrt[]{\color{grey}{n}}}}$$`
+
+Where **z** is derived by calculating the difference between the .blue[sample mean] and the &lt;font color="green"&gt;population mean&lt;/font&gt; and dividing it by the &lt;font color="purple"&gt;population standard deviation&lt;/font&gt; divided by the &lt;font color="orange"&gt;square root &lt;/font&gt;of the &lt;font color="grey"&gt;sample size&lt;/font&gt;. 
+
+
+```r
+*sample_z &lt;- (sample_mean - pop_mean) / (pop_sd / sqrt(sample_n))
+dist_z  &lt;- (trumps - pop_mean) / (pop_sd / sqrt(sample_n))
+print(sample_z) 
+```
+
+```
+## [1] 1.2
+```
+
+---
+exclude: true
+
+&lt;img src="index_files/figure-html/p8-1.png" width="1008" /&gt;
+
+- This probability is related to what you know as a p-value (we'll come back to 
+this).
+
+---
+exclude: true
+
+class: middle
+
+.pull-left[
+
+![image](./assets/img/ztable.png)
+
+]
+
+.pull-right[
+
+&lt;/br&gt;
+
+- We can check the area under the curve to the right or left of different 
+z-scores by using the z-table.
+
+- In this case we see that the area to the right of **1.2** equals 1 - 0.8849, or 
+0.1151.
+
+- This implies that the probability of observing a sample IQ of 103 is .12.
+
+]
+
+.footnote[http://www.stat.ufl.edu/~athienit/Tables/Ztable.pdf]
+
+---
+exclude: true
+
+class: title-slide-section-red
+
+# Ex 2 - Exams
+
+---
+exclude: true
+
+# Ex 2 - Exams
+
+Assume that the test scores of a college entrance exam fits a normal 
+distribution. Furthermore, the mean test score is 72, and the standard 
+deviation is 15.2. What is the percentage of students scoring 84 or 
+more in the exam?
+
+1. Calculate the z-score
+2. Check z-table
+
+--
+exclude: true
+
+
+```r
+# (score - mean) / sd
+(84 - 72) / 15.2
+```
+
+The z-score is: 0.7894737. Look this value up in z-table.
+
+--
+exclude: true
+
+### We can do this in R
+
+
+```r
+pnorm(q = 84, mean = 72, sd = 15.2, lower.tail = FALSE) 
+```
+
+```
+## [1] 0.2149176
+```
+
+---
+exclude: true
+
+class: middle, center
+
+### **As a linguist you will probably never do this**
+
+--
+exclude: true
+
+### but it helps us understand the importance of 
+### the .blue[normal distribution] and the .blue[CLT]...
+### they allow us to answer questions like this 
+### and to do hypothesis testing.
+
+
+
+
+
+
+
+
+
+
+
+---
+
+class: title-slide-section-grey, middle
+
+# Hypothesis testing
+
+---
+background-image: url(https://i.imgflip.com/2sdkd6.jpg)
+background-size: contain
+background-position: 50% 50%
+background-color: black
+
+&lt;!-- meme of karl pearson "do you have a moment to talk about NHST" --&gt; 
+
+---
+background-image: url(./assets/img/gavel.JPG)
+background-size: contain
+
+# .white[NHST]
+
+--
+
+.pull-left[
+.Large[.white[In a trial, the &lt;/br&gt;
+.big[.yellow[.bold[null hypothesis]] (.yellow[H&lt;sub&gt;0&lt;/sub&gt;])] &lt;/br&gt; 
+is innocence.]]]
+
+--
+
+.footnote[
+.Large[
+.white[
+The objective is to see if the evidence .big[(**the data**)] contradicts this 
+hypothesis, supporting an .big[.bold[.green[alternative hypothesis]] (.green[H&lt;sub&gt;1&lt;/sub&gt;])], guilt. 
+]
+]
+]
+
+---
+background-image: url(https://api.time.com/wp-content/uploads/2019/01/ruth-bader-ginsburg-supreme-court-justice-portrait.jpg)
+background-size: contain
+background-color: black
+
+# .white[NHST]
+
+&lt;!-- RBG headshot --&gt; 
+
+--
+
+.pull-left[
+.footnote[
+.big[
+.white[If there is no evidence, &lt;/br&gt;the accused cannot be &lt;/br&gt; found 
+guilty.]
+
+.white[We .big[**fail to reject** .yellow[.bold[H&lt;sub&gt;0&lt;/sub&gt;]]].]
+]
+]
+]
+
+--
+
+.pull-right[
+.footnote[
+.big[
+.white[If there is evidence of guilt beyond a reasonable doubt, 
+the accused is found guilty.
+
+We .big[.bold[.lightgrey[reject] .yellow[H&lt;sub&gt;0&lt;/sub&gt;]]].]
+]
+]
+]
+
+---
+class: middle
+background-color: black
+background-image: url(https://www.snopes.com/tachyon/2017/03/Ruth_Bader_Ginsburg_fb.jpg?resize=1200,630&amp;quality=65)
+background-size: contain
+
+# .white[So what's a] .yellow[p-value].white[?]
+
+???
+
+- It is a poor choice of word
+- All it means is that an effect is not statistically equal to zero
+- It may be an effect of trivial magnitude
+- Basically, the prediction is better than nothing
+- It doesn't mean “significant” in terms of importance
+
+--
+
+### **p-value**: .white[the probability of obtaining &lt;/br&gt;your data, if H&lt;sub&gt;0&lt;/sub&gt; is TRUE.]
+
+--
+&lt;/br&gt;
+
+# .white[...and "].yellow[significant].white["?]
+
+--
+
+### **Significance**: .white[obtaining a p-value below &lt;/br&gt;an arbitrary threshold]
+
+---
+class: center, middle
+background-color: black
+
+# .lightgrey[High p-value: your data are likely with a true null.]
+
+# .lightgrey[Low p-value: your data are unlikely with a true null.]
+
+--
+
+.pull-left[
+# Low p-values do not tell you how likely your hypothesis is!
+]
+
+--
+
+.pull-right[
+# Low p-values are not "more significant" than high p-values!
+]
+
+---
+background-color: black
+background-image: url(https://larspsyll.files.wordpress.com/2014/07/i_do_not_think_it_significant_means_what_you_think_it_means.jpg)
+background-size: contain
+
+---
+class: middle
+background-color: black
+background-image: url(https://www.freepngimg.com/thumb/arnold_schwarzenegger/29411-8-arnold-schwarzenegger-file.png)
+background-size: contain
+background-position: 100% 50%
+
+# .white[What is] **power**.white[?]
+
+### .lightgrey[The probability of (correctly) rejecting] 
+### **H&lt;sub&gt;0&lt;/sub&gt;** .lightgrey[when] .yellow[H&lt;sub&gt;1&lt;/sub&gt;] .lightgrey[is true.] 
+
+---
+background-image: url("../assets/img/pensar2.jpg")
+background-size: 250px
+background-position: 95% 5%
+
+# Hypothesis testing in context
+
+- We have a question. We want to know the 'truth'.
+
+- Generally we compare **sample distributions** of population(s)  
+i.e., we want to know if a group is different from another group with respect to 
+something
+
+- In other words, we hypothesize something about a .blue[population] or about 
+the relationship between two .blue[populations]
+
+- What we hypothesize is considered an *alternative* to a *null* hypothesis
+  - **Null hypothesis** (H&lt;sub&gt;0&lt;/sub&gt;): the difference between the populations = 0
+  - .blue[Alternative hypothesis] (H&lt;sub&gt;1&lt;/sub&gt;): the difference between the populations `\(\neq\)` 0
+
+- We determine which statistical test is most appropriate according to the 
+nature of our data
+
+- Set alpha
+
+- Conduct relevant test and...
+  - reject the null hypothesis (if there is sufficient evidence)
+  - fail to reject the null hypothesis 
+
+???
+
+Theory Falsification
+- Scientific theories are fallible and require testing
+- Basically, there's no way to prove a theory, we can only support it:
+- We **can** disprove a theory if our observations or experimental results disconfirm it
+- Research should be designed in a way that subjects theory to risk of falsification, it should attempt to disconfirm the theory
+- It must be possible at least in principle to disconfirm a scientific theory
+
+
+---
+background-image: url("../assets/img/confundido.png")
+background-size: 300px
+background-position: 85% 50%
+
+# Which test do I use?
+
+### There are many...
+
+---
+background-image: url("./assets/img/procedures_flowchart.png")
+background-size: contain
+
+---
+layout: true
+
+# t-test
+
+---
+
+- Compares two sample distributions to determine if they are different
+
+- What do we mean by 'different'?
+
+--
+
+- We consider the sample distributions 'different' if the relationship between 
+them is due to something other than random chance
+
+- Normally we analyze the probability that a real relationship exists
+
+- A t-test determines if the difference between two averages is equal to 0
+
+--
+
+&lt;img src="index_files/figure-html/t-test-prep-1.png" width="864" style="display: block; margin: auto;" /&gt;
+
+---
+
+- There are several types of t-tests
+- We are interested in two:
+	1. independent samples
+	2. paired samples
+
+--
+
+.pull-left[
+
+### Independent samples
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; name &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; group &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; score &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; John &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue !important;" &gt;g1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 250 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Jane &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue !important;" &gt;g1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 340 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Jimmy &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #cc0033 !important;" &gt;g2&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 460 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Jessy &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #cc0033 !important;" &gt;g2&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 200 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+.pull-right[
+
+### Paired samples
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; name &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; test1 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; test2 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mike &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 35 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 67 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Melanie &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 50 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 46 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Melissa &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 90 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 86 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mitchell &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 78 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 91 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+---
+
+### Independent samples
+
+.pull-left[
+
+
+
+```r
+ind_samp &lt;- tribble(
+  ~'name', ~'group', ~'score', 
+   'John',  'g1',      250, 
+   'Jane',  'g1',      340, 
+   'Jimmy', 'g2',      460, 
+   'Jessy', 'g2',      200)
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; name &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; group &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; score &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; John &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue !important;" &gt;g1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 250 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Jane &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue !important;" &gt;g1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 340 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Jimmy &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #cc0033 !important;" &gt;g2&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 460 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Jessy &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #cc0033 !important;" &gt;g2&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 200 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+.pull-right[
+
+
+```r
+# t-test: # independent 2-group
+t.test(score ~ group, data = ind_samp)
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  score by group
+## t = -0.25442, df = 1.2363, p-value = 0.8349
+## alternative hypothesis: true difference in means between group g1 and group g2 is not equal to 0
+## 95 percent confidence interval:
+##  -1161.468  1091.468
+## sample estimates:
+## mean in group g1 mean in group g2 
+##              295              330
+```
+
+]
+
+---
+
+### Paired
+
+.pull-left[
+
+
+
+```r
+prd_samp &lt;- tribble(
+  ~'name',     ~'test1', ~'test2', 
+   'Mike',      35,       67, 
+   'Melanie',   50,       46, 
+   'Melissa',   90,       86, 
+   'Mitchell',  78,       91)
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; name &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; test1 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; test2 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mike &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 35 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 67 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Melanie &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 50 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 46 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Melissa &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 90 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 86 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mitchell &lt;/td&gt;
+   &lt;td style="text-align:right;color: blue !important;"&gt; 78 &lt;/td&gt;
+   &lt;td style="text-align:right;color: #cc0033 !important;"&gt; 91 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+.pull-right[
+
+
+```r
+# t-test: paired sample
+t.test(prd_samp$test1, prd_samp$test2, 
+       paired = TRUE)
+```
+
+```
+## 
+## 	Paired t-test
+## 
+## data:  prd_samp$test1 and prd_samp$test2
+## t = -1.0785, df = 3, p-value = 0.3598
+## alternative hypothesis: true mean difference is not equal to 0
+## 95 percent confidence interval:
+##  -36.54539  18.04539
+## sample estimates:
+## mean difference 
+##           -9.25
+```
+
+]
+
+---
+
+### Paired (alternative syntax)
+
+We can transform the dataframe from wide to long. 
+
+
+```r
+prd_samp_long &lt;- prd_samp %&gt;% 
+  pivot_longer(cols = -name, names_to = "test", values_to = "score")
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; name &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; test &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; score &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue !important;" &gt;Mike&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: black !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: coral !important;" &gt;test1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 35 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue !important;" &gt;Mike&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: black !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: lightskyblue !important;" &gt;test2&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 67 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #cc0033 !important;" &gt;Melanie&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: black !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: coral !important;" &gt;test1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 50 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #cc0033 !important;" &gt;Melanie&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: black !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: lightskyblue !important;" &gt;test2&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 46 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;" &gt;Melissa&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: black !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: coral !important;" &gt;test1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 90 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;" &gt;Melissa&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: black !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: lightskyblue !important;" &gt;test2&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 86 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: lightblue !important;" &gt;Mitchell&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: black !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: coral !important;" &gt;test1&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 78 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: lightblue !important;" &gt;Mitchell&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: black !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: lightskyblue !important;" &gt;test2&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 91 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+#### Paired (alternative syntax)
+
+Same result...
+
+
+```r
+# t-test: paired sample
+t.test(score ~ test, data = prd_samp_long, paired = TRUE)
+```
+
+```
+## 
+## 	Paired t-test
+## 
+## data:  score by test
+## t = -1.0785, df = 3, p-value = 0.3598
+## alternative hypothesis: true mean difference is not equal to 0
+## 95 percent confidence interval:
+##  -36.54539  18.04539
+## sample estimates:
+## mean difference 
+##           -9.25
+```
+
+---
+layout: false
+class: middle
+
+&lt;table class="table table-hover" style="font-size: 26px; width: auto !important; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="empty-cells: hide;border-bottom:hidden;" colspan="1"&gt;&lt;/th&gt;
+&lt;th style="empty-cells: hide;border-bottom:hidden;" colspan="1"&gt;&lt;/th&gt;
+&lt;th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"&gt;&lt;div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; "&gt;Reality&lt;/div&gt;&lt;/th&gt;
+&lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt;    &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; H0 is true &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; H0 is false &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;font-weight: bold;"&gt; Decision &lt;/td&gt;
+   &lt;td style="text-align:left;width: 10em; border-right:1px solid;"&gt; Fail to reject H0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue !important;"&gt;Correct&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #cc0033 !important;"&gt;Type II error&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;font-weight: bold;"&gt; Decision &lt;/td&gt;
+   &lt;td style="text-align:left;width: 10em; border-right:1px solid;"&gt; Reject H0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #cc0033 !important;"&gt;Type I error&lt;/span&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &lt;span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue !important;"&gt;Correct&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+&lt;blockquote align='center' class="twitter-tweet" data-lang="de"&gt;
+&lt;a href="https://twitter.com/drob/status/781276244310622209"&gt;&lt;/a&gt;
+&lt;/blockquote&gt;
+
+---
+
+&lt;iframe src="https://jvcasillas.shinyapps.io/r_for_linguists/#section-data-structures" style="border:none;" height="800" width="100%"&gt;&lt;/iframe&gt;
+
+---
+class: title-slide-final, left
+
+# References
+
+
+
+- 
+&lt;p&gt;&lt;cite&gt;Wickham, H. and G. Grolemund
+(2016).
+&lt;em&gt;R for Data Science: Import, Tidy, Transform, Visualize, and Model Data&lt;/em&gt;.
+O'Reilly Media.&lt;/cite&gt;&lt;/p&gt;
+- 
+&lt;p&gt;&lt;cite&gt;Johnson, K.
+(2011).
+&amp;ldquo;Fundamentals of Quantitative Analysis&amp;rdquo;.
+In: 
+&lt;em&gt;Quantitative Methods In Linguistics&lt;/em&gt;.
+Ed. by K. Johnson.
+Wiley, pp. 1&amp;ndash;33.&lt;/cite&gt;&lt;/p&gt;
+- 
+&lt;p&gt;&lt;cite&gt;Takahashi, S.
+(2009).
+&lt;em&gt;The Manga Guide to Statistics&lt;/em&gt;.
+Trend-Pro CO., LTD.&lt;/cite&gt;&lt;/p&gt;
+
+- https://www.methodsconsultants.com/tutorial/the-central-limit-theorem-and-its-implications-for-statistical-inference/
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

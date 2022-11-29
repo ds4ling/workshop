@@ -1,0 +1,1102 @@
+---
+title   : 'Statistics for Linguists'
+subtitle: 'Day 1 - Distributions'
+author  : "Joseph V. Casillas, PhD"
+date    : "Rutgers University</br>Last update: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: assets
+    css: ["hygge", "rutgers", "rutgers-fonts"]
+    nature:
+      beforeInit: ["https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js"]
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+    includes:
+      in_header: "../assets/partials/header.html"
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra-all-the-things, echo=FALSE}
+xaringanExtra::use_xaringan_extra(
+  c("tile_view", "panelset", "editable", "animate", "tachyons", "webcam")
+)
+```
+
+```{r, 'helpers', echo=FALSE, message=F, warning=F}
+source(here::here("slides", "assets", "scripts", "helpers.R"))
+```
+
+class: title-slide-section-grey, middle
+
+# .white[Statistical thinking]
+
+---
+layout: true
+
+# Statistical thinking
+
+---
+
+### A necessary evil
+
+- Mastering quantitative methods is an "[...] increasingly vital component of linguistic training" (Johnson, 2008). 
+
+--
+
+- Main roadblock = lack of resources
+
+--
+
+- Most programs don't offer this training. Students get it elsewhere (or not at all)
+
+--
+
+- Not a lot of good texts made specifically for linguistics
+
+--
+
+  - "Linguists learn to do stats on the street."
+  - "If you want to be a phonotician today, you really have to train to be a 
+  programmer."
+
+---
+
+### Big picture
+
+- It's all guessing. We use stats and hypothesis testing to assess our guesses
+
+--
+
+- "All models are wrong, but some are useful" - Georege Box
+
+--
+
+> One of the points of this class is to teach you to build useful models and to understand how you can assess their usefulness
+
+---
+
+### An aside
+
+- Statistics is hard
+
+- You are learning. You will make mistakes. 
+
+- You should come away with a better understanding of the big picture. 
+
+- Ideally this would be the first class of many you take on the subject
+
+---
+
+### Goals (according to Johnson, 2008)
+
+1. Data reduction
+
+2. Inference
+
+3. Discovery of relationships
+
+4. Exploration
+
+--
+
+### Really?
+
+---
+layout: false
+class: center
+background-image: url(../assets/img/workflow/datascience_workflow.png)
+background-size: contain
+
+# EDA or CDA?
+
+---
+
+# .center[Exploratory data analysis</br>vs.</br>Confirmatory data analysis]
+
+### .blue[EDA]: used to get to know your data, to generate hypotheses
+
+### .RUred[CDA]: used ONLY to test hypotheses
+
+- Issues
+  - data dredging, p-hacking
+  - Many scientists do EDA first, and establish their hypotheses a posteriori (once you have already found "significant" differences)
+- Both are necessary and part of science
+
+### .center[This is pseudoscience!]
+
+---
+class: title-slide-section-grey, middle
+
+# .white[Observations]
+
+---
+layout: true
+
+# What is an observation anyway?
+
+---
+background-image: url(./assets/img/observation1_1.png)
+background-size: contain
+
+???
+
+- Observation: Using the senses for some motivated purpose
+- Senses not always reliable and don't necessarily perfectly represent reality: 
+  - Sensory observations are already a step removed from reality because they 
+  are first passed through our perceptions and reinterpreted before we actually
+  “make sense” of them
+  - In other words, our raw sensory input is not what we perceive
+
+- We have many evolved adaptive mechanisms for deciphering sensory input:
+  - First, we have a sensation
+  - Then, perception reconstructs it into a meaningful message in our brain
+
+--
+background-image: url(./assets/img/observation1_2.png)
+background-size: contain
+
+--
+background-image: url(./assets/img/observation1_3.png)
+background-size: contain
+
+--
+background-image: url(./assets/img/observation1_4.png)
+background-size: contain
+
+---
+background-image: url(./assets/img/observation2_1.png)
+background-size: contain
+
+???
+
+- Where do we get these numbers? 1) Observation 2) process of measurement
+- Measurement = processes of assigning a number to an observation
+- Why? Because in most experimental research every observation must be turned into a number 
+- We then use statistics to analyze our numbers
+
+- Rules of Measurement
+  - numbers are not arbitrary
+  - there is a meaningful and selective process
+  - must be reliable and replicable (Inter-Rater, Inter-Item, Test-Retest)
+  - must be valid (external validity)
+- In sum: Not all numbers are scientific data: must be reliable, valid measurements based on empirical observations
+
+--
+background-image: url(./assets/img/observation2_2.png)
+background-size: contain
+
+--
+background-image: url(./assets/img/observation2_3.png)
+background-size: contain
+
+---
+background-image: url(./assets/img/observation_sum.png)
+background-position: 50% 50%
+background-size: 775px
+
+???
+
+- There is a lot of room for bias and error in this multi-stage process!
+- Numbers don't "speak for themselves"
+- Our brain's process the number, we speak for them
+- We interpret the numbers based what we **think** they represent
+- All our interpretations are subject to error and there are many opportunities to make errors in the process
+- So how do we know that our numbers aren't too far removed from reality?
+
+---
+
+### Johnson discusses 4 types...
+
+1. Nominal
+
+2. Ordinal
+
+3. Interval
+
+4. Ratio
+
+--
+
+### The type of observations you deal with are related to your area of research and your questions.
+
+--
+
+### The type of observations you analyze will determine the statistical methods you use to answer your questions. 
+
+--
+
+### Different types of observations are distributed in different ways.
+
+---
+
+layout: false
+class: title-slide-section-grey, middle
+
+# Distributions
+
+---
+layout: true
+
+# Distributions
+
+---
+
+### The basics
+
+.pull-left[
+
+- If we collect a series of observations we have a **sample** of data
+
+- We can create a ```histogram``` by selecting a bin size and counting the 
+frequency of the values in our sample that fall inside the bin
+
+- A histogram shows us the frequency distribution of our sample
+
+- For example, the histogram to the right shows that 
+the value ```3``` appears in this sample over 200 times
+
+]
+
+.pull-right[
+
+```{r, 'normal_distribution1', cache=F, echo=FALSE, fig.retina=2, fig.height=5}
+# 1000 random numbers with a mean of 5, sd of 2
+my_normal_x <- rnorm(1000, mean = 3.5, sd = 1.5)
+
+# Histogram of data
+p1 <- tibble(x = my_normal_x) %>% 
+  ggplot(., aes(x = x))
+
+p1 + geom_histogram(binwidth = 1, fill = 'lightblue', 
+                   color = 'black', alpha = 0.6) + 
+    scale_x_continuous(breaks = -1:8, labels = -1:8) + 
+    ds4ling_theme()
+```
+
+]
+
+---
+
+### Describing the sample 
+
+We can describe the characteristics of our sample to see how the values are 
+distributed. 
+
+For this we use...
+
+1. Measures of central tendency (mid-point)
+
+2. Measures of dispersion (around mid-point)
+
+---
+
+### Describing the sample 
+
+#### Measures of central tendency (mid-point)
+
+```{r, 'trivial-sample'}
+# Create a vector of numbers
+my_data <- c(2, 5, 8)
+```
+
+.pull-left[
+
+- .blue[mean]: arithmetic average, least squares estimate of central tendency
+
+- .blue[median]: value located in the middle
+
+- .blue[mode]: most frequently occurring value
+
+]
+
+--
+
+.pull-right[
+
+```{r, 'avg-ex'}
+
+(2 + 5 + 8) / 3
+
+mean(my_data)
+median(my_data)
+```
+
+]
+
+---
+
+### Describing the sample 
+
+#### Measures of dispersion (around mid-point)
+
+```{r, 'print-ex', echo=F}
+my_data 
+```
+
+.pull-left[
+
+- .blue[range]: difference between highest and lowest value
+
+- .blue[variance]: subtract mean from each value, sum the squares and divide by 
+n - 1
+
+- .blue[standard deviation]: square root of the variance
+
+]
+
+--
+
+.pull-right[
+
+```{r, 'range'}
+max(my_data) - min(my_data)
+
+
+# 2 - 5 = -3^2 = 9
+# 5 - 5 =  0^2 = 0
+# 8 - 5 =  3^2 = 9
+#              = 18 / 2
+# Variance = 9
+
+# SD (square root of 9) = 3
+```
+
+]
+
+---
+
+### Describing the sample 
+
+#### Measures of dispersion (around mid-point)
+
+```{r, 'print-ex-again', echo=F}
+my_data 
+```
+
+.pull-left[
+
+- .blue[range]: difference between highest and lowest value
+
+- .blue[variance]: subtract mean from each value, sum the squares and divide by 
+n - 1
+
+- .blue[standard deviation]: square root of the variance
+
+]
+
+.pull-right[
+
+```{r, 'range-var-sd'}
+range(my_data)
+var(my_data)
+sd(my_data)
+```
+
+]
+
+---
+
+### More about distributions
+
+.pull-left[
+
+- There are many <u>families</u> of distributions<sup>1</sup>, each of which have important characteristics. 
+
+- The most important for us (for now) is the normal distribution. 
+
+- It is easy to recognize because it looks like a bell. 
+]
+
+.pull-right[
+
+```{r, 'normal_distribution2', echo=FALSE, fig.retina=2, fig.height=5, cache=F}
+
+p1 + geom_histogram(binwidth = 1, fill = 'lightblue', 
+                   color = 'black', alpha = 0.6) + 
+    scale_x_continuous(breaks = -1:8, labels = -1:8) + 
+    ds4ling_theme()
+```
+
+]
+
+.footnote[<sup>1</sup> i.e., normal distribution, t-distribution, F-distribution, 
+χ-distribution, etc.]
+
+???
+
+```
+# 1000 random numbers with a mean of 5, sd of 2
+my_normal_x <- rnorm(1000, mean = 3.5, sd = 1.5)
+
+# Histogram of data
+p1 <- tibble(x = my_normal_x) %>% 
+  ggplot(., aes(x = x)) + 
+    geom_histogram(binwidth = 1, fill = 'lightblue', 
+                   color = 'black', alpha = 0.6
+                   aes(y = ..density..)) + 
+    geom_density(bw = 0.75) + 
+    scale_x_continuous(breaks = 1:10, 
+                       labels = 1:10) + 
+    ds4ling_theme()
+
+print(p1)
+```
+
+---
+
+### More about distributions
+
+- If we decrease the bin size in our histogram (the range of observations used 
+for each vertical bar) we can see the distribution looks more bell-like
+
+```{r, normal-distributions3, echo=FALSE, fig.retina=2, fig.height=5, fig.width=3.5, cache=F}
+
+p1 + geom_histogram(binwidth = 0.66, fill = 'lightblue', 
+                   color = 'black', alpha = 0.6) + 
+     ds4ling_theme()
+
+p1 + geom_histogram(binwidth = 0.33, fill = 'lightblue', 
+                   color = 'black', alpha = 0.6) + 
+     ds4ling_theme()
+
+p1 + geom_histogram(binwidth = 0.22, fill = 'lightblue', 
+                   color = 'black', alpha = 0.6) + 
+     ds4ling_theme()
+
+p1 + geom_histogram(binwidth = 0.2, fill = 'lightblue', alpha = 0.6,
+                    color = 'black', aes(y = ..density..)) +
+     geom_density(bw = 0.75, color = 'black', size = 1) + 
+     ds4ling_theme()
+```
+
+---
+
+### The basics
+
+.pull-left[
+
+- If we continue decreasing the bin size we can also see that the rectangular 
+shape of the vertical bars becomes a curved line
+
+- We can do this to the point that the bin sizes are decreased to the limit at 
+zero
+
+- The formula that derives this line is called a probability density function. 
+
+]
+
+
+.pull-right[
+
+```{r, normal-distributions4, echo=FALSE, fig.retina=2, fig.height=5, cache=F}
+p1 + geom_histogram(binwidth = 1, fill = 'lightblue', alpha = 0.6,
+                    color = 'black', aes(y = ..density..)) +
+     geom_density(bw = 0.75, color = 'black', size = 1) + 
+     ds4ling_theme()
+```
+
+]
+
+---
+layout: false
+
+</br></br></br></br></br></br></br>
+
+### .center[.RUred[We can calculate the probability of any set of observations</br>by finding the area under any portion of the curve]<sup>1</sup>]
+
+.footnote[<sup>1</sup>This will be important for hypothesis testing later...]
+
+---
+layout: true
+
+# Distributions
+
+---
+
+### Less-than-normal data
+
+.pull-left[
+
+- Likewise it is easy to notice when a distribution is not normal. 
+
+- We can end up with non-normal data for many reasons. 
+
+- Sometimes it depends on the nature of what we are measuring.
+
+]
+
+.pull-right[
+
+```{r, 'uniform_distribution', echo=FALSE, fig.retina=2, fig.height=5, warning=F, cache=F}
+# 100 random uniform numbers from 1 to 6 (a die)
+my_uniform_x <- sample(1:6, size = 1000, replace = TRUE) 
+
+# Histogram of data
+p2 <- tibble(x = my_uniform_x) %>% 
+  ggplot(., aes(x = x)) + 
+    geom_histogram(binwidth = 1, fill = 'red', alpha = 0.6,
+                   color = 'black', aes(y = ..density..)) + 
+    stat_function(fun = dnorm, args = list(mean = 3.5, sd = 1.7)) + 
+    scale_x_continuous(breaks = 1:6, labels = 1:6, limits = c(-2, 9), 
+      oob = function(x, limits) x) + 
+    annotate("text", x = -1, y = 0.20, parse = T, size = 8,
+             label = paste0("mu == 3.5")) + 
+    annotate("text", x = -1, y = 0.18, parse = T, size = 8,
+             label = paste0("sigma == 1.7")) + 
+    ds4ling_theme()
+
+print(p2)
+```
+
+]
+
+???
+
+```
+# 100 random uniform numbers from 1 to 6 (a die)
+my_uniform_x <- sample(1:6, size = 1000, replace = TRUE) 
+
+# Histogram of data
+p2 <- tibble(x = my_uniform_x) %>% 
+  ggplot(., aes(x = x)) + 
+    geom_histogram(binwidth = 1, fill = 'grey90', 
+                   color = 'black', aes(y = ..density..)) + 
+    stat_function(fun = dnorm, args = list(mean = 3.5, sd = 1.7)) + 
+    scale_x_continuous(limits = c(-2, 9), breaks = 1:6, labels = 1:6) + 
+    annotate("text", x = -1, y = 0.20, parse = T, 
+             label = paste0("mu == 3.5")) + 
+    annotate("text", x = -1, y = 0.19, parse = T, 
+             label = paste0("sigma == 1.7")) + 
+    ds4ling_theme()
+```
+
+---
+
+### Less-than-normal data
+
+- because of the nature of the data generating process
+- because of outliers
+- because of other underlying population differences
+
+```{r, 'non_normal_distributions', echo=FALSE, fig.retina=2, fig.height=4.5, fig.width=14, cache=F}
+
+my_skewed_x <- rsnorm(1000, mean = 2.5, sd = 1.5, xi = 3.5)
+
+p3 <- tibble(x = my_skewed_x) %>%
+  ggplot(., aes(x = x)) + 
+    geom_histogram(aes(y = ..density..), 
+      binwidth = 0.25, fill = 'lightgrey', color = 'black') +
+    geom_density(bw = 0.5) + 
+    scale_x_continuous(
+      limits = c(-3, 11), breaks = c(0, 4, 8), labels = c(0, 4, 8), 
+      oob = function(x, limits) x) +
+    ds4ling_theme()
+
+# Vector with outliers
+my_outlier_x <- c(rnorm(n = 900, mean = 3, sd = 1.25), 
+                 rnorm(n = 100, mean = 8.5, sd = 0.5))
+
+p4 <- tibble(x = my_outlier_x) %>% 
+  ggplot(., aes(x = x)) + 
+    geom_histogram(binwidth = 0.5, fill = 'lightblue', color = 'black', 
+                   aes(y = ..density..)) + 
+    geom_density(bw = 0.5) + 
+    scale_x_continuous(limits = c(-3, 11), breaks = c(0, 4, 8), 
+                       labels = c(0, 4, 8), oob = function(x, limits) x) + 
+    ds4ling_theme()
+
+p3 | p4
+
+```
+
+???
+
+```
+# Vector with outliers
+my_skewed_x <- c(rnorm(n = 900, mean = 3.5, sd = 1.5), 
+                 rnorm(n = 100, mean = 10.5, sd = 1.5))
+
+p3 <- tibble(x = my_skewed_x) %>% 
+  ggplot(., aes(x = x)) + 
+    geom_histogram(binwidth = 1, fill = 'grey90', color = 'black', 
+                   aes(y = ..density..)) + 
+    ds4ling_theme()
+
+print(p3)
+```
+
+---
+layout:false
+
+```{r, 'p123', echo=FALSE, fig.retina=2, fig.height=8, fig.width=14, fig.align='center', cache=F}
+# combine vectors to plot all three distributions on top of each other 
+combined_dists <- 
+  tibble(normal = my_normal_x, 
+         uniform = my_uniform_x, 
+         skewed = my_skewed_x, 
+         outliers = my_outlier_x) %>% 
+  pivot_longer(cols = everything(), names_to = "type", values_to = "val")
+
+# Calculate some descriptives
+dist_desc <- combined_dists %>% 
+  group_by(type) %>% 
+  summarize(mean = round(mean(val), 2), 
+            median = round(median(val), 2), 
+            sd = round(sd(val), 2), .groups = "drop")
+
+p5 <- combined_dists %>%
+  ggplot(., aes(x = val, y = type, fill = type, height = ..density..)) + 
+    geom_density_ridges(scale = 1.8, stat = 'density') + 
+    scale_fill_brewer("Blues", guide = FALSE) + 
+    geom_vline(xintercept = 3.5, lty = 3, color = 'grey60') + 
+    ds4ling_theme() + 
+    theme(axis.text.y = element_text(vjust = 0))
+
+print(p5)
+```
+
+```{r, 'qqplot-build', echo=FALSE, include=FALSE, cache=F}
+# Build qqplots for the next slide
+qq1 <- gg_qqplot(my_normal_x)
+qq2 <- gg_qqplot(my_uniform_x)
+qq3 <- gg_qqplot(my_skewed_x)
+qq4 <- gg_qqplot(my_outlier_x)
+```
+
+```{r, 'qqplots1', echo=FALSE, fig.retina=2, fig.width=8, fig.height=9, include=FALSE, cache=F, eval=T}
+p1_qq1 <- p1 + geom_histogram(binwidth = 1, fill = 'lightblue', 
+                   color = 'black', alpha = 0.6) + 
+    scale_x_continuous(breaks = -1:8, labels = -1:8) + 
+    ds4ling_theme() 
+
+p1_qq1 / qq1 
+```
+
+---
+background-image: url("./index_files/figure-html/qqplots1-1.png")
+background-position: 90% 50%
+background-size: 450px
+
+# Is my data normal?
+
+### QQ plots
+
+.pull-left[
+
+- A good way to check if our data is normal 
+
+- A qq-plot = plot quantile scores from data and quantile scores predicted 
+by normal curve.
+
+- If data come from the same distribution, the points follow the reference line.
+  - We can check the correlation between a vector of data and the theoretical 
+  quantiles. 
+  - Normal data should be highly correlated with theoretical quantiles from the 
+  normal distribution (more on correlation next week). 
+
+]
+
+---
+
+```{r, 'qqplots234', echo=FALSE, fig.retina=2, fig.width=14, fig.height=8.5, warning=F, cache=F}
+# Plot all samples and qq plots
+(p2 | p3 | p4) / (qq2 | qq3 | qq4)
+```
+
+---
+layout: true
+
+# What else?
+
+---
+
+- There is something else special about the normal distribution. 
+- It has a useful property called the **empirical rule**.
+
+.pull-left[
+
+### Empirical rule<sup>1</sup> 
+
+For data which follow a normal distribution:
+
+- 68 percent of the data fall within 1σ of µ
+- 95 percent of the data fall within 2σ of µ
+- 99.7 percent of the data fall within 3σ of µ 
+]
+
+.pull-right[
+
+<ru-blockquote>
+
+- **µ** (mew): pop. mean
+- **σ** (sigma): pop. std. deviation 
+- **x̄** (x-bar): sample mean
+
+</ru-blockquote>
+
+]
+
+.footnote[<sup>1</sup>Also called the 68-95-99.7 rule.]
+
+---
+
+### Standardizing
+
+- We can take samples of data and **standardize** them--convert them 
+to z-scores--to put them on the same scale (this will be a handy technique 
+later on)
+- .blue[z-score]: A z-score (or standard score) represents the number of 
+standard deviations a given value x falls from the mean, μ. 
+
+--
+
+### An example
+
+```{r, 'create-vectors'}
+vec1 <- c(2, 5, 8)
+vec2 <- c(22, 55, 88)
+```
+
+.pull-left[
+
+```{r, 'mean-sd-vec1', results='hold'}
+mean(vec1)
+sd(vec1)
+```
+
+]
+
+.pull-right[
+
+```{r, 'mean-sd-vec2', results='hold'}
+mean(vec2)
+sd(vec2)
+```
+
+]
+
+---
+
+### Convert to .RUred[z-score]
+
+<font color="orange">Subtract the mean</font> from <font color="green">each value</font> and divide by the <font color="blue">standard deviation</font>
+
+### $$\color{red}{z} = \frac{\color{green}{x} - \color{orange}{\mu}}{\color{blue}{\sigma}}$$
+
+--
+
+.pull-left[
+
+### vec1
+
+```
+2 - 5 = -3 / 3 = -1
+5 - 5 =  0 / 3 =  0
+8 - 5 =  3 / 3 =  1
+```
+
+]
+
+.pull-right[
+
+### vec2
+
+```
+22 -  55 = -33 / 33 = -1
+55 -  55 =   0 / 33 =  0
+88 -  55 =  33 / 33 =  1
+
+```
+
+]
+
+
+---
+
+### Convert to .RUred[z-score]
+
+<font color="orange">Subtract the mean</font> from <font color="green">each value</font> and divide by the <font color="blue">standard deviation</font>
+
+### $$\color{red}{z} = \frac{\color{green}{x} - \color{orange}{\mu}}{\color{blue}{\sigma}}$$
+
+.pull-left[
+
+```{r, 'std-vec1-manual'}
+vec1_std <- (vec1 - mean(vec1)) / sd(vec1)
+vec1_std
+
+mean(vec1_std); sd(vec1_std)
+```
+
+]
+
+.pull-right[
+
+```{r, 'std-vec2-manual'}
+vec2_std <- (vec2 - mean(vec2)) / sd(vec2)
+vec2_std
+
+mean(vec2_std); sd(vec2_std)
+```
+
+]
+
+---
+layout: false
+class: title-slide-section-red
+
+# Example - Exam scores
+
+- Imagine you and a freind took exams in different classes. 
+
+- You received the same raw score (89 out of 100)
+
+- The exams were graded on a curve and your curved grade is higher than 
+your friends. Why?
+
+---
+
+# Exam scores
+
+```{r, 'exam-scores1', echo=FALSE, fig.retina=2, fig.width=14, fig.height=6, cache=F}
+
+# Load test_scores data
+data(test_scores)
+
+# Calculate descriptives of class a
+descriptives_a <- test_scores %>% 
+  dplyr::filter(group == "Class_A") %>% 
+  group_by(group) %>% 
+  summarize(Range = max(score) - min(score), 
+            Median = median(score),
+            `Mean score` = mean(score), 
+            `SD score` = sd(score), .groups = "drop")
+
+# Plot class a
+test_scores %>% 
+  dplyr::filter(., group == 'Class_A') %>%
+  ggplot(., aes(x = group, y = score, label = id)) + 
+    geom_hline(yintercept = descriptives_a$`Mean score`, 
+               color = 'red', lty = 2, size = 1.5) +
+    geom_hline(yintercept = descriptives_a$`Mean score` + descriptives_a$`SD score`, 
+               color = 'darkred', lty = 2, size = 1.5) +
+    geom_hline(yintercept = descriptives_a$`Mean score` - descriptives_a$`SD score`, 
+               color = 'darkred', lty = 2, size = 1.5) +
+    geom_label_repel(aes(fill = important), nudge_x = 0.3, size = 8, 
+                     color = 'black', show.legend = FALSE) + 
+    geom_point(size = 5) + 
+    scale_fill_brewer(palette = "Set1") + 
+    labs(x = NULL, y = 'Score', title = NULL) + 
+    coord_flip() + 
+    theme_grey(base_family = 'Times', base_size = 30)
+```
+
+--
+
+```{r, 'ex-descriptives1', results='asis', echo=FALSE, cache=F}
+descriptives_a %>% select(-group) %>% kable(format = 'html')
+```
+
+---
+
+```{r, 'exam-scores2', echo=FALSE, fig.retina=2, fig.width=14, fig.height=7, cache=F}
+
+# Replot class a with different x lims
+class_a_plot <- test_scores %>% 
+  dplyr::filter(., group == 'Class_A') %>%
+  ggplot(., aes(x = group, y = score, label = id)) + 
+    geom_hline(yintercept = descriptives_a$`Mean score`, 
+               color = 'red', lty = 2, size = 1.5) +
+    geom_hline(yintercept = descriptives_a$`Mean score` + descriptives_a$`SD score`, 
+               color = 'darkred', lty = 2, size = 1.5) +
+    geom_hline(yintercept = descriptives_a$`Mean score` - descriptives_a$`SD score`, 
+               color = 'darkred', lty = 2, size = 1.5) +
+    geom_label_repel(aes(fill = important), nudge_x = 0.3, size = 7, 
+                     color = 'black', show.legend = FALSE) + 
+    geom_point(size = 5, pch = 21, aes(fill = important), show.legend = F) + 
+    scale_fill_brewer(palette = "Set1") + 
+    labs(x = NULL, y = 'Score', title = NULL) + 
+    ylim(60, 100) + 
+    coord_flip() + 
+    theme_grey(base_family = 'Times', base_size = 25)
+
+# Calculate descriptives of class b
+descriptives_b <- test_scores %>% 
+  dplyr::filter(., group == 'Class_B') %>%
+  group_by(group) %>% 
+  summarize(., Range = max(score) - min(score), 
+               Median = median(score),
+               `Mean score` = mean(score), 
+               `SD score` = sd(score), .groups = "drop")
+
+# Plot class b on same scale as class a
+class_b_plot <- test_scores %>% 
+  dplyr::filter(., group == 'Class_B') %>%
+  ggplot(., aes(x = group, y = score, label = id)) + 
+    geom_hline(yintercept = descriptives_b$`Mean score`, 
+               color = 'red', lty = 2, size = 1.5) +
+    geom_hline(yintercept = descriptives_b$`Mean score` + descriptives_b$`SD score`, 
+               color = 'darkred', lty = 2, size = 1.5) +
+    geom_hline(yintercept = descriptives_b$`Mean score` - descriptives_b$`SD score`, 
+               color = 'darkred', lty = 2, size = 1.5) +
+    geom_label_repel(aes(fill = important), nudge_x = 0.3, size = 7, 
+                     color = 'black', show.legend = FALSE) + 
+    geom_point(size = 5, pch = 21, aes(fill = important), show.legend = F) + 
+    scale_fill_brewer(palette = 'Set1') + 
+    labs(x = NULL, y = 'Score', title = NULL) + 
+    ylim(60, 100) + 
+    coord_flip() + 
+    theme_grey(base_family = 'Times', base_size = 25)
+
+# side by side
+class_a_plot / class_b_plot
+```
+
+--
+
+```{r, 'ex-descriptives2', results='asis', echo=FALSE, cache=F}
+bind_rows(descriptives_a, descriptives_b) %>% kable(format = 'html')
+```
+
+---
+
+# Exam scores - Standardized
+
+```{r, 'exam-scores-std1', echo=FALSE, fig.retina=2, fig.width=14, fig.height=7, cache=F}
+
+# standardize the scores of each group
+scores <- test_scores %>% 
+  group_by(group) %>% 
+  mutate(., `Std. score` = (score - mean(score)) / sd(score))
+
+# Calculate descriptives by group
+descriptives_std <- scores %>% 
+  group_by(group) %>% 
+  summarize(., `Std. Mean` = mean(`Std. score`), `Std. SD` = sd(`Std. score`), 
+    .groups = "drop")
+
+# Plot standardized data
+scores %>% 
+    ungroup() %>% 
+    mutate(., group = factor(group, levels = c('Class_B', 'Class_A'))) %>% 
+    ggplot(., aes(x = group, y = `Std. score`, label = id)) + 
+    geom_hline(yintercept = descriptives_std$`Std. Mean`, 
+               color = 'red', lty = 2, size = 1.5) +
+    geom_hline(yintercept = descriptives_std$`Std. Mean` + 
+               descriptives_std$`Std. SD`, 
+               color = 'darkred', lty = 2, size = 1.5) +
+    geom_hline(yintercept = descriptives_std$`Std. Mean` - 
+               descriptives_std$`Std. SD`, 
+               color = 'darkred', lty = 2, size = 1.5) +
+    geom_label_repel(aes(fill = important), nudge_x = 0.3, size = 8, 
+                     color = 'black', show.legend = FALSE) + 
+    geom_point(size = 5, pch = 21, aes(fill = important), show.legend = F) + 
+    scale_fill_brewer(palette = "Set1") + 
+    labs(x = NULL, title = NULL) + 
+    coord_flip(ylim = c(-2, 2)) + 
+    theme_grey(base_family = 'Times', base_size = 30)
+```
+
+---
+class: middle
+
+.pull-left[
+
+```{r, 'ex-print1', results = 'asis', cache=F, echo=FALSE}
+scores %>% 
+  ungroup(.) %>%
+  dplyr::filter(., group == 'Class_A') %>% 
+  select(-important, -group) %>% 
+  arrange(score) %>% 
+  mutate(., `Dev. score` = `Std. score` * 10 + 50) %>% 
+  kable(format = 'html') %>% 
+  row_spec(5, bold = T, color = "white", background = "#cc0033")
+```
+
+]
+
+.pull-right[
+
+```{r, 'ex-print2', results = 'asis', cache=F, echo=FALSE}
+scores %>% 
+  ungroup(.) %>%
+  dplyr::filter(., group == 'Class_B') %>% 
+  select(-important, -group) %>% 
+  arrange(score) %>% 
+  mutate(., `Dev. score` = `Std. score` * 10 + 50) %>% 
+  kable(format = 'html') %>% 
+  row_spec(10, bold = T, color = "white", background = "#cc0033")
+```
+
+]
+
+--
+
+</br>
+
+.center[
+
+### You're friend received the same score on her exam,
+
+### but you did better relative to the rest of your class. 
+
+]
+
+---
+
+# Key points
+
+- EDA and CDA are essential parts of data science
+
+- Obtaining scientific data in not a trivial process 
+
+- Observations can be classified as nominal, ordinal, interval or ratio
+
+- Histograms of a sample distribution are useful for visualizing data
+
+- Descriptive statistics allow us to visualize data mathematically
+
+- There are many families of distributions
+
+- The normal distribution is important for hypothesis testing
+
+- QQ plots can help to determine if data are normal
+
+- z-scores can be used to compare data derived from different sources
+
+---
+layout: false
+class: title-slide-final, left
+
+# References
+
+```{r, echo=FALSE, results='asis', message=F}
+bib <- ReadBib(here("slides", "assets", "bib", "ds4ling_refs.bib"), check = FALSE)
+ui <- "- "
+```
+
+```{r, results='asis', echo=FALSE, eval=TRUE, cache=FALSE, warning=FALSE, message=FALSE}
+writeLines(ui)
+print(bib[key = "wickham2016r"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+writeLines(ui)
+print(bib[key = "qml_ch1"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+writeLines(ui)
+print(bib[key = "manga2009"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+```
+
+

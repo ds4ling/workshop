@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Statistics for Linguists</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Joseph V. Casillas, PhD" />
+    <script src="assets/header-attrs/header-attrs.js"></script>
+    <link href="assets/remark-css/hygge.css" rel="stylesheet" />
+    <link href="assets/remark-css/rutgers.css" rel="stylesheet" />
+    <link href="assets/remark-css/rutgers-fonts.css" rel="stylesheet" />
+    <link href="assets/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="assets/tile-view/tile-view.js"></script>
+    <link href="assets/panelset/panelset.css" rel="stylesheet" />
+    <script src="assets/panelset/panelset.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"b224eec8c7284a36b913a2d751cdae5a","expires":14}</script>
+    <script src="assets/himalaya/himalaya.js"></script>
+    <script src="assets/js-cookie/js.cookie.js"></script>
+    <link href="assets/editable/editable.css" rel="stylesheet" />
+    <script src="assets/editable/editable.js"></script>
+    <script src="assets/freezeframe/freezeframe.min.js"></script>
+    <script src="assets/xaringanExtra-freezeframe/freezeframe-init.js"></script>
+    <script id="xaringanExtra-freezeframe-options" type="application/json">{"selector":"img[src$=\"gif\"]","trigger":"click","overlay":false,"responsive":true,"warnings":true}</script>
+    <script src="https://use.fontawesome.com/5235085b15.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Statistics for Linguists
+]
+.subtitle[
+## Day 2 - Bayesian inference
+]
+.author[
+### Joseph V. Casillas, PhD
+]
+.date[
+### Rutgers University</br>Last update: 2022-11-29
+]
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+class: title-slide-section-grey, middle
+
+# What is probability?
+
+---
+
+class: title-slide-section-grey, middle
+
+# The world according to frequentists
+
+---
+background-image: url(https://www.bellevuerarecoins.com/wp-content/uploads/bigstock-Coin-Flip-5807921.jpg)
+background-size: contain
+background-position: 100% 50%
+
+# What is frequentism?
+
+.pull-left[
+- A blanket term used to refer to "classical" statistics
+
+- Population parameters are fixed, actually exist
+
+- Probability refers to the long-run frequency of a given event
+
+- A sample of data is the result of one of an infinite number of exactly repeated experiments
+
+- Data are random, result from sampling a fixed population distribution
+]
+
+???
+
+- Frequentist statistics represent what we have been doing all semester
+- The frequentist view of probability is what leads to odd definitions of statistical machinery, like confidence intervals
+- This view of probability seems to be at odds with how we think/reason
+  - What is the probability X candidate wins the election?
+
+---
+class: center, middle
+
+# What if...
+
+### There isn't one true population parameter... &lt;br&gt;
+--
+but an entire distribution of parameters, some more plausible than others
+
+---
+class: middle
+
+
+
+&lt;img src="index_files/figure-html/cars-f-vs-cars-b1-1.png" width="936" /&gt;
+
+---
+class: middle
+count: false
+
+&lt;img src="index_files/figure-html/cars-f-vs-cars-b2-1.png" width="936" /&gt;
+
+---
+class: middle
+
+&lt;img src="index_files/figure-html/cars-b-draws1-1.png" width="936" /&gt;
+
+---
+class: middle
+count: false
+
+&lt;img src="index_files/figure-html/cars-b-draws2-1.png" width="936" /&gt;
+
+---
+class: middle
+count: false
+
+&lt;img src="index_files/figure-html/cars-b-draws3-1.png" width="936" /&gt;
+
+---
+class: middle
+
+&lt;img src="index_files/figure-html/cars-f-vs-cars-b-2-1.png" width="936" /&gt;
+
+???
+
+Classical: There is a single "true" line of best fit, and I'll give my best estimate of it.
+
+Bayesian: There is a distribution of lines of fit...some more plausible than others...and I'll give you samples from that distribution.
+
+---
+background-color: black
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/bayesian_bey.png)
+background-size: contain
+
+---
+
+# Distributions of plausible outcomes
+
+.pull-left[
+
+- In Bayesian inference we attempt to approximate this (these) distribution(s)... we call it the **posterior distribution**
+
+- Bayesian inference is all about the posterior
+
+- It represents a distribution of estimates that could arise from the data
+
+- Values that are more common (appear more often) are more plausible
+
+- For *very* simple problems we can calculate the posterior analytically by integrating (calculus)
+
+- For most problems (regression) we cannot calculate the posterior... so we approximate it via sampling (and calculus)
+
+]
+
+.pull-right[
+&lt;br&gt;
+&lt;img src="index_files/figure-html/normal-dist-1.png" width="432" /&gt;
+
+]
+
+---
+
+# A trivial example
+
+.pull-left[
+
+### More cars
+
+- Let's explore the `mpg` variable
+
+- N = 32
+
+- The range is 10.4, 33.9. 
+
+- The mean is 20.090625. 
+
+- The SD is 6.0269481.
+
+- The 95% quantiles are 10.4, 32.7375
+
+- We'll fit an intercept only model. 
+
+]
+
+.pull-right[
+
+&lt;/br&gt;&lt;/br&gt;
+&lt;img src="index_files/figure-html/mtcars-mpg-plot-1.png" width="504" /&gt;
+
+]
+
+--
+
+.pull-left[
+.center[
+
+`$$mpg \sim \alpha + \epsilon$$`
+
+```lm(mpg ~ 1)```
+
+]
+]
+
+---
+
+# A trivial example
+
+We'll fit an intercept only model. The mean `mpg` is 20.090625. 
+
+### Frequentist model
+
+
+```r
+lm(mpg ~ 1, data = mtcars) %&gt;% summary()
+```
+
+```
+## 
+## Call:
+## lm(formula = mpg ~ 1, data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -9.6906 -4.6656 -0.8906  2.7094 13.8094 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   20.091      1.065   18.86   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 6.027 on 31 degrees of freedom
+```
+
+---
+
+# A trivial example
+
+We'll fit an intercept only model. The mean `mpg` is 20.090625. 
+
+--
+
+### Bayesian model
+
+
+```r
+brm(mpg ~ 1, data = mtcars) %&gt;% summary
+```
+
+
+```
+##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: mpg ~ 1 
+##    Data: mtcars (Number of observations: 32) 
+##   Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup draws = 4000
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept    20.06      1.04    18.06    22.25 1.00     2881     2280
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma     6.14      0.79     4.84     7.87 1.00     3106     2113
+## 
+## Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).
+```
+
+---
+
+# Exploring the posterior
+
+.pull-left[
+
+```r
+cp &lt;- as_tibble(cars_bayes_int)
+```
+
+
+```
+## # A tibble: 4,000 × 1
+##    b_Intercept
+##          &lt;dbl&gt;
+##  1        21.9
+##  2        21.5
+##  3        19.1
+##  4        20.5
+##  5        19.7
+##  6        20.8
+##  7        19.5
+##  8        20.0
+##  9        20.4
+## 10        19.9
+## # … with 3,990 more rows
+```
+
+- The posterior distribution is just like any other distribution of data we've seen
+
+- We can analyze it however we want
+
+]
+
+--
+
+.pull-right[
+
+&lt;img src="index_files/figure-html/cars-post-plot-1.png" width="504" /&gt;
+
+
+```r
+mean(cp); quantile(cp, probs = c(0.025, 0.975))
+```
+
+```
+## [1] 20.06213
+```
+
+```
+##     2.5%    97.5% 
+## 18.05595 22.25243
+```
+
+]
+
+---
+class: title-slide-section-grey, middle
+
+# **How do we get a posterior?**
+
+### Let's talk about probability
+
+---
+class: middle, center
+
+.Large[
+`$$P(\color{green}{y})$$`
+]
+
+--
+
+.Large["the probability of .green[y]"]
+
+--
+
+.Large["the probability of .green[you getting an A in stats]"]
+
+---
+class: middle, center
+
+.Large[
+`$$P(\color{green}{y} | \color{red}{z} )$$`
+]
+
+--
+
+.Large["the probability of .green[y] given .red[z]"]
+
+--
+
+.Large["the probability of .green[you getting an A in stats] given .red[you don't do the readings]"]
+
+---
+
+# How do we get a posterior?
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+.center[
+.Large[
+$$
+P(A | B) = \frac{P(B | A) \times P(A)}{P(B)}
+$$
+]
+]
+
+--
+
+Read as: 
+
+&lt;ru-blockquote&gt;
+The probability of A given B is equal to the probability of B given A times the probability of A divided by the probability of B
+&lt;/ru-blockquote&gt;
+
+--
+
+.content-box-red[
+There is a good chance you never actually use this, even though most texts on Bayesian inference will start with this and base rate fallacy examples 
+]
+
+???
+
+It tells you how to convert one conditional probability into another one.
+
+---
+background-image: url(./assets/img/bayes_theorem.gif)
+background-size: 600px
+background-position: 50% 40%
+
+# How do we get a posterior?
+
+---
+background-image: url(./assets/img/bayes_theorem.png)
+background-size: 600px
+background-position: 50% 40%
+
+# How do we get a posterior?
+
+--
+
+.footnote[
+.content-box-blue[
+The posterior distribution is the product of the likelihood and the prior...&lt;br&gt;
+(divided by the normalizing constant)
+]
+]
+
+???
+
+This is much more interesting in the context of statistical modelling
+
+In a class on Bayesian inference we would dedicate a lot of time to understanding the likelihood and the prior...
+
+The prior is the most controversial part of Bayesian inference
+
+---
+
+# How do we get a posterior?
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+.Large[
+$$
+Posterior = \frac{Likelihood \times Prior}{Normalizing\ constant}
+$$
+]
+
+???
+
+Prior and posterior describe when information is obtained: what we know pre-data is our prior information, and what we learn post-data is the updated information (“posterior”).
+
+The likelihood in the equation says how likely the data is given the model parameters. 
+I think of it as fit: How well do the parameters fit the data? 
+Classical regression's line of best fit is the maximum likelihood line. 
+The likelihood also encompasses the data-generating process behind the model. 
+For example, if we assume that the observed data is normally distributed, then we evaluate the likelihood by using the normal probability density function. 
+You don't need to know what that last sentence means. 
+What's important is that the likelihood contains our built-in assumptions about how the data is distributed.
+
+---
+class: middle
+
+&lt;iframe src="https://seeing-theory.brown.edu/bayesian-inference/index.html" style="border:none;" width="100%" height="100%"&gt;
+
+---
+
+# How do we get a posterior?
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+.Large[
+$$
+updated\ knowledge \propto Likelihood\ of\ data \times prior\ beliefs
+$$
+]
+
+--
+
+.footnote[
+.content-box-blue[
+We can think of Bayes' theorem as a principled/systematic method for updating our knowledge in light of new data.
+
+- Update beliefs in proportion to how well the data fit those beliefs.
+- Because beliefs have probabilities, we can quantify our uncertainty about them.
+
+]
+]
+
+---
+
+# How do we get a posterior?
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+.Large[
+$$
+P(unknown | observed) = \frac{\color{red}{P(observed | unknown)} \times P(unknown)}{P(observed)}
+$$
+]
+
+???
+
+We have some model that describes a data-generating process and we have some observed data, but we want to estimate some unknown model parameters. In that case, the formula reads like:
+
+When I was first learning Bayes, this form was my anchor for remembering the formula. The goal is to learn about unknown quantity from data, so the left side needs to be “unknown given data”.
+
+---
+class: title-slide-section-grey, middle
+
+# Frequentism vs. Bayesianism
+
+---
+
+# Frequentism vs. Bayesianism
+
+.center[
+In essence the frequentist approach assess the probability of the data given a specific hypothesis
+]
+
+.large[
+`$$P(data | H_{x})$$`
+]
+
+&lt;br&gt;
+
+--
+
+.center[
+Through Bayes formula one is able to asses the probability of a specific hypothesis given the data
+]
+
+.large[
+`$$P(H_{x} | data)$$`
+]
+
+&lt;br&gt;
+
+--
+
+.center[
+.content-box-blue[
+This is what we pretty much always want in science &lt;br&gt;(and what many people think they are doing with frequentist statistics)
+]
+]
+
+---
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/rstats_ci_1.png)
+background-size: contain
+
+---
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/rstats_ci_2.png)
+background-size: contain
+
+---
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/bayesian_priors.png)
+background-size: contain
+background-position: 100% 50%
+background-color: black
+
+# About priors
+
+.pull-left[
+.white[
+- To approximate the posterior distribution we need priors and data
+
+- Priors = prior beliefs or assumptions
+
+- They represent a way for us to incorporate prior experience or domain expertise into the model 
+
+- You can set any prior you want (subjective)
+
+- Many object to Bayesian inference because of the priors
+
+- Counterpoint: priors force you to be explicit about your assumptions
+]
+]
+
+---
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/bayesian_likelihoods.png)
+background-size: contain
+background-color: black
+
+---
+
+# Why?
+
+.pull-left[
+### Advantages
+
+- A more intuitive inferential framework
+- Focus on distributions and uncertainty estimation instead of point estimates
+- More natural interpretation of results
+- Ability to handle small samples with appropriate guard against overfitting
+- Natural/principled way to combine prior information with data, within a solid decision theoretical framework
+- Flexible, can fit *many* models
+- Multiple comparisons?
+- Evidence for the null?
+- Model convergence?
+]
+
+--
+
+.pull-right[
+### Disadvantages
+
+- Conceptually difficult
+- Steep learning curve
+- Requires careful consideration of prior assumptions
+- Frequentist probability is based on an imaginary set of experiments that you never actually carry out
+- Manipulating posterior takes practice
+- Less common, less accepted
+- Computationally costly, slow
+- There is no correct way to choose a prior
+]
+
+---
+class: title-slide-section-grey, middle
+
+# Frequentism vs. Bayesianism?
+
+---
+
+# Frequentism vs. Bayesianism?
+
+&lt;br&gt;
+
+.Large[
+- A Bayesian estimate with flat priors is generally equivalent to a frequentist MLE
+
+- Frequentism is not wrong, just different
+
+- Frequentism is susceptible to QRPs
+
+- It's about using the right tool for the job
+
+- Do whatever you need to do answer your questions
+]
+
+---
+class: title-slide-section-grey, middle
+
+# How you do it?
+
+---
+
+# More sleep (but Bayesian)
+
+### `sleepstudy` dataset
+
+.pull-left[
+
+- Part of `lme4` package
+
+- Criterion = reaction time (`Reaction`)
+
+- Predictor = \# of days of sleep deprivation (`Days`)
+
+- 10 observations per participant
+
+- \+2 fake participants w/ incomplete data
+
+]
+
+.pull-right[
+
+
+
+
+```r
+str(df_sleep)
+```
+
+```
+## tibble [183 × 3] (S3: tbl_df/tbl/data.frame)
+##  $ Reaction: num [1:183] 250 259 251 321 357 ...
+##  $ Days    : num [1:183] 0 1 2 3 4 5 6 7 8 9 ...
+##  $ Subject : chr [1:183] "308" "308" "308" "308" ...
+```
+
+```r
+head(df_sleep)
+```
+
+```
+## # A tibble: 6 × 3
+##   Reaction  Days Subject
+##      &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  
+## 1     250.     0 308    
+## 2     259.     1 308    
+## 3     251.     2 308    
+## 4     321.     3 308    
+## 5     357.     4 308    
+## 6     415.     5 308
+```
+
+]
+
+---
+class: middle
+
+&lt;img src="index_files/figure-html/ss-plot0-1.png" width="1008" /&gt;
+
+---
+class: middle
+
+
+```
+## Linear mixed model fit by REML ['lmerMod']
+## Formula: Reaction ~ 1 + Days + (1 + Days | Subject)
+##    Data: df_sleep
+## 
+## REML criterion at convergence: 1771.4
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -3.9707 -0.4703  0.0276  0.4594  5.2009 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev. Corr
+##  Subject  (Intercept) 582.72   24.140       
+##           Days         35.03    5.919   0.07
+##  Residual             649.36   25.483       
+## Number of obs: 183, groups:  Subject, 20
+## 
+## Fixed effects:
+##             Estimate Std. Error t value
+## (Intercept)  252.543      6.433  39.257
+## Days          10.452      1.542   6.778
+## 
+## Correlation of Fixed Effects:
+##      (Intr)
+## Days -0.137
+```
+
+---
+class: middle
+
+&lt;img src="index_files/figure-html/ss-plot1-1.png" width="1008" /&gt;
+
+---
+
+# Bayesian version
+
+### Fitting the model
+
+.center[
+.Large[
+$$
+`\begin{aligned}
+Reaction_{ij} &amp; \sim normal(\mu, \sigma) \\
+\mu &amp; = \alpha_{ij} + \beta * Days_{ij} \\
+\alpha &amp; \sim normal(0, 1) \\
+\beta &amp; \sim normal(0, 1) \\
+\sigma &amp; \sim normal(0, 1)
+\end{aligned}`
+$$
+]
+]
+
+--
+
+&lt;/br&gt;
+.center[
+.Large[
+```
+brm(Reaction ~ 1 + Days + (1 + Days | Subject), data = sleepstudy)
+```
+]
+]
+
+---
+class: middle
+
+
+```
+##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: Reaction ~ Days + (Days | Subject) 
+##    Data: df_sleep (Number of observations: 183) 
+##   Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup draws = 4000
+## 
+## Group-Level Effects: 
+## ~Subject (Number of levels: 20) 
+##                     Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)          25.88      6.26    15.14    39.91 1.00     1793     2244
+## sd(Days)                6.58      1.53     4.14    10.09 1.00     1581     2319
+## cor(Intercept,Days)     0.09      0.30    -0.46     0.66 1.00     1047     1656
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept   252.18      6.80   238.81   265.63 1.00     1909     2649
+## Days         10.34      1.69     6.88    13.61 1.00     1314     1918
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma    25.79      1.52    23.03    28.93 1.00     3622     2961
+## 
+## Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).
+```
+
+---
+
+&lt;img src="index_files/figure-html/sleep-draws-main-1.png" width="1008" /&gt;
+
+---
+
+&lt;img src="index_files/figure-html/sleep-draws-forest-1.png" width="1008" /&gt;
+
+---
+background-color: black
+
+&lt;img src="index_files/figure-html/sleep-draws-solar-system-1.png" width="1008" /&gt;
+
+---
+
+&lt;img src="index_files/figure-html/sleep-draws-spaghetti-1.png" width="1008" /&gt;
+
+---
+background-color: black
+
+&lt;img src="index_files/figure-html/sleep-multiverse-1.png" width="1008" /&gt;
+
+---
+class: middle
+background-color: black
+
+&lt;img src="index_files/figure-html/unnamed-chunk-1-1.png" width="972" /&gt;
+
+---
+class: middle, center
+background-color: black
+
+# .white["We put a tiny sliver of scientific information into the model and then we bet on the things that can happen a large number of ways"]
+
+---
+background-image: url(https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png)
+background-size: contain
+
+.footnote[[BDA walkthrough](./assets/bda_walkthrough/bda_walkthrough.zip)]
+
+---
+class: middle
+
+&lt;iframe src="https://allisonhorst.github.io/palmerpenguins/" style="border:none;" height="100%", width="100%"&gt;
+
+---
+exclude: true
+
+(McElreath, 2015)
+
+---
+layout: false
+class: title-slide-final, left
+
+# References
+
+[1] R. McElreath. _Statistical Rethinking: A Bayesian Course with
+Examples in R and Stan_. Chapman &amp; Hall/CRC Texts in Statistical Science.
+CRC Press, 2015. ISBN: 9781482253481.
+
+[2] Bates, D. (2011). *Mixed models in R using the lme4 package Part 2: Longitudinal data, modeling interactions*. http://lme4.r-forge.r-project.org/slides/2011-03-16-Amsterdam/2Longitudinal.pdf
+
+[3] Mahr, T. (2017). *Plotting partial pooling in mixed-effects models*. https://www.tjmahr.com/plotting-partial-pooling-in-mixed-effects-models/
+
+[4] Mahr, T. (2019). *Another mixed effects model visualization*. https://www.tjmahr.com/another-mixed-effects-model-visualization/
+
+[5] Mahr, T. (2020) *Bayes’ theorem in three panels*. https://www.tjmahr.com/bayes-theorem-in-three-panels/
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "default",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,1059 @@
+---
+title   : 'Statistics for Linguists'
+subtitle: 'Day 2 - Multilevel models'
+author  : "Joseph V. Casillas, PhD"
+date    : "Rutgers University</br>Last update: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: assets
+    css: ["hygge", "rutgers", "rutgers-fonts"]
+    nature:
+      beforeInit: ["https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js", "https://platform.twitter.com/widgets.js"]
+      highlightStyle: default
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+    includes:
+      in_header: "../assets/partials/header.html"
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra-all-the-things, echo=FALSE}
+xaringanExtra::use_xaringan_extra(
+  c("tile_view", "panelset", "editable" 
+    #"scribble", "search", "webcam"
+    )
+)
+```
+
+```{r, 'helpers', echo=FALSE, message=F, warning=F}
+source(here::here("slides", "assets", "scripts", "helpers.R"))
+source(here("slides", "02_2_mlm", "assets", "scripts", "lmem.R"))
+```
+
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=F, message=F}
+bib <- ReadBib(here("slides", "assets", "bib", "ds4ling_refs.bib"), check = FALSE)
+ui <- "- "
+```
+
+```{r 'global_setup', echo=FALSE}
+opts_chunk$set(fig.retina=2, cache=FALSE)
+```
+
+class: title-slide-section-grey, middle
+
+# Next steps
+
+---
+layout: true
+
+# What we've seen
+
+- MRC
+
+- Linear regression
+
+- General linear model
+
+- Generalized linear model
+
+---
+
+background-image: url(./assets/img/lm_ex1.png)
+background-position: 90% 50%
+background-size: 750px
+
+---
+
+background-image: url(./assets/img/lm_ex2.png)
+background-position: 90% 50%
+background-size: 750px
+
+---
+layout: false
+
+# What about repeated measures designs?
+
+- Whenever we have more than one data point from the same 
+participant we are dealing with a type of repeated measures 
+design
+  - between subjects factor
+  - within subjects factor
+
+<p></p>
+
+- Everything we have done this semester has been under the 
+assumption that we have one data point per participant (i.e., 
+no within subjects factors)
+
+- This is because one of the assumptions of our models was that 
+there was no autocorrelation, i.e., that the data were independent 
+
+- Repeated measures designs introduce autocorrelation into the 
+model. Why?
+
+---
+
+# What's the big deal?
+
+- Disregarding lack of independence = pseudo-replication
+
+- In other words, replicating the data as though they were 
+independent when they aren’t
+
+- This will inflate your degrees of freedom, completely bias your 
+parameter estimates and make your p-values meaningless
+
+---
+
+# What does a repeated measures design look like?
+
+.pull-left[
+- This dataset has the weight of 50 different chicks at 12 
+different time points
+
+- Notice that the first 12 rows come from the same `chick` (chick 
+1)
+
+- In other words, `Time` can be thought of as a continuous time series 
+variable (within-subjects) that would violate our assumptions of independence
+
+- `Diet`, on the other hand, is a between-subjects factor (you 
+can't be on more than one diet at a time)
+
+- Notice that both `Time` and `Diet` appear in this dataset as 
+numeric values. 
+
+- You have to *think* about your data to make sure you understand 
+what type of variables you have.
+]
+
+.pull-right[
+```{r, 'chicks', cache=FALSE}
+head(ChickWeight, 20)
+```
+]
+
+---
+
+# What can we do?
+
+- Currently, the most popular solution is to use a multi-level or 
+hierarchical model
+
+- These models are commonly referred to as mixed effects models 
+
+- They include both fixed effects and random effects
+
+- They provide a flexible framework that allows us to account for 
+the hierarchical structure of our data (within-subjects variables, 
+time-series data, etc.)
+
+- Building on our knowledge of the linear model, understanding 
+the basic idea of mixed effects models is trivial
+
+---
+
+# How does it work? 
+
+### Standard linear model
+
+- Recall our formula for fitting a linear model
+
+--
+
+.Large[$$\hat{y} = \alpha + \beta X + \epsilon$$]
+
+--
+
+.Large[$$response = intercept + slope * predictor + error$$]
+
+--
+
+- We fit these models in R using `lm()` or `glm()`  
+##.center[
+```
+lm(criterion ~ predictor, data = my_data)
+```
+]
+
+- In a mixed effects model, what we know as *predictors* are 
+called **fixed effects**
+
+--
+
+- The novel aspect of a mixed effects model is that it also 
+includes .blue[random effects]
+
+- Random effects allow us to account for non-independence
+
+---
+
+# How does it work? 
+
+### Mixed effects model
+
+- A mixed effects model *mixes* both fixed effects and random effects
+
+--
+
+.Large[$$\hat{y} = \alpha + \color{red}{\beta}\color{blue}{X} + \color{green}{u}\color{purple}{Z} + \epsilon $$]
+
+--
+
+.Large[$$response = intercept + \color{red}{slope} \times \color{blue}{FE} + \color{green}{u} \times \color{purple}{RE} + error$$]
+
+--
+
+- We fit these models in R using `lmer()` or `glmer()` from the `lme4` package (there are other options as well)
+
+.center[
+```
+lmer(criterion ~ fixed_effect + (1|random_effect), data = my_data)
+```
+]
+
+---
+
+# What is a random effect? 
+
+- This is actually a really nuanced question and nobody has a good 
+answer
+
+- Some people use descriptions like the following:
+
+| fixed                     | random                 |
+| :------------------------ | :--------------------- |
+| repeatable                | non repeatable         |
+| systematic influence      | random influence       |
+| exhaust the pop.          | sample the pop.        |
+| generally of interest     | often not of interest  |
+| continuous or categorical | have to be categorical |
+
+- ...but you will always find exceptions to this
+
+- Most of the time you will see subjects and items as random effects 
+(things that are repeated in the design)
+
+- This typically implies that the model includes **random intercepts**, 
+and/or .blue[random slopes]
+
+- Instead of trying to define random effects, let's try to 
+understand what they do
+
+---
+
+```{r, 'lmem_plot_raw', cache=FALSE, fig.width=14, fig.height=8, echo=FALSE}
+ggplot(my_df, aes(x = time, y = response)) + 
+  geom_point(pch = 21, fill = 'grey80', size = 3) + 
+  labs(y = "Response", x = "Time") + 
+  ds4ling_bw_theme(base_size = 18, base_family = "Times")
+```
+
+---
+class: middle
+
+.pull-left[
+```{r, 'lmem_structure', cache=FALSE, echo=FALSE}
+select(my_df, subjects, time, response) %>% 
+  as.data.frame(.) %>% 
+  head(24) %>% 
+  kable(., format = 'html')
+```
+]
+
+--
+
+</br></br></br></br>
+
+.pull-right[
+- The dataframe includes values of the `response` variable at 20 
+different time points for each participant (n = 10)
+
+- We could model this as:  
+```
+lm(response ~ time, data = my_df)
+```
+
+- But this would violate our assumption of independence (and would 
+produce a terribly misspecified model)
+]
+
+---
+
+```{r, 'lmem_plot_lm', cache=FALSE, fig.width=14, fig.height=8, echo=FALSE}
+ggplot(my_df, aes(x = time, y = response)) + 
+  geom_point(pch = 21, fill = 'grey80', size = 3) + 
+  geom_smooth(method = lm, formula = "y ~ x") + 
+  labs(y = "Response", x = "Time") + 
+  ds4ling_bw_theme(base_size = 18, base_family = "Times")
+```
+
+---
+
+# Let's include `subjects` as a random effect
+
+- We will do this by giving subjects a random intercept
+
+- In other words, we will allow the intercepts to vary for each 
+participant (as opposed to modeling just 1 intercept)
+
+.center[
+```
+lmer(response ~ time + (1|subjects), data = my_df)
+```
+]
+
+- What would this look like?
+
+---
+
+```{r, 'lmem_plot_subj', cache=FALSE, fig.width=14, fig.height=8, echo=FALSE}
+ggplot(my_df, aes(x = time, y = response, fill = subjects)) + 
+  geom_point(pch = 21, color = 'grey80', size = 3) + 
+  labs(y = "Response", x = "Time") + 
+  ds4ling_bw_theme(base_size = 18, base_family = "Times")
+```
+
+---
+
+```{r, 'lmem_plot_ranInt', cache=FALSE, fig.width=14, fig.height=8, echo=FALSE}
+ggplot(my_df, aes(x = time, y = response, fill = subjects)) + 
+  geom_point(pch = 21, color = 'grey80', size = 3) + 
+  geom_abline(data = ran_ints, size = 1, show.legend = F, 
+              color = 'grey60', 
+              aes(intercept = intercepts, slope = slopes)) + 
+  geom_abline(intercept = fixef(mod_int)[1], 
+              slope = fixef(mod_int)[2], 
+              color = 'darkred', size = 2) + 
+  labs(y = "Response", x = "Time") + 
+  ds4ling_bw_theme(base_size = 18, base_family = "Times")
+```
+
+---
+background-image: url(../assets/img/pensar2.png)
+background-position: 90% 50%
+
+# What did we do?
+
+.pull-left[
+- We are taking into account the idiosyncratic differences 
+associated with each individual subject
+
+- By giving each subject its own intercept we are informing the 
+model that each individual has a different starting point in 
+the time course (when `time` = 0)
+
+<p></p>
+
+- In general this makes sense because some people...
+  - are faster/slower responders
+  - speak faster/slower
+  - have higher/lower pitched voices
+
+<p></p>
+
+- We can also take into account the fact that some people...
+  - slow down during an experiment
+  - respond more/less accurately over time
+  - learn at different rates
+]
+
+---
+
+```{r, 'lmem_plot_ranSlopes', cache=FALSE, fig.width=14, fig.height=8, echo=FALSE}
+ggplot(my_df, aes(x = time, y = response, fill = subjects)) + 
+  geom_point(pch = 21, color = 'grey80', size = 3) + 
+  geom_smooth(aes(color = subjects), method = lm, se = F, 
+    formula = "y ~ x") + 
+  labs(y = "Response", x = "Time") + 
+  ds4ling_bw_theme(base_size = 18, base_family = "Times")
+
+```
+
+---
+background-image: url(../assets/img/pensar2.png)
+background-position: 90% 50%
+
+# What did we do?
+
+.pull-left[
+- The model now allows the random intercepts to vary for each 
+individual for the effect `time`
+
+- This means we included a random slope for each participant
+
+- By adding a random slope for the effect `time` we take into 
+account the fact that `response` change for each individual at 
+a different rate
+
+- Under the hood, the model uses this information to calculate 
+the best fit line for all of the data
+
+- This method is called partial pooling and represents one of 
+the most important (and least understood) aspects of mixed 
+effects modeling
+]
+
+---
+
+.pull-left[
+</br></br></br></br>
+
+```
+lmer(response ~ time + (1 + time|subjects), data = my_df)
+```
+
+- Again, `(1 + time|subjects)` represents the random structure 
+of the model
+
+- Anything to the right of `|` is a random intercept
+
+- Anything to the left of `|` is given a random slope for the 
+effect specified to the right
+
+- Thus, `(1 + time|subjects)` means random slopes for the effect `time` for each subject
+
+- It is rarely a good idea to only use random intercepts
+]
+
+.pull-right[
+```{r, 'lmem_plot_ranSlopes2', cache=FALSE, fig.width=7, fig.height=9, echo=FALSE}
+ggplot(my_df, aes(x = time, y = response, group = subjects)) + 
+  geom_point(aes(color = subjects), pch = 21, fill = 'grey60', size = 3, show.legend = F) + 
+  geom_smooth(method = lm, se = F, color = 'grey60', 
+    formula = "y ~ x") + 
+  geom_abline(intercept = fixef(mod_slp)[1], 
+              slope = fixef(mod_slp)[2], 
+              color = 'darkred', size = 2) + 
+  labs(y = "Response", x = "Time") + 
+  ds4ling_bw_theme(base_size = 18, base_family = "Times")
+```
+]
+
+---
+
+# Great news!
+
+- We have spent the entire semester building up our knowledge 
+of the linear model so that we would be prepared to understand 
+mixed effects models 
+
+- Why? They are the standard in speech sciences now
+
+--
+
+<p></p>
+
+- Everything that you have learned in this class applies 
+to a mixed effects model 
+  - model interpretation
+  - nested model comparisons
+  - treatment of categorical factors
+  - centering, standardizing, and other transformations
+
+--
+
+<p></p>
+
+- What about GLMs?
+  - Them too!
+  - You can fit mixed effects models for count data and 
+  binary outcomes using `glmer()`
+  - All you have to do is specify the distribution and the 
+  linking function
+
+--
+
+```
+glmer(response ~ fixed_effect + (1 + fixed_effect|participant), family = binomial(link = "logit"))
+```
+
+```
+glmer(counts   ~ fixed_effect + (1 + fixed_effect|participant), family = poisson(link = "log"))
+```
+
+
+
+---
+
+<iframe src="http://mfviz.com/hierarchical-models/" height="100%" width="100%" title="mlm" style="border:none;"></iframe>
+
+---
+class: title-slide-section-grey, middle
+
+# Understanding partial pooling
+
+.footnote[
+
+Based on [Bates (2011)](http://lme4.r-forge.r-project.org/slides/2011-03-16-Amsterdam/2Longitudinal.pdf) and [Mahr (2017)](https://www.tjmahr.com/plotting-partial-pooling-in-mixed-effects-models/)
+
+]
+
+---
+
+# Partial pooling
+
+### `sleepstudy` dataset
+
+.pull-left[
+
+- Part of `lme4` package
+
+- Criterion = reaction time (`Reaction`)
+
+- Predictor = \# of days of sleep deprivation (`Days`)
+
+- 10 observations per participant
+
+- \+2 fake participants w/ incomplete data
+
+]
+
+.pull-right[
+
+```{r, ss-cleanup, echo=F}
+# Convert to tibble for better printing. 
+# Convert factors to strings
+sleepstudy <- sleepstudy %>% 
+  as_tibble() %>% 
+  mutate(Subject = as.character(Subject))
+
+# Add two fake participants
+df_sleep <- bind_rows(
+  sleepstudy,
+  tibble(Reaction = c(286, 288), Days = 0:1, Subject = "374"),
+  tibble(Reaction = 245, Days = 0, Subject = "373"))
+```
+
+```{r, ss-add-subjs}
+str(df_sleep)
+head(df_sleep)
+```
+
+]
+
+---
+class: middle
+
+```{r, ss-plot0, fig.width=14, fig.height=8.5, echo=F}
+df_sleep %>% 
+  ggplot(., aes(x = Days, y = Reaction)) + 
+    geom_point(pch = 21, aes(fill = Subject)) + 
+    scale_x_continuous(breaks = 0:4 * 2) + 
+    ds4ling_bw_theme(base_size = 18, base_family = "Times")
+```
+
+---
+class: middle
+
+```{r, ss-plot1, fig.width=14, fig.height=8.5, echo=F}
+
+xlab <- "Days of sleep deprivation"
+ylab <- "Average reaction time (ms)"
+
+ggplot(df_sleep) + 
+  aes(x = Days, y = Reaction) + 
+  geom_smooth(method = "lm", se = FALSE, formula = "y ~ x") +
+  geom_point() +
+  facet_wrap("Subject") +
+  labs(x = xlab, y = ylab, 
+    title = "No-pooling", 
+    subtitle = "Info from each participant is not pooled together, i.e., there is an individual model for each person.") + 
+  scale_x_continuous(breaks = 0:4 * 2) + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+
+```
+
+---
+
+# No pooling
+
+```{r, no-pooling, echo=F, warning=F}
+df_no_pooling <- lmList(Reaction ~ Days | Subject, df_sleep) %>% 
+  coef() %>% 
+  tibble::rownames_to_column("Subject") %>% 
+  rename(Intercept = `(Intercept)`, Slope_Days = Days) %>% 
+  mutate(Model = "No pooling") %>% 
+  dplyr::filter(Subject != "373")
+
+df_no_pooling %>% 
+  kable(., format = "html")
+```
+???
+
+This is the same as fitting a separate line for each cluster of data
+
+The models are unaware that any of the other participants exist. 
+
+---
+class: middle
+
+```{r, ss-plot2, fig.width=14, fig.height=8.5, echo=F}
+# Fit a model on all the data pooled together
+m_pooled <- lm(Reaction ~ Days, df_sleep) 
+
+# Repeat the intercept and slope terms for each participant
+df_pooled <- tibble(
+  Model = "Complete pooling",
+  Subject = unique(df_sleep$Subject),
+  Intercept = coef(m_pooled)[1], 
+  Slope_Days = coef(m_pooled)[2]
+)
+
+df_sleep %>% 
+  ggplot(., aes(x = Days, y = Reaction)) + 
+    geom_point(pch = 21, fill = "grey84") + 
+    geom_smooth(method = lm, formula = "y ~ x") + 
+    scale_x_continuous(breaks = 0:4 * 2) + 
+    labs(title = "Complete pooling", 
+      subtitle = "RT ~ Days, model is unaware of participant clusters.") + 
+    ds4ling_bw_theme(base_size = 18, base_family = "Times")
+```
+
+---
+
+# Complete pooling
+
+```{r, complete-pooling-lm}
+summary(m_pooled)
+```
+
+---
+class: middle
+
+```{r, ss-plot3, fig.width=14, fig.height=8.5, echo=F}
+# Join the raw data so we can use plot the points and the lines.
+df_models <- bind_rows(df_pooled, df_no_pooling) %>% 
+  left_join(df_sleep, by = "Subject")
+
+p_model_comparison <- ggplot(df_models) + 
+  aes(x = Days, y = Reaction) + 
+  geom_abline(
+    aes(intercept = Intercept, slope = Slope_Days, color = Model),
+    size = .75
+  ) + 
+  geom_point() +
+  facet_wrap("Subject") +
+  labs(x = xlab, y = ylab, 
+    title = "Comparison", 
+    subtitle = "Complete pooling vs. no pooling.") + 
+  scale_x_continuous(breaks = 0:4 * 2) + 
+  scale_color_brewer(palette = "Set1") + 
+  ds4ling_bw_theme(base_size = 18, base_family = "Times") + 
+  theme(legend.position = "bottom", legend.justification = "left")
+
+p_model_comparison
+```
+
+???
+
+Complete pooling is the same line for each subject, sometimes it is a good fit, sometimes it is way off (i.e., 309)
+
+---
+class: middle
+
+```{r, ss-plot4, fig.width=14, fig.height=8.5, echo=F}
+df_models %>% 
+  dplyr::filter(Subject %in% c("308", "309", "333", "335", "373", "374")) %>% 
+  ggplot(.) + 
+  aes(x = Days, y = Reaction) + 
+  geom_abline(
+    aes(intercept = Intercept, slope = Slope_Days, color = Model),
+    size = .75
+  ) + 
+  geom_point() +
+  facet_wrap("Subject") +
+  labs(x = xlab, y = ylab, 
+    title = "Comparison", 
+    subtitle = "Complete pooling vs. no pooling.") + 
+  scale_x_continuous(breaks = 0:4 * 2) + 
+  scale_color_brewer(palette = "Set1") + 
+  ds4ling_bw_theme(base_size = 18, base_family = "Times") + 
+  theme(legend.position = "bottom", legend.justification = "left")
+```
+
+???
+
+Complete pooling is the same line for each subject, sometimes it is a good fit, sometimes it is way off (i.e., 309)
+
+subj 373 is interesting... when you know very little, best guess is complete pooling estimate
+
+no pooling model follows the data, steep slope for 308, negative slope for 335.
+but... moving from one cluster (subj) to another, they forget everything about the previous clusters (no pooling = model with amnesia)
+
+---
+background-color: black
+class: center, middle
+
+# Can we improve estimates with partial pooling?
+
+???
+
+The mixed effects model will pool information from all the lines to improve estimates of each individual line. 
+
+after seeing data from participants with complete data, the model makes an informed guess about the lines for the participants with incomplete data
+
+---
+class: middle
+
+.center[
+### `Reaction ~ 1 + Days + (1 + Days | Subject)`
+]
+
+<br>
+
+--
+
+- We allow the effect of `Days` to vary for each `Subject`
+
+--
+
+- By-subject random intercepts with random slope for `Days`
+
+- `lmer(Reaction ~ 1 + Days + (1 + Days | Subject), data = df_sleep)`
+
+---
+class: middle
+
+.pull-left[
+
+```{r, lmem, echo=F}
+m <- lmer(Reaction ~ 1 + Days + (1 + Days | Subject), df_sleep)
+summary(m)
+```
+
+]
+
+.pull-right[
+
+- Most of this will look familiar
+
+- Fixed effects estimates (and interpretations) work just like lm, glm, etc. 
+
+- What's new? The random effects estimates
+
+]
+
+---
+
+### **Partial pooling**
+
+```{r, lmem-re, echo=F}
+# Make a dataframe with the fitted effects
+df_partial_pooling <- coef(m)[["Subject"]] %>% 
+  tibble::rownames_to_column("Subject") %>% 
+  as_tibble() %>% 
+  rename(Intercept = `(Intercept)`, Slope_Days = Days) %>% 
+  mutate(Model = "Partial pooling")
+
+kable(df_partial_pooling, format = "html")
+```
+
+---
+
+```{r, plot-all-pooling-types, fig.width=14, fig.height=8.5, echo=F}
+df_models <- bind_rows(
+  df_pooled, df_no_pooling, df_partial_pooling) %>%
+  left_join(df_sleep, by = "Subject")
+
+# Replace the data-set of the last plot
+p_model_comparison %+% df_models + 
+  labs(y = ylab, x = xlab, 
+    title = "Comparison", 
+    subtitle = "No pooling vs. Complete pooling vs. Partial pooling")
+```
+
+---
+class: middle
+
+```{r, plot-all-pooling-types-subset, fig.width=14, fig.height=8.5, echo=F}
+p_model_comparison %+% dplyr::filter(df_models, Subject %in% c("308", "309", "333", "335", "373", "374")) + 
+  labs(y = ylab, x = xlab, 
+    title = "Comparison", 
+    subtitle = "No pooling vs. Complete pooling vs. Partial pooling")
+
+```
+
+???
+
+no pooling and partial pooling estimates are generally similar
+
+if they differ, the partial pooling model estimate is pulled slightly towards the complete-pooling line (shrinkage).
+
+---
+background-image: url(https://i.pinimg.com/originals/65/8b/7c/658b7c3e1ace3cb6fc6bf7a6fa7748b9.jpg)
+background-size: contain
+
+<!-- costanza shirnkage meme -->
+
+---
+background-color: black
+
+```{r, topo-map, echo=F, fig.width=14, fig.height=7.5}
+# Also visualize the point for the fixed effects
+df_fixef <- tibble(
+  Model = "Partial pooling (average)",
+  Intercept = fixef(m)[1],
+  Slope_Days = fixef(m)[2]
+)
+
+# Complete pooling / fixed effects are center of gravity in the plot
+df_gravity <- df_pooled %>% 
+  distinct(Model, Intercept, Slope_Days) %>% 
+  bind_rows(df_fixef)
+
+df_pulled <- bind_rows(df_no_pooling, df_partial_pooling)
+
+# Extract the matrix
+cov_mat <- VarCorr(m)[["Subject"]]
+
+# Strip off some details so that just the useful part is printed
+attr(cov_mat, "stddev") <- NULL
+attr(cov_mat, "correlation") <- NULL
+
+# Helper function to make a data-frame of ellipse points that 
+# includes the level as a column
+make_ellipse <- function(cov_mat, center, level) {
+  ellipse::ellipse(cov_mat, centre = center, level = level) %>%
+    as.data.frame() %>%
+    mutate(level = level) %>% 
+    as_tibble()
+}
+
+center <- fixef(m)
+levels <- c(.1, .3, .5, .7, .9)
+
+df_ellipse <- levels %>%
+  purrr::map_df(~ make_ellipse(cov_mat, center, level = .x)) %>% 
+  rename(Intercept = `(Intercept)`, Slope_Days = Days)
+
+# Euclidean distance
+contour_dist <- function(xs, ys, center_x, center_y) {
+  x_diff <- (center_x - xs) ^ 2
+  y_diff <- (center_y - ys) ^ 2
+  sqrt(x_diff + y_diff)
+}
+
+# Find the point to label in each ellipse.
+df_label_locations <- df_ellipse %>% 
+  group_by(level) %>%
+  dplyr::filter(
+    Intercept < quantile(Intercept, .25), 
+    Slope_Days < quantile(Slope_Days, .25)
+  ) %>% 
+  # Compute distance from center.
+  mutate(dist = contour_dist(
+    Intercept, Slope_Days, fixef(m)[1], fixef(m)[2])) %>%
+  # Keep smallest values.
+  top_n(-1, wt = dist) %>% 
+  ungroup()
+
+ggplot(df_pulled) + 
+  aes(x = Intercept, y = Slope_Days, color = Model) + 
+  geom_path(aes(group = level, color = NULL), data = df_ellipse,
+    linetype = "dashed", color = "grey74") +
+  geom_point(data = df_gravity, size = 9, pch = 20:21, stroke = 3) + 
+  geom_point(size = 4) + 
+  geom_path(aes(group = Subject, color = NULL), 
+    arrow = arrow(length = unit(.02, "npc"))) + 
+  geom_text(aes(label = level, color = NULL), 
+    data = df_label_locations, nudge_x = .5, nudge_y = .8, 
+    size = 3.5, color = "grey60") + 
+  labs(title = NULL, 
+    subtitle = "Topographic map of regression parameters", 
+    x = "Intercept estimate", y = "Slope estimate") +
+  scale_color_viridis_d(option = "C", begin = 0.3) + 
+  ggdark::dark_theme_gray(base_size = 18, base_family = "Times") + 
+  theme(legend.position = "bottom", legend.justification = "left") 
+```
+
+---
+class: middle, center
+background-color: black
+
+
+```{r, partial-pooling-summary, echo=F, fig.width=12, fig.height=8.5, warning=F}
+# From : https://www.tjmahr.com/another-mixed-effects-model-visualization/
+
+# Select four participants to highlight
+df_demo <- df_sleep %>%
+  dplyr::filter(Subject %in% c("335", "333", "350", "374"))
+
+sleep_bda_mod <- brms::brm(
+  Reaction ~ Days + (Days | Subject),
+  data = df_sleep, 
+  seed = 20191125, 
+  file = here("slides", "assets", "mods", "sleep_mod")
+)
+
+col_data <- "grey80"
+tag_others <- "   (others)   "
+
+p_top <- ggplot(df_demo) +
+  aes(x = Days, y = Reaction) +
+  geom_line(aes(group = Subject), color = col_data) +
+  geom_point(color = col_data, size = 2) +
+  facet_wrap("Subject", nrow = 1) +
+  scale_x_continuous(breaks = seq(0, 9, by = 2)) +
+  coord_cartesian(ylim = c(200, 500)) +
+  ggtitle("Each participant contributes data") +
+  labs(x = NULL, y = "") + 
+  ggdark::dark_theme_gray(base_size = 14) +
+  theme(
+    strip.background = element_blank(),
+    strip.text = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.tag.position = "right",
+    plot.tag = element_text(size = rel(.9))
+    #plot.title.position = "plot"
+  )
+
+df_demo_fitted <- df_demo %>%
+  # Create a dataframe with all possible combination of Subject and Days
+  tidyr::expand(
+    Subject,
+    Days = seq(min(Days), max(Days), by = 1)
+  ) %>%
+  # Get the posterior predictions
+  tidybayes::add_fitted_draws(model = sleep_bda_mod)
+
+col_data <- "grey80"
+tag_others <- "   (others)   "
+
+p_bottom <- ggplot(df_demo_fitted) +
+  aes(x = Days, y = .value) +
+  # .width is the interval width
+  tidybayes::stat_lineribbon(alpha = .4, .width = .95, 
+    color = "white") +
+  geom_point(
+    aes(y = Reaction), 
+    data = df_demo, 
+    size = 2, 
+    color = col_data
+  ) +
+  facet_wrap("Subject", nrow = 1) +
+  # Use the viridis scale on the ribbon fill
+  scale_color_viridis_d(option = "A", aesthetics = "fill", 
+    begin = 0.5) +
+  # No legend
+  guides(fill = FALSE) +
+  scale_x_continuous(breaks = seq(0, 9, by = 2)) +
+  coord_cartesian(ylim = c(200, 500)) +
+  ggtitle(
+    "Individual trajectories \"borrow information\" from others"
+  ) +
+  labs(x = NULL, y = "") + 
+  ggdark::dark_theme_gray(base_size = 14) +
+  theme(
+    strip.background = element_blank(),
+    strip.text = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.tag.position = "right",
+    plot.tag = element_text(size = rel(.9))
+    #plot.title.position = "plot"
+  )
+
+df_population <- df_sleep %>%
+  distinct(Days) %>%
+  mutate(Subject = "fake") %>%
+  tidybayes::add_fitted_draws(sleep_bda_mod, allow_new_levels = TRUE)
+
+p_population <- ggplot(df_population) +
+  aes(x = Days, y = .value) +
+  tidybayes::stat_lineribbon(
+    # new part
+    color = "#11111100",
+    .width = c(.1, .25, .5, .6, .7, .8, .9, .95)
+  ) +
+  scale_x_continuous(
+    "Days",
+    breaks = seq(0, 9, by = 2),
+    minor_breaks = NULL
+  ) +
+  coord_cartesian(ylim = c(200, 500)) +
+  scale_y_continuous("Reaction Time") +
+  scale_color_viridis_d(option = "A", aesthetics = "fill") +
+  guides(fill = FALSE) +
+  ggtitle("Model estimates the population of participants") +
+  ggdark::dark_theme_gray(base_size = 14) 
+
+p_middle <- cowplot::plot_grid(
+  p_population, 
+  NULL, 
+  nrow = 1, 
+  rel_widths = c(3, 0)
+)
+
+cowplot::plot_grid(
+  p_top,
+  p_middle,
+  p_bottom,
+  ncol = 1,
+  rel_heights = c(1, 2, 1)
+)
+
+```
+
+---
+class: middle
+background-color: black
+
+.pull-left[
+
+<br><br><br><br>
+.white[
+- Multilevel models use the grouping variables to learn about the nested structure of the data
+
+- The model can use this information to make educated guesses when there is incomplete information
+
+- The model takes advantage of partial pooling, producing shrinkage
+
+- This builds skepticism into the model with regard to extreme values 
+]
+]
+
+.pull-right[
+
+```{r, partial-pooling-summary2, echo=F, fig.width=7, fig.height=8.5}
+
+cowplot::plot_grid(
+  p_top,
+  p_middle,
+  p_bottom,
+  ncol = 1,
+  rel_heights = c(1, 2, 1)
+)
+
+```
+]
+
+---
+exclude: true
+
+`r AutoCite(bib, c("wickham2016r", "qass93_ch2", "qass93_ch3", "qass93_ch4"))`
+
+---
+layout: false
+class: title-slide-final, left
+
+# References
+
+```{r, 'refs', results='asis', echo=FALSE, eval=TRUE, cache=FALSE}
+PrintBibliography(bib)
+```
+
+[5] Bates, D. (2011). *Mixed models in R using the lme4 package Part 2: Longitudinal data, modeling interactions*. http://lme4.r-forge.r-project.org/slides/2011-03-16-Amsterdam/2Longitudinal.pdf
+
+[6] Mahr, T. (2017). *Plotting partial pooling in mixed-effects models*. https://www.tjmahr.com/plotting-partial-pooling-in-mixed-effects-models/
+
+[7] Mahr, T. (2019). *Another mixed effects model visualization*. https://www.tjmahr.com/another-mixed-effects-model-visualization/
+
+
