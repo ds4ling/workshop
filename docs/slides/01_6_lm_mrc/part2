@@ -1,0 +1,1123 @@
+
+---
+class: title-slide-section-grey, middle
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/lm_ballantine.png)
+background-size: 600px
+background-position: 100% 50%
+
+# Assumptions (revisited)
+
+---
+background-image: url(./assets/img/ballentine4b.png), url(./assets/img/ballentine8.png)
+background-size: 450px, 450px
+background-position: 25% 90%, 75% 90%
+
+# A new assumption
+
+### Multicollinearity
+
+- Multicollinearity occurs when the predictors are correlated
+  - height (x<sub>1</sub>) and weight (x<sub>2</sub>)
+  - intelligence (x<sub>1</sub>) and creativity (x<sub>2</sub>)
+
+---
+background-image: url(./assets/img/ballentine4b.png), url(./assets/img/ballentine8.png)
+background-size: 400px, 400px
+background-position: 95% 10%, 95% 90%
+
+# A new assumption
+
+### Multicollinearity
+
+.pull-left[
+- Why is it a problem?
+  - "Confounds" produce ambiguity of causal inference
+
+<p></p>
+
+- Least Squares Estimation in Linear Model:
+  - Simultaneous estimation of additive effects of all model predictors
+  - Does not adequately partition variance among correlated predictors
+
+<p></p>
+
+- Least squares estimation is not adequate for dealing with multicollinearity
+  - works best when predictors are uncorrelated
+]
+
+---
+class: middle, center
+
+<iframe src="https://gallery.shinyapps.io/collinearity/" style="border:none;" height="600" width="1300"></iframe>
+
+---
+
+# Old assumptions revisited
+
+### Model specification errors
+
+#### Avoid excluding relevant variables
+
+- Use Multiple Working Hypotheses
+
+- This is how you safeguard against leaving out a variable that you might need 
+later
+
+- But don't put in everything but the kitchen sink...
+--
+you also must avoid including irrelevant variables
+
+- Ideally you want to use plausible rival hypotheses
+
+--
+
+- You need to have some theory behind your reasoning
+
+--
+
+- Assuming you have done all of this, we need to figure out which predictors 
+are relevant and which are not relevant
+
+- This is not nearly as a big of a problem as having excluded a relevant 
+variable
+
+---
+
+# How useful is the model output?
+
+### Traditional t-test to determine if the b = 0
+
+- Take b-weight, compute standard error
+- Use SE<sub>b</sub> and the b-weight and construct a t-ratio:
+
+#### $$t_b = (b/SE_b)$$
+
+- Theoretically this informs us of whether b = 0 or not
+
+--
+
+### Problem
+
+- The b-weights and the SE of the b-weight are both critically dependent 
+on the model being correctly specified!
+- If you made either kind of model specification error, the parameter estimates 
+are invalid
+  - The b-weights might have changed if you omitted a relevant variable
+  - The SE of the b-weights will have changed (increased) if you included an 
+  irrelevant variable
+
+---
+background-image: url(../../assets/img/frustracion.jpg)
+background-position: 90% 50%
+
+# How useful is the model output?
+
+### Your t-tests might not be informative 
+
+- If the model is not correctly specified then it is based  
+on incorrect values of either b or SE<sub>b</sub> or both
+
+--
+
+- If you knew the model was correctly specified then you  
+would have no need to use the t-tests in the first place
+
+--
+
+- You only need to use them if you're unsure whether the  
+model is correctly specified
+
+- So the only conditions in which the tests are useful are  
+the conditions in which they may be invalid!
+
+--
+
+- But you only test this if you are questioning the  
+specification of the model
+
+### How do you deal with this?
+
+--
+
+.footnote[
+Hierarchical partitioning of variance through nested model comparisons
+]
+
+---
+
+# Nested model comparisons
+
+### Hierarchical Partitioning of Variance
+
+- Comparison of "hierarchically nested" multiple regression models
+
+- Requires theoretical specification and causal ordering of predictors
+
+--
+
+### What is a nested model?
+
+.content-box-blue[
+
+A nested model is when one model is nested inside the other such that there is 
+a more inclusive model that contains more parameters and a less inclusive model 
+(restricted model) that contains just a subset of specific variables you would 
+like to test
+
+]
+
+---
+
+# Nested model comparisons
+
+### What is a nested model?
+
+- In nested model comparisons, you are testing whether those parameters not in 
+the restricted model can be eliminated:
+  - You want to see if those parameters not in the restricted models can be set 
+  to 0
+  - You want to see if these extra parameters are needed or if they can be 
+  taken out
+
+<p></p>
+
+- Testing a more complicated model and then a less complicated one
+
+---
+
+# Nested model comparisons
+
+### Comparing nested models
+
+- You often cannot compare two different restricted models directly
+
+<p></p>
+
+- If the models do not overlap they cannot be directly compared:
+  - So you must construct an inclusive model such that both restricted models 
+  are nested within a common inclusive model
+  - Then we can do the nested model comparisons
+  - Run the alternative restricted models and test each against the same 
+  inclusive model
+
+---
+background-image: url(./assets/img/ballentine5.png)
+background-size: 400px
+background-position: 90% 50%
+
+# Nested model comparisons
+
+### The semipartial R<sup>2</sup>
+
+.pull-left[
+
+- The sr<sup>2</sup> doesn’t tell you if the predictor in question is 
+statistically significant:
+  - But it does tell you how to estimate the unique contributions of each 
+  variable
+
+<p></p>
+
+- We are attempting the elimination of irrelevant variables with this procedure:
+  - We cannot address omission of a relevant variable this way (or in any other 
+  mathematical way because you cannot do math on variables that you didn’t 
+  measure in first place `r emojifont::emoji("woman_facepalming")`)
+  - This method corrects Type I Errors only
+
+]
+---
+
+# Nested model comparisons
+
+### Inclusive Regression Model (R<sup>2</sup><sub>I</sub>):
+
+$$\hat{y} = a + b_{1}x_{1} + b_{2}x_{2} + b_{3}x_{3} + e$$
+
+### Restricted Regression Model (R<sup>2</sup><sub>R</sub>):
+
+$$\hat{y} = a + b_{1}x_{1} + b_{2}x_{2} + e$$
+
+### Nested Model Comparison:
+
+.content-box-red[
+$$(R^2_{I} - R^2_{R}) = sr^2(y, x_{3} \times x_{1}, x_{2})$$
+]
+
+---
+
+# Nested model comparisons: (k<sub>I</sub> - k<sub>R</sub>) = 1
+
+### Restricted Regression Model 1:
+
+$$\hat{y} = a + b_{1}x_{1} + b_{2}x_{2} + e$$
+
+### Restricted Regression Model 2:
+
+$$\hat{y} = a + b_{1}x_{1} + b_{3}x_{3} + e$$
+
+### Restricted Regression Model 3:
+
+$$\hat{y} = a + b_{2}x_{2} + b_{3}x_{3} + e$$
+
+---
+
+# Nested model comparisons: (k<sub>I</sub> - k<sub>R</sub>) = 2
+
+### Restricted Regression Model 4:
+
+$$\hat{y} = a + b_{1}x_{1} + e$$
+
+### Restricted Regression Model 5:
+
+$$\hat{y} = a + b_{2}x_{2} + e$$
+
+### Restricted Regression Model 6:
+
+$$\hat{y} = a + b_{3}x_{3} + e$$
+
+---
+background-image: url(./assets/img/ballentine5.png)
+background-size: 400px
+background-position: 90% 50%
+
+# Nested model comparisons
+
+### How do we test semipartials?
+
+.pull-left[
+
+- We will use a modification of the F-ratio (systematic variance over the error 
+variance)
+
+- F-ratio for sr<sup>2</sup> = the F-ratio for the hierarchical partitioning of variance using nested model comparisons
+
+- The sr<sup>2</sup> of the variable of interest goes in the numerator
+
+- The residual of the inclusive model goes in the denominator
+
+]
+
+---
+background-image: url(./assets/img/ballentine4b.png), url(./assets/img/ballentine4c.png)
+background-size: 400px, 400px
+background-position: 95% 10%, 95% 90%
+
+# Nested model comparisons
+
+### The semipartial F-Ratio
+
+.pull-left[
+
+- This F-ratio is used like a “backward” traditional F-ratio:
+  - It is a test of what you have eliminated to see if you can safely eliminate 
+  it
+  - You only eliminate variables if doing so does not result in a significant 
+  loss of explanatory power
+
+<p></p>
+
+- It is not a test of whether what you have included is relevant:
+  - It’s not what’s left in the model that is being tested
+  - It’s what’s not in the restrictive model that is being tested
+
+]
+
+---
+class: title-slide-section-red
+background-image: url(https://assets.stickpng.com/images/580b57fcd9996e24bc43c53b.png)
+background-size: 400px
+background-position: 90% 50%
+
+# Statistics of love example
+
+.pull-left[
+
+- Imagine that you have a romantic partner that you are thinking of dumping 
+
+- It might be worthwhile to see if it is a good idea by doing the math first
+
+- So you consider what your life is like with your partner (inclusive model) 
+and subtract what it would be like without your partner (restricted model)
+
+- If the answer is greater than zero, you might want to retain your partner
+
+- If it is less than or equal to zero, you may safely dump your partner
+
+]
+
+---
+background-image: url(./assets/img/vot.png)
+background-size: 600px
+background-position: 100% 50%
+
+# Stop voicing example
+
+.pull-left[
+
+- Imagine you are looking at how skewness (x<sub>1</sub>) and kurtosis 
+(x<sub>2</sub>) of coronal stop bursts can predict voice-onset time (y)
+
+- You want to see if you can eliminate the kurtosis (x<sub>2</sub>) variable
+
+- Your restricted model would be R<sup>2</sup> (y, x<sub>1</sub>) 
+i.e., predicting VOT from skewness alone
+
+- If the semipartial F-ratio is not statistically significant, then you can 
+eliminate the kurtosis variable from the model
+
+- If the F-ratio is significant, then you cannot eliminate that variable from 
+the model
+]
+
+---
+background-image: url(./assets/img/vot.png)
+background-size: 600px
+background-position: 100% 50%
+
+# Stop voicing example (cont.)
+
+.pull-left[
+
+- Suppose skewness and kurtosis can predict 40% of the variance in VOT
+
+- If skewness alone can predict 38% of this, then:
+  - The squared semipartial correlation of kurtosis is 40% - 38% = 2%
+  - Which is less than our total error variance because 1 - 40% = 60%
+
+- Then skewness does just fine on its own predicting VOT and we can eliminate 
+kurtosis as a predictor
+  - Provided the F-ratio for the semipartial of kurtosis is not statistically 
+  significant
+  - This also may depend on sample size
+
+]
+
+---
+background-image: url(./assets/img/vot.png)
+background-size: 600px
+background-position: 100% 50%
+
+# Stop voicing example (cont.)
+
+.pull-left[
+
+- On the other hand, if skewness only accounts for say 10% of the variance
+  - Then 40% - 10% = 30%
+  - Then kurtosis might still be important and we cannot eliminate it from 
+  the model due to a statistically significant semipartial F-ratio
+
+- You are testing to see if skewness is strong enough to account for VOT in 
+coronal stops without considering kurtosis
+
+- You want a non-significant semipartial F- ratio if you want to eliminate any 
+variable
+
+]
+
+---
+
+# Nested model comparisons
+
+### Hierarchical tests of significance
+
+### $$F_{(\color{red}{k_{I}}-\color{blue}{k_{R}}),(n - \color{red}{k_{I}} - 1)} = \frac{(\color{red}{R^2_{I}} - \color{blue}{R^2_{R}}) / (\color{red}{k_{I}} - \color{blue}{k_{R}})}{(1 - \color{red}{R^2_{I}}) / (n - \color{red}{k_{I}} - 1)}$$
+
+- R<sup>2</sup> = Squared multiple correlation
+
+- k = Model degrees of freedom (number of predictors)
+
+- n = Total sample size
+
+- .RUred[I] = .RUred[Inclusive Model] (Including All Predictors)
+
+- .blue[R] = .blue[Restricted Model] (Excluding Some Predictors)
+
+- (.RUred[R<sup>2</sup><sub>I</sub>] – .blue[R<sup>2</sup><sub>R</sub>]) = 
+Squared Semipartial Correlation
+
+---
+
+# Nested model comparisons
+
+- Results of hierarchical partitioning of variance and hierarchical tests of 
+significance depend critically upon causal order specified among predictors:
+  - There is no purely mathematical solution to this problem
+  - Causal ordering of predictors must be specified by theory
+
+- Comparisons of hierarchically nested models permit testing of alternative 
+hypotheses generated by rival causal theories
+
+- A "confound" is just an alternative hypothesis towards which one has a 
+negative attitude
+
+--
+
+### What about likelihood ratio tests?
+
+---
+
+# Nested model comparisons
+
+### Genetics example revisited
+
+- You share 50% of genes with your Mom (M) and 50% with your Dad (D)
+
+- But your parents don’t share that many genes
+
+- M and D are generally not genetically correlated with each other, but you 
+(the M\*D interaction) are correlated with both M and D
+
+--
+
+- So M and D are main (additive) effects and you are the M\*D (multiplicative) 
+interaction
+
+- You are now correlated with both main effects
+
+- This causes *multicollinearity*
+
+- M and D may then argue over this shared variance
+
+- You have become a confound
+
+---
+
+# Nested model comparisons
+
+### Dealing with multicollinearity
+
+- To test for the statistical significance of the interaction effect, you use 
+hierarchically nested model comparisons:
+  - This is a the reasonable solution for the problem of multicollinearity
+  - Interaction terms (nonadditivity) ALWAYS create multicollinearity
+
+- If the main effect variables are already correlated, the multicollinearity is 
+worse:
+  - But you still get multicollinearity even if the component main effects are 
+  not correlated
+
+--
+
+- The purely additive model (main effects only) is simpler than the 
+multiplicative model (including the interaction):
+  - So if the additive model can do it then go with it because it is 
+  more parsimonious
+  - Leave out (eliminate) the interaction effects first because they might be 
+  too confusing
+
+---
+
+# Nested model comparisons
+
+### Example: A multiple regression with three predictors
+
+.center[
+`y ~ a * b * c`
+]
+
+|                         |                   |
+| :---------------------- | :---------------- |
+| Main effects:           | a, b, and c       |
+| Two way interactions:   | a:b, a:c, and b:c |
+| Three way interactions: | a:b:c             |
+
+<p></p>
+
+- So which terms get causal priority in the hierarchical partitioning of 
+variance?
+--
+
+- Main effects, then two way interactions, then three way interactions, etc.
+
+--
+
+### It is more parsimonious to use the main effects:
+
+- Fewer dfs are used and it is a less complicated model
+- Using a linear additive model is generally the most parsimonious way to go 
+about it
+- It is thought that any common variance should be given first to the main 
+effects because they are conceptually more parsimonious
+
+---
+
+# Nested model comparisons
+
+### Lack of parsimony
+
+- If you use an interaction term (e.g., a*b), you are claiming that you need 
+BOTH in order to have an effect
+  - This is an extra substantive claim which needs to be supported 
+  - It’s an **AND** statement not an .blue[OR] statement, so it’s a bit riskier
+
+<p></p>
+
+- Inclusive model contains all interactions that you wish to test:
+  - Then you use restricted models to test each interaction separately
+
+<p></p>
+
+- You can generate a ridiculous amount of hypotheses with a small number of 
+variables and this might really compromise your model parsimony:
+  - You need a theoretical reason to include an interaction term
+
+---
+
+# Nested model comparisons
+
+### Summarizing
+
+- Problem: Multicollinearity
+
+- Solution: Hierarchical partitioning of variance
+
+- Make an inclusive model and do hierarchical partitioning of variance
+
+- Determine which terms (lower order and higher order, additive and 
+interactive), if any, can be eliminated
+
+---
+
+# Nested model comparisons
+
+### Causal priority
+
+- So which one gets causal priority?
+
+<p></p>
+
+- Main effects generally do:
+  - But now two-way interactions and squared terms are just as complicated
+  - So are three-way interactions and cubed terms, etc.
+
+<p></p>
+
+- There is no convention for deciding which comes first:
+  - There is no mathematical solution to this problem
+  - We need a theoretical solution
+
+---
+
+# Nested model comparisons
+
+### Use principles of strong inference
+
+- Only test plausible rival hypotheses
+
+- Be careful and selective!
+
+- Even with a small number of primitive component terms (main effects), once 
+you examine all the possible interactions you will have a complex model
+
+- You will exhaust your statistical power very quickly
+
+---
+
+# Nested model comparisons
+
+### Doing it in R
+
+- Fit all the relevant models
+
+```{r, mod_comp1}
+mod_full <- lm(mpg ~ wt + drat + wt:drat, data = mtcars) # inclusive model
+mod_int  <- lm(mpg ~ wt + drat          , data = mtcars) # restricted model
+mod_drat <- lm(mpg ~ wt                 , data = mtcars) # restricted model
+mod_wt   <- lm(mpg ~ drat               , data = mtcars) # restricted model
+mod_null <- lm(mpg ~ 1                  , data = mtcars) # null model
+```
+
+--
+
+- Test higher order variables and main effects using nested model comparisons  
+  - In R we do this with the .red[`anova()`] function
+  - It is not an anova (for that we use the .red[`aov()`] function)
+  - We include the restricted model and the inclusive model to test if removing 
+  the variable from the inclusive model significantly changes the goodness of it
+  - If it does, then we leave it in (it is important)
+  - If it doesn't, then we can take it out (it is not important)
+
+---
+
+# Nested model comparisons
+
+### Doing it in R
+
+```{r, mod_comp2}
+anova(mod_int, mod_full) # Test interaction effect
+```
+
+--
+
+- There is a significant interaction of `wt` and `drat` (*F*(1) = 5.41, 
+p < 0.03)
+
+--
+
+- Notice that I report the df, the F-ratio, and the p-value from this output.
+
+---
+class: title-slide-section-grey, middle
+background-image: url(https://i0.wp.com/freepngimages.com/wp-content/uploads/2017/02/games-dice-no-background.png?w=500)
+background-position: 90% 50%
+
+# Capitalizing on Chance
+
+---
+
+### Inflated R<sup>2</sup>
+
+- Least squares estimation capitalizes on chance associations
+- Including irrelevant variables increases R<sup>2</sup> non-significantly
+- Sample R<sup>2</sup> is systematically overestimated, or inflated
+
+--
+
+### As k increases, there is more capitalization on chance 
+
+- This is bad
+- Every variable you measure has some error in it, and some of this error can 
+be capitalized on by least squared estimation and this will boost our observed 
+R<sup>2</sup>
+- So sample R<sup>2</sup> deviates more from the true population R<sup>2</sup> 
+as k increases
+
+--
+
+### As n increases, the overestimation of R<sup>2</sup> is less: 
+
+- This is good
+- The bigger the sample we have, the closer our observed R<sup>2</sup> will be 
+to the real population R<sup>2</sup>
+- When n equals infinity, then our sample R<sup>2</sup> would equal the real 
+R<sup>2</sup>
+
+---
+
+# Alpha slippage
+
+- Alpha is the probability of committing a Type I Error:
+- Experiment-Wise alpha is a function of the Test-Wise alpha and the total 
+number of significance tests conducted:
+
+### $$\color{red}{\alpha _{e}} = 1 - (1 - \color{blue}{\alpha _{T}})^\color{green}{k}$$
+
+|                        |                              |
+| ---------------------: | :--------------------------- |
+| .blue[α<sub>T</sub>] = | Test-wise alpha              |
+| .green[k]            = | Number of significance tests |
+| .red[α<sub>E</sub>]  = | Experiment-wise alpha        |
+
+
+
+---
+
+# Alpha slippage
+
+.pull-left[
+
+## .center[.red[.40] = 1 - (1 - .blue[0.05])<sup>.green[10]</sup>]
+
+|               |                              |
+| ------------: | :--------------------------- |
+| .blue[0.05] = | Test-wise alpha              |
+| .green[10]  = | Number of significance tests |
+| .red[.40]   = | Experiment-wise alpha        |
+
+]
+
+.pull-right[
+
+## .center[.red[.64] = 1 - (1 - .blue[0.05])<sup>.green[20]</sup>]
+
+|               |                              |
+| ------------: | :--------------------------- |
+| .blue[0.05] = | Test-wise alpha              |
+| .green[20]  = | Number of significance tests |
+| .red[.64]   = | Experiment-wise alpha        |
+
+]
+
+---
+
+# Alpha slippage
+
+.pull-left[
+
+## .center[.red[.99] = 1 - (1 - .blue[0.05])<sup>.green[100]</sup>]
+
+|               |                              |
+| ------------: | :--------------------------- |
+| .blue[0.05] = | Test-wise alpha              |
+| .green[100] = | Number of significance tests |
+| .red[.99]   = | Experiment-wise alpha        |
+
+]
+
+.pull-right[
+
+## .center[.red[1.0] = 1 - (1 - .blue[0.05])<sup>.green[500]</sup>]
+
+|               |                              |
+| ------------: | :--------------------------- |
+| .blue[0.05] = | Test-wise alpha              |
+| .green[500] = | Number of significance tests |
+| .red[1.0]   = | Experiment-wise alpha        |
+
+]
+
+---
+
+# Alpha slippage
+
+### Taking repeated risks
+
+.pull-left[
+
+- Every time you do a significance test (at .05) you take a risk of making a 
+Type I Error every 1 in 20 times
+
+- If you do it once you have a 95% chance of being right
+
+- But if you do it multiple times your chances of eventually making a Type I 
+Error greatly increases
+
+- If you have an issue of a journal with 20 articles in it (each using a .05 
+alpha), the chance of one of those articles reporting a Type I Error is pretty 
+high
+
+]
+
+.pull-right[
+
+```{r, alpha_slippage, warning=FALSE, echo=FALSE, fig.height=5, fig.retina=2}
+error_rate <- vector(mode = 'numeric', length = 100)
+
+for (i in 1:100) {
+  error_rate[i] <- 1 - (1 - 0.05)^i
+}
+
+tibble(x = 1:100, y = error_rate) %>% 
+  ggplot(., aes(x = x, y = y)) + 
+   geom_point(pch = 21, fill = '#cc0033', size = 7) + 
+   labs(x = "# of tests", y = "Type I error rate") + 
+   ds4ling::ds4ling_bw_theme(base_family = "Times", base_size = 16)
+```
+
+]
+
+---
+
+# Empirical selection of variables
+
+### We should strive to create theoretically specified models that test a priori alternative hypotheses:
+
+- In these models (in a perfect world), all hypotheses are carefully 
+selected, plausible rival hypotheses
+
+- Higher order variables are included when theoretically motivated
+
+### We should be discouraged from testing atheoretical ones:
+
+- If you do all possible comparisons, you weaken your statistical 
+power and you get alpha slippage
+
+- When you try to correct for the alpha slippage (by making a more stringent 
+test-wise alpha) you run the risk of committing more Type II Errors
+
+---
+
+# Empirical selection of variables
+
+- There are other techniques in multiple regression that are completely different in basic objectives  
+i.e., empirical selection or exploratory regression techniques
+
+- There are two reasons why we would use exploratory regression techniques that 
+are not based on theory:
+
+  - Reason 1: Some people are interested in prediction and not causation, and 
+  predictions don’t require theory
+
+  - Reason 2: There may be an honest lack of theory in the area you are 
+  investigating
+
+---
+
+# Empirical selection of variables
+
+### Reason 1: Some people are interested in prediction and not causation, and predictions don’t require theory
+
+- For example, motorcycle ownership increases car insurance rates:
+  - Causally, this makes no sense
+  - But for predictive purposes, it does make sense
+
+<p></p>
+
+- Motorcycle owners may be riskier car drivers due to personality factors:
+  - High testosterone 
+  - Frontal lobe development?
+
+---
+
+# Empirical selection of variables
+
+### Reason 2: There may be an honest lack of theory in the area you are investigating
+
+- It might be an entirely new area of scientific investigation
+
+- It might be the case that existing theory was found inadequate or 
+insufficiently supported by the evidence
+
+<p></p>
+
+- However, some people still use exploratory techniques even when they have a 
+theory that they could be testing 
+  - experimenter degrees of freedom
+  - p-hacking
+  - fishing expeditions
+  - pseudoscience
+
+<p></p>
+
+- This is unnecessary and wrong
+
+---
+
+# Empirical selection of variables
+
+### How should we do it?
+
+- First, we must design the study:
+  - We need to sample a broad set of variables, and think as creatively and 
+  diversely as you can about what to include
+  - We need to go beyond the “usual suspects”
+- Second, we need to specify the model:
+  - How do we figure out which variables to include and which should be 
+  excluded without a theory?
+- Two elementary methods:
+  - Backward Elimination
+  - Forward Selection
+
+---
+
+# Empirical selection of variables
+
+### Backward elimination
+
+1. Include all your variables into a single simultaneous regression model:
+  - Get b-weights, R<sup>2</sup>, etc.
+  - Take a look at all the b-weights
+2. Try to eliminate any irrelevant variables:
+  - You are focusing on variables with the smallest effect sizes and the "least 
+  significant" b-weights
+  - Do this one step at time, because multicollinearity may be involved
+  - Remember this is not theoretically-based and there are no a priori 
+  hypotheses
+3. Re-fit the model with the weakest variable eliminated
+4. Compare new model to the original one and see if its better:
+  - Look at the new R<sup>2</sup> and then compare the R<sup>2</sup> of the 
+  model with that variable included with the model with that variable removed, 
+  and see if the new model is statistically acceptable
+5. If you could eliminate that variable, you now look at this model (not the 
+original model) and see which is the next weakest variable
+  - Try to eliminate this one, and do the same thing all over again
+
+---
+
+# Empirical selection of variables
+
+### Backward elimination
+
+- Keep doing this until when everything left is significant
+
+- When removing something more results in a statistically significant sR2 F-ratio
+
+- Then you have to put that last variable back in, and that’s your final model
+
+- You are picking off the weakest variables until you can no longer validly eliminate anything else
+
+---
+
+# Empirical selection of variables
+
+### Backward elimination - Problems
+
+- In true backward elimination, once you eliminate something you can’t go back 
+on that decision
+
+- Due to Multicollinearity, one variable that was eliminated in an earlier step 
+might now be significant in a new context, but you have no way to know this:
+
+- Remember significance is often context dependent
+
+- Variable A might have not been significant in step 2, but now that variables 
+B, C, and D have been removed it might be significant
+
+---
+
+# Empirical selection of variables
+
+### Forward selection
+
+- Correlate all the predictors with the criterion variable (do bivariate 
+correlations of all the predictors with the criterion):
+  - Pick the one with the best bivariate correlation
+  - Run the model with this correlation
+- Now, you don't want to include your next largest bivariate correlation from 
+the original correlations that you found:
+  - Instead, you partial out variable 1 from all remaining variables
+  - Then you take the one with the biggest sR<sup>2</sup> after variable 1 was 
+  removed and run the next regression
+- To get variable 3, you partial out variable 1 and 2 and look at the variable 
+with the next biggest sR<sup>2</sup>, and then you put that one in
+
+---
+
+# Empirical selection of variables
+
+### Forward selection
+
+- After each step, you take the difference in your R<sup>2</sup> values and 
+test it for significance to see if the newly added variable adds a significant 
+amount of variance to the previous model:
+  - If you have already added variables 1 and 2, and now you want to add 
+  variable 3 you need to compare the model with variables 1 and 2 with the 
+  model with variables 1, 2, and 3
+  - So you subtract the R<sup>2</sup> and do the semi-partial F-ratio
+  - Just like an a priori hierarchical procedure!
+- Do this until the most recently added variable no longer adds significance 
+variance (sR<sup>2</sup>) to the model:
+  - And then throw that variable back!
+- Why not test the remaining ones?
+  - Because you were testing the ones with the largest sR<sup>2</sup>, so any 
+  remaining variables will have lower sR<sup>2</sup> and will therefore not add 
+  any more significant variance to the model than your last tested variable
+
+---
+
+# Empirical selection of variables
+
+### Forward selection - Problems
+
+Similar to Backward Elimination:
+
+- As you put things in there is no way for you to go back and change variables 
+that you already added
+
+- So there is no way of going back and rethinking what you have already done
+
+- Even though variable 1 may have been good in the original context, but now 
+that other variables have been added, it might not make so much sense anymore
+
+- So you can end up in two completely different places using the same data when 
+you use forward selection and backward elimination
+
+---
+
+# Empirical selection of variables
+
+### Stepwise regression
+
+- Stepwise Regression is the most popular procedure for exploratory regression:
+  - It is a combination of forward selection and backward elimination
+  - Not the same as hierarchical partitioning of variance!
+- Basically, you take one step forward, one step back, one step forward, etc.:
+  - Start with forward selection, then do backward elimination
+  - Until both of the procedures fail and you can’t add anything profitably and 
+  you can’t lose anything profitably
+- By combining the two procedures, you get to add something, but then you 
+follow the addition immediately with a backward elimination to see if you can 
+eliminate something else:
+  - Which you couldn’t do previously with forward selection
+  - The backward elimination looks at everything, so you can eliminate anything 
+  and anytime as long as you don’t lose a significant amount of variance
+  - So you can eliminate variable 1 in step 8
+
+---
+
+# Empirical selection of variables
+
+### Benefits of using exploratory regression techniques:
+
+- You get to proceed in spite of lack of theoretical guidance
+
+- Produce hypotheses/theory building for future research
+
+### Major problems involved:
+
+- No a priori theory involved, so the procedure is totally mindless
+
+- You are testing a very large number of variables and you are running a HUGE 
+risk of committing Type I Errors due to massive capitalization on chance
+
+- In fact, you might end up with nothing but Type I Errors!
+
+---
+class: title-slide-section-grey, middle
+
+# Reporting results
+
+---
+
+# Reporting
+
+- The main purpose is to explain what you did in a manner that is understandable 
+and reproducible
+- You should report: 
+
+1. General description: 
+  - The model you used to fit your data
+  - The variables included (criterion, predictors)
+  - Transformations (if applicable)
+  - Tests for model assumptions
+  - How you assessed main effects and interactions
+  - Alpha
+2. Results
+  - Model fit
+  - Main effects (usually model comparisons)
+  - Interactions (usually model comparisons)
+  - Interpretations (directionality, b-weights, SE, CI, p-values)
+
+---
+background-image: url(./assets/img/reporting1.png)
+background-size: 900px
+background-position: 80% 70%
+
+# Reporting
+
+### General description
+
+.footnote[Llompart & Casillas, 2016]
+
+---
+background-image: url(./assets/img/reporting2.png)
+background-size: 800px
+background-position: 80% 70%
+
+# Reporting
+
+### Results
+
+.footnote[Llompart & Casillas, 2016]
+
+---
+background-image: url(./assets/img/reporting3.png)
+background-size: 900px
+background-position: 80% 70%
+
+# Reporting
+
+### General description
+
+.footnote[Casillas, 2015]
+
+---
+background-image: url(./assets/img/reporting4.png)
+background-size: 900px
+background-position: 80% 70%
+
+# Reporting
+
+### Results
+
+.footnote[Casillas, 2015]

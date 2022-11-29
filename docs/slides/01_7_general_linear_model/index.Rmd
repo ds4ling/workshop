@@ -1,0 +1,1396 @@
+---
+title   : 'Statistics for Linguists'
+subtitle: 'Day 1 - The general linear model'
+author  : "Joseph V. Casillas, PhD"
+date    : "Rutgers University</br>Last update: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: assets
+    css: ["hygge", "rutgers", "rutgers-fonts"]
+    nature:
+      beforeInit: ["http://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js", "https://platform.twitter.com/widgets.js"]
+      highlightStyle: default
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+    includes:
+      in_header: "../assets/partials/header.html"
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-extra-all-the-things, echo=FALSE}
+xaringanExtra::use_xaringan_extra(
+  c("tile_view", "panelset", "editable", "animate", "tachyons", "webcam")
+)
+```
+
+```{r, 'helpers', echo=FALSE, message=F, warning=F}
+source(here::here("slides", "assets", "scripts", "helpers.R"))
+```
+
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=F, message=F}
+bib <- ReadBib(here("slides", "assets", "bib", "ds4ling_refs.bib"), check = FALSE)
+ui <- "- "
+```
+
+```{r global_setup, echo=FALSE}
+opts_chunk$set(fig.retina=2, cache=FALSE)
+```
+
+class: inverse, middle
+
+<blockquote align='center' class="twitter-tweet" data-lang="de">
+<a href="https://twitter.com/tres_gonzaga/status/910822470927523840"></a>
+</blockquote>
+
+---
+class: title-slide-section-grey, middle
+
+# The general linear model
+
+---
+layout: true
+
+# A quick review
+
+---
+
+### Classical MRC
+
+- In classical Multiple Regression/Correlation (MRC) predictors are 
+continuous variables
+
+<p></p>
+
+- Recall
+  - Darwinian theory predicted continuous variation in traits
+  - Galton and Pearson created a model in which continuous variables were used
+  - Discontinuous (categorical) variables were not considered
+
+<p></p>
+
+- In real life we do run into dichotomous/discontinuous variables
+
+- Or... if an entire experimental group gets one treatment and another group 
+gets a different treatment, this is also dichotomous/discontinuous
+
+---
+
+### Classical ANOVA
+
+- Classical Analysis of Variance (ANOVA) assumes that all predictors are 
+discontinuous variables
+
+- ANOVA methods are often abused by forcing continuous variables into 
+discontinuous form (this can reduce your statistical power by as much as 50%)
+
+---
+
+### Both types of variables (continuous and categorical) exist in the real world
+
+.pull-left[
+
+### Categorical
+
+- Smoker/Non-smoker
+
+- Native speaker/L2 learner
+
+- Voiced/voiceless segment
+
+- Stressed/Unstressed syllable
+
+- Etc.
+
+]
+
+.pull-right[
+
+### Continuous
+
+- Age
+
+- Weight
+
+- Amount of exercise
+
+- Miles per gallon
+
+- VOT
+
+]
+
+---
+
+### The modern GLM
+
+#### Modern GLM includes both MRC and ANOVA:
+
+- MRC predictors are all continuous
+
+- ANOVA predictors are all discontinuous/categorical
+
+- But both MRC and ANOVA are both part of the same big thing: the GLM
+
+---
+
+### A unified model
+
+- Before ANOVA and MRC were unified, we could not account for both levels of 
+measurement within the same model
+
+- The modern GLM can accommodate any combination of categorical and continuous 
+variables
+
+- This was not known until 1968 (Cohen, 1968)
+
+- So now we can construct mixed models with both categorical and continuous 
+variables
+
+---
+layout: true
+
+# A brief history
+
+---
+
+### Remember...
+
+.pull-left[
+
+#### Aristotle
+
+- Categories are inherent in the individual
+- Individuals need to have some identifiable, visible feature to be classified
+- It is the possession of certain observable features that puts individuals in 
+categories
+
+]
+
+--
+
+.pull-right[
+
+#### Plato
+
+- Categories are God-given
+- Things possess an essence of a type
+- Observable features are not reliable because they are based on sense 
+perceptions
+
+]
+
+--
+
+</br>
+
+#### .RUred[To Aristotle the individual was ultimate reality, but to Plato the individual was an imperfect reflection of the perfect category or its “ideal type” (= eidolon)]
+
+---
+background-image: url(https://theancientwebgreece.files.wordpress.com/2017/09/bc284-bob5_just2.jpg?w=337&zoom=2)
+background-size: contain
+background-position: 100%
+
+### How unification occurred
+
+.pull-left[
+
+- Platonic and Aristotelian philosophy came back into European culture 
+(the Essentialists and the Nominalists in Scholastic Philosophy)
+
+- Nominalists assert that groups are mental constructs (not like Plato's 
+god-given groups)
+
+- This kind of Aristotelian reasoning was revived in statistics by Jacob Cohen 
+in 1968
+
+- The solution to unifying MRC and ANOVA: .RUred[Dummy Variable Coding]
+
+]
+
+---
+
+### The two disciplines
+
+Lee Cronbach (1957) *Two Disciplines of Scientific Psychology*
+
+.pull-left[
+
+#### Differential Psychology</br>(Galton and Pearson) 
+
+- Influenced by Darwinian thinking
+
+- Based on individual differences
+
+- This led to the development of MRC
+
+]
+
+--
+
+.pull-right[
+
+#### Experimental Psychology</br>(Fechner, Weber, and Wundt) 
+
+- Relied more on typological approach
+
+- Categorically distinct groupings to design and carry out experiments
+
+- This led to the development of ANOVA (Fisher)
+
+]
+
+---
+
+### The two disciplines
+
+#### MRC and ANOVA are both part of the same GLM model but, over time, they began to diverge from each other:
+
+- We need them both, but historically this separation occurred
+
+#### Fisher (experimentalists) versus Pearson (observationalists):
+
+- A personal/family feud existed between them
+- Pearson was principle figure in stats, criticized Fisher's use of chi-square 
+test in an old paper
+- Thought that Fisher had done a disservice to statistics (see Lenhard, 2006)
+- Both angry, held grudges
+
+---
+background-image: url(https://geneonline.news/wp-content/uploads/2016/02/Ronald-Fisher-from-Royal-Society-e1455600445283-1024x850.jpg)
+background-size: 400px
+background-position: 90%
+
+### Sir Ronald Aylmer Fisher
+
+.pull-left[
+
+- Did agricultural experiments with plants at Rothamsted Experimental Station at Harpenden, Hertfordshire, England (Studies in Crop Variation, 1919)
+
+- Actually did controlled experiments
+
+- Unlike the other differential psychologists who just did observational studies
+
+- Did not have a Platonist ideology and understood individual differences
+
+]
+
+---
+background-image: url(https://geneonline.news/wp-content/uploads/2016/02/Ronald-Fisher-from-Royal-Society-e1455600445283-1024x850.jpg)
+background-size: 400px
+background-position: 90%
+
+### Sir Ronald Aylmer Fisher
+
+#### Invented ANOVA to support the experimental method:
+
+.pull-left[
+
+- Randomly selected groups will differ by some amount due to individual 
+differences among members of the group
+
+- However, experimental groups should be different beyond these random 
+individual differences
+
+- He didn’t want to just assume the groups were different
+
+- He wanted to show the variance between groups was greater than the variance 
+within groups
+
+]
+
+---
+
+### Fisher's method
+
+- Fisher's used random assignment, not random sampling 
+
+- Random Sampling: any individual in the population has an equal chance of 
+being in the sample
+
+- Random Assignment:
+  - You randomly assign each subject to a treatment group or control group
+  - You create 2 or more groups that will be subjected to 2 or more different 
+  treatments
+  - This is important to show that differences between treatment groups is 
+  greater than chance
+
+--
+
+- Your sample might not be random, but your assignment to experimental groups 
+should be random
+- This procedure has nothing to do with representing the original population:
+  - Just with how you randomly assign individuals into treatment groups from 
+  the basic sample you are working with
+  - Each subject must have an equal chance to get into either of the treatment 
+  groups
+
+---
+
+### Fisher's method
+
+- Using the central limit theorem, we know how the distribution of randomly 
+selected group means will differ from the mean of the entire population
+
+- If the treatment worked, the results should be greater than what would be 
+expected by chance (meaning sampling of individuals)
+
+- If treatment did not work, the results would not be greater than what is 
+expected by chance (meaning sampling of individuals)
+
+--
+
+- This is what the F-ratio (for Fisher) is all about
+
+- The numerator in the F-ratio represents the variance due to treatment effects
+
+- The denominator is an independent estimate of the random sampling "error"
+
+- All ANOVA assumes random assignment not necessarily random sampling
+
+---
+
+### Fisher's method
+
+- This was designed for purely experimental purposes, not for naturally 
+occurring phenomena, i.e., observational studies
+
+- Should not use classical ANOVA for observational studies, only for pure 
+controlled experiments
+
+- For example, one should not use ANOVA to study naturally occurring races, 
+sexes, etc., because of lack of random assignment to these groups
+
+- For example, if you compare males with females, this is not a randomly assigned condition
+
+--
+
+- Researchers do this anyway
+
+---
+
+### Analysis of Variance (ANOVA)
+
+- How did Sir Ronald Fisher build the ANOVA model?
+
+- He built it from the MRC model...
+
+---
+
+### Summed Linear Deviations (MRC)
+
+Sum of Linear Deviations:  
+
+.Large[
+$$(y_{i} - \bar{y}) = (\hat{y}_{i} - \bar{y}) + (y_{i} - \hat{y}_{i})$$
+]
+
+--
+
+.center[
+### Total Deviation = Predicted Deviation + Error Deviation
+]
+
+---
+
+### Multiple Regression/Correlation
+
+#### In MRC, the predicted y ( $\hat{y}_{i}$ ) is the score predicted based on the regression line:
+
+- MRC is based on having individual scores as the criterion variable (y)
+
+- Individual continuous variables are also the predictors for y
+
+---
+
+### Summed Linear Deviations (ANOVA)
+
+Sum of Linear Deviations:  
+
+.Large[
+$$(y_{i} - \bar{y}_{G}) = (\bar{y}_{j} - \bar{y}_{G}) + (y_{i} - \bar{y}_{j})$$
+]
+
+.center[
+
+### Total Deviation = Predicted Deviation + Error Deviation
+
+]
+
+---
+
+### Analysis of Variance
+
+In ANOVA, you are dealing with groups:
+
+- Still trying to predict an individual's score
+
+- But you aren't basing your prediction on other individual scores
+
+- You are basing it on their group status
+
+---
+
+### Analysis of Variance
+
+#### What is the best prediction you can make about any individual in a group if you don’t know anything else about that individual?
+
+- Use the mean of the group to predict individual scores
+
+- Our predicted score ( $\hat{y}_{i}$ ) now becomes our group mean ( $\bar{y}_{j}$ )
+
+- So the group mean ( $\bar{y}_{j}$ ) now becomes the predicted $\hat{y}_{i}$
+
+--
+
+#### This is because my prediction for you (if I don’t know anything else about you) is based on your group’s mean
+
+- The grand mean is $\bar{y}_{G}$ and the group mean is $\bar{y}_{j}$
+
+---
+
+### Sums of Squared Deviations (MRC)
+
+SS = Sum of squares: 
+
+.Large[
+$$\sum (y_{i} - \bar{y})^2 = \sum (\hat{y}_{i} - \bar{y})^2 + \sum (y_{i} - \hat{y}_{i})^2$$
+]
+
+--
+
+.Large[
+$$SS_{Total} = SS_{Predicted} + SS_{Error}$$
+]
+
+--
+
+.Large[
+|                  |     |                                  |
+| :--------------- | :-: | :------------------------------- |
+| $SS_{Total}$     |  =  | $\sum (y_{i} - \bar{y})^2$       |
+| $SS_{Predicted}$ |  =  | $\sum (\hat{y}_{i} - \bar{y})^2$ |
+| $SS_{Error}$     |  =  | $\sum (y_{i} - \hat{y}_{i})^2$   |
+]
+
+---
+
+### Sums of Squared Deviations (ANOVA)
+
+SS = Sum of squares: 
+
+.Large[
+$$\sum (y_{i} - \bar{y}_{G})^2 = \sum (\bar{y}_{j} - \bar{y}_{G})^2 + \sum (y_{i} - \bar{y}_{j})^2$$
+]
+
+--
+
+.Large[
+$$SS_{Total} = SS_{Predicted} + SS_{Error}$$
+]
+
+--
+
+.Large[
+|                  |     |                                      |
+| :--------------- | :-: | :----------------------------------- |
+| $SS_{Total}$     |  =  | $\sum (y_{i} - \bar{y}_{G})^2$       |
+| $SS_{Predicted}$ |  =  | $\sum (\bar{y}_{j} - \bar{y}_{G})^2$ |
+| $SS_{Error}$     |  =  | $\sum (y_{i} - \bar{y}_{j})^2$       |
+]
+
+---
+
+### Squared Multiple Correlation Coefficient (MRC)
+
+.Large[
+$$R^2 = \frac{\sum (\hat{y}_{i} - \bar{y})^2} {\sum (y_{i} - \bar{y})^2}$$
+
+$$R^2 = \frac{SS_{Predicted}} {SS_{Total}}$$
+]
+
+Coefficient of determination  
+Proportion of Variance Explained
+
+---
+
+### Squared Multiple Correlation Coefficient (ANOVA)
+
+.Large[
+$$R^2 = \frac{\sum (\hat{y}_{j} - \bar{y}_{G})^2} {\sum (y_{i} - \bar{y}_{G})^2}$$
+
+$$R^2 = \frac{SS_{Predicted}} {SS_{Total}}$$
+]
+
+Coefficient of determination  
+Proportion of Variance Explained
+
+---
+
+### Mean Squared Deviations (MRC)
+
+MS = Mean Squares (Variances):
+
+.Large[
+|                  |     |                                                     |
+| :--------------- | :-: | :-------------------------------------------------- |
+| $MS_{Total}$     |  =  | $\frac{\sum (y_{i} - \bar{y})^2} {(n - 1)}$         |
+| $MS_{Predicted}$ |  =  | $\frac{\sum (\hat{y}_{i} - \bar{y})^2} {(k)}$       |
+| $MS_{Error}$     |  =  | $\frac{\sum (y_{i} - \hat{y}_{i})^2} {(n - k - 1)}$ |
+
+$$F_{(k), (n-k-1)} = \frac{\sum (\hat{y}_{i} - \bar{y})^2 / (k)}
+                          {\sum (y_{i} - \hat{y}_{i})^2 / (n - k - 1)}$$
+]
+
+---
+
+### Mean Squared Deviations (ANOVA)
+
+MS = Mean Squares (Variances):
+
+.Large[
+|                  |     |                                                |
+| :--------------- | :-: | :--------------------------------------------- |
+| $MS_{Total}$     |  =  | $\sum (y_{i} - \bar{y}_{G})^2 / (n - 1)$       |
+| $MS_{Predicted}$ |  =  | $\sum (\bar{y}_{j} - \bar{y}_{G})^2 / (g - 1)$ |
+| $MS_{Error}$     |  =  | $\sum (y_{i} - \bar{y}_{j})^2 / (n - g)$       |
+
+$$F_{(g-1), (n-g)} = \frac{\sum (\bar{y}_{j} - \bar{y}_{G})^2 / (g - 1)}
+                          {\sum (y_{i} - \hat{y}_{j})^2 / (n - g)}$$
+]
+
+---
+
+### Mean Squared Deviations (MRC/ANOVA)
+
+MS = Mean Squares (Variances):
+
+.Large[
+|                  |     |                                   |
+| :--------------- | :-: | :-------------------------------- |
+| $MS_{Total}$     |  =  | $SS_{Total} / df_{Total}$         |
+| $MS_{Predicted}$ |  =  | $SS_{Predicted} / df_{Predicted}$ |
+| $MS_{Error}$     |  =  | $SS_{Error} / df_{Error}$         |
+
+$$F-ratio = \frac{MS_{Predicted}} {MS_{Error}}$$
+]
+
+---
+
+### Degrees of Freedom
+
+.pull-left[
+
+### MRC
+
+.Large[
+|                  |     |           |
+| :--------------- | :-: | :-------- |
+| $df_{Total}$     |  =  | n - 1     |
+| $df_{Predicted}$ |  =  | k         |
+| $df_{Error}$     |  =  | n - k - 1 |
+
+$$df_{Total} = df_{Predicted} + df_{Error}$$
+]
+]
+
+.pull-right[
+
+### ANOVA
+
+.Large[
+|                  |     |       |
+| :--------------- | :-: | :---- |
+| $df_{Total}$     |  =  | n - 1 |
+| $df_{Predicted}$ |  =  | g - 1 |
+| $df_{Error}$     |  =  | n - g |
+
+$$df_{Total} = df_{Predicted} + df_{Error}$$
+]
+]
+
+---
+
+### Equivalences
+
+.Large[
+| MRC              |     | ANOVA      |
+| :--------------- | :-: | :--------- |
+| .white[.]        |     |            |
+| $SS_{Predicted}$ |  =  | $SS_{BG}$  |
+| $SS_{Error}$     |  =  | $SS_{WG}$  |
+| .white[.]        |     |            |
+| $MS_{Predicted}$ |  =  | $MS_{BG}$  |
+| $MS_{Error}$     |  =  |  $MS_{WG}$ |
+| .white[.]        |     |            |
+| k                |  =  | g - 1      |
+| n - k - 1        |  =  | n - g      |
+]
+
+---
+
+### Equivalences (MRC/ANOVA)
+
+- ANOVA is just MRC where the predictors are categorical variables
+
+--
+
+- Predictions are based entirely on the group status of individuals
+
+--
+
+- The criterion variables are still in continuous
+
+--
+
+<p></p>
+
+- In a controlled experiment, these are orthogonal variables:
+  - Conclusions may not be theoretically valid if you are using naturally 
+  occurring groups
+  - But the math will still work
+
+<p></p>
+
+- The strength of ANOVA is based on proper experimental design
+
+---
+
+### The Logic of the F-Ratio
+
+- If we use random assignment, the means of the groups should only differ 
+by random chance (individual differences) and nothing else
+
+- However, if we introduce an effective treatment, then the means will differ 
+by random chance *plus* the effects of the treatment
+
+- But if the treatment didn’t work, then the means will only differ by random 
+chance
+
+- This is the denominator of the F-ratio!
+
+---
+background-image: url(https://memegenerator.net/img/instances/81519428/hey-girl-whats-your-number.jpg), url(https://memegenerator.net/img/instances/81519424/hey-girl-whats-your-type.jpg)
+background-position: 20% 60%, 83% 60%
+background-size: 300px, 300px
+
+.pull-left[
+
+### .center[MRC]
+
+]
+
+.pull-right[
+
+### .center[ANOVA]
+
+]
+
+--
+
+.footnote[So how did unification occur?]
+
+---
+layout: true
+
+# The General Linear Model
+
+---
+background-image: url(https://jamanetwork.com/data/Journals/PSYCH/926697/m_yot8401f1.png)
+background-position: 90%
+background-size: 300px
+
+### Jacob Cohen (1923-1998)
+
+- Statistician and Psychologist
+  - Best known for his work on statistical power and effect size
+  - Helped lay foundations for meta-analysis
+  - Gave his name to Cohen's kappa and Cohen's d
+- Made a breakthrough in how to create the modern GLM:
+  - Introduced Dummy Variable method of coding groups
+  - Makes MRC do ANOVA!
+
+<p></p>
+
+- (1968) Multiple regression as a general data analytic system
+- (1969) Statistical Power Analysis for the Behavioral Sciences
+- (1975) Applied Multiple Regression/Correlation Analysis for  
+the Behavioral Sciences
+- (1990) Things I have learned (so far) (1994) The earth is  
+round (p<.05)
+
+---
+
+### Dummy variables
+
+- This was based upon the idea that category membership can be considered an 
+individual characteristic
+
+<p></p>
+
+- Your category membership is part of who you are
+  - You may have other individual differences in addition to your category 
+  membership
+  - But membership is also an individual trait!
+
+<p></p>
+
+- This was Aristotelian/Nominalist, not Platonic/Essentialist typological 
+thinking!
+
+- Aristotle said that categories inhere in the individual and that the 
+individual is the ultimate reality
+
+---
+
+### Dummy variables
+
+- In a sense Cohen took an Aristotelian approach in order to include both MRC 
+and ANOVA within one *general* linear model
+
+- You score each person by a dummy variable to say whether they have a feature 
+that defines their group membership or not
+
+- Dummy variable coding is just binary coding of whether you have or do not 
+have trait
+
+- Dummy variable coding will make a regular regression equation do an ANOVA
+
+- *Multiple Regression As A General Data Analytic Method* was the name of 
+Cohen's seminal article
+
+---
+
+### The "GLM" Compromise
+
+- The way he told the story (in 1968), MRC had seemingly “eaten” ANOVA:
+  - MRC included ANOVA
+  - ANOVA was just a “special case” of MRC
+
+<p></p>
+
+- This is mathematically correct, but it upset the ANOVA guys, so they instead 
+called the whole superordinate category the GLM to make everyone happy:
+  - GLM with continuous predictors = MRC
+  - GLM with categorical predictors = ANOVA
+- If you have all of one or all of another you can call it either classical 
+ANOVA or a classical MRC
+- But if not, you call it a "Mixed GLM"
+
+<p></p>
+
+- How did Jacob Cohen accomplish this feat?
+  - He didn’t actually cite Aristotle
+  - He just did the math...
+
+---
+layout: false
+class: title-slide-section-grey, middle
+
+# Dummy variables
+
+---
+layout: true
+
+# Dummy variables
+
+---
+
+### The Multiple Regression Equation
+
+.Large[
+$$\hat{y}_{i} = a + b_{1}x_{1} + b_{2}x_{2} + b_{3}x_{3} ...$$
+]
+
+--
+
+.Large[
+
+What if the predictors are dummy variables?
+
+.center[
+|         |     |         |     |        |
+| :-----: | :-: | :-----: | :-: | :----: |
+| $x_{1}$ |  =  | $d_{1}$ |  =  | 0 or 1 |
+| $x_{2}$ |  =  | $d_{2}$ |  =  | 0 or 1 |
+| $x_{3}$ |  =  | $d_{3}$ |  =  | 0 or 1 |
+]
+]
+
+---
+
+### The Dummy Variable Equation
+
+.large[
+A single dummy variable: 
+]
+
+.Large[
+$$\hat{y}_{i} = a + b_{1}d_{1}$$
+]
+
+--
+
+.large[
+
+Evaluating the function: 
+
+|                       |             |
+| :-------------------: | :---------- |
+| $\hat{y}_{(d1=1)} =$  | $a + b_{1}$ |
+| .white[.]             |             |
+| $\hat{y}_{(d1=0)} =$  | $a$         |
+]
+
+---
+
+### Evaluating the function
+
+.Large[
+|                                                   |
+| :------------------------------------------------ |
+| $\bar{y}_{(d1=1)} = \hat{y}_{(d1=1)} = a + b_{1}$ |
+| .white[.]                                         |
+| $\bar{y}_{(d1=0)} = \hat{y}_{(d1=0)} = a$         |
+]
+
+--
+
+### Which implies that...
+
+.Large[
+$$b_{1} = (\bar{y}_{(d1=1)} - \bar{y}_{(d1=0)})$$
+]
+
+---
+
+.Large[
+
+### You get j-1 dummies
+
+| Groups | d<sub>1</sub> | d<sub>2</sub> | d<sub>3</sub> |
+| :----- | :-----------: | :-----------: | :-----------: |
+| A      | 0             | 0             | 0             |
+| B      | 1             | 0             | 0             |
+| C      | 0             | 1             | 0             |
+| D      | 0             | 0             | 1             |
+
+]
+
+---
+
+### One level is taken as the *reference* or *baseline*. This is the intercept.
+
+.Large[
+
+| Groups | d<sub>1</sub> | d<sub>2</sub> | d<sub>3</sub> |                  |
+| :----- | :-----------: | :-----------: | :-----------: | :--------------- |
+| **A**  | **0**         | **0**         | **0**         | ⬅︎ **Intercept** |
+| B      | 1             | 0             | 0             |                  |
+| C      | 0             | 1             | 0             |                  |
+| D      | 0             | 0             | 1             |                  |
+
+]
+
+---
+
+### j-1 dummies = j-1 comparisons
+
+.Large[
+
+| Groups   | d<sub>1</sub> | d<sub>2</sub> | d<sub>3</sub> |                  |
+| :------- | :-----------: | :-----------: | :-----------: | :--------------- |
+| **A**    | **0**         | **0**         | **0**         | ⬅︎ **Intercept** |
+| .blue[B] | .blue[1]      | 0             | 0             |                  |
+| C        | 0             | 1             | 0             |                  |
+| D        | 0             | 0             | 1             |                  |
+|          | ⬆︎</br>**A**.blue[B]|         |               |                  |
+]
+
+---
+
+### j-1 dummies = j-1 comparisons
+
+.Large[
+
+| Groups   | d<sub>1</sub> | d<sub>2</sub> | d<sub>3</sub> |                  |
+| :------- | :-----------: | :-----------: | :-----------: | :--------------- |
+| **A**    | **0**         | **0**         | **0**         | ⬅︎ **Intercept** |
+| B        | 1             | 0             | 0             |                  |
+| .blue[C] | 0             | .blue[1]      | 0             |                  |
+| D        | 0             | 0             | 1             |                  |
+|          |               | ⬆︎</br>**A**.blue[C]|         |                  |
+]
+
+---
+
+### j-1 dummies = j-1 comparisons
+
+.Large[
+
+| Groups   | d<sub>1</sub> | d<sub>2</sub> | d<sub>3</sub> |                  |
+| :------- | :-----------: | :-----------: | :-----------: | :--------------- |
+| **A**    | **0**         | **0**         | **0**         | ⬅︎ **Intercept** |
+| B        | 1             | 0             | 0             |                  |
+| C        | 0             | 1             | 0             |                  |
+| .blue[D] | 0             | 0             | .blue[1]      |                  |
+|          |               |               | ⬆︎</br>**A**.blue[D] |           |
+]
+
+--
+
+Let's see some examples...
+
+---
+
+### `mtcars`
+
+```{r, mtcars_p1, echo=FALSE, fig.width=14, fig.height=6}
+ggplot(mtcars, aes(x = as.numeric(cyl), y = mpg)) + 
+  geom_smooth(method = 'lm', se = F, formula = "y ~ x") + 
+  geom_point(size = 6, fill = 'red', color = 'black', pch = 21, alpha = 0.5) + 
+  scale_x_continuous(breaks = c(4, 6, 8), 
+                     labels = c("4-cyl", "6-cyl", "8-cyl")) + 
+  labs(x = "cyl", y = "mpg") + 
+  ds4ling_bw_theme(base_size = 26, base_family = 'Times')
+```
+
+---
+
+```{r, eval=FALSE, cache=FALSE}
+lm(mpg ~ cyl, data = mtcars)
+```
+
+```{r, mtcars_table1, echo=FALSE}
+mod_2 <- lm(mpg ~ as.factor(cyl), data = mtcars)
+mod_2 %>% 
+  tidy(.) %>% 
+  mutate(., term = recode_factor(term, `(Intercept)` = "Intercept", 
+                                       `as.factor(cyl)6` = "6-cyl", 
+                                       `as.factor(cyl)8` = "8-cyl")) %>% 
+  knitr::kable(., format = 'html', digits = 2)
+```
+
+```{r, mtcars_p2, echo=FALSE, fig.width=14, fig.height=4.5}
+ggplot(mtcars, aes(x = as.numeric(cyl), y = mpg)) + 
+  geom_smooth(method = 'lm', se = F, formula = "y ~ x") + 
+  geom_point(size = 6, fill = 'red', color = 'black', pch = 21, alpha = 0.5) + 
+  scale_x_continuous(breaks = c(4, 6, 8), 
+                     labels = c("4-cyl", "6-cyl", "8-cyl")) + 
+  labs(x = "cyl", y = "mpg") + 
+  ds4ling_bw_theme(base_size = 26, base_family = 'Times')
+```
+
+---
+
+```{r, eval=FALSE, cache=FALSE}
+lm(mpg ~ cyl, data = mtcars)
+```
+
+```{r, mtcars_table2, echo=FALSE}
+mod_2 %>% 
+  tidy(.) %>% 
+  mutate(., term = recode_factor(term, `(Intercept)` = "Intercept", 
+                                       `as.factor(cyl)6` = "6-cyl", 
+                                       `as.factor(cyl)8` = "8-cyl")) %>% 
+  knitr::kable(., format = 'html', digits = 3)
+```
+
+```{r, mtcars_p3, echo=FALSE, fig.width=14, fig.height=4.5}
+ggplot(mtcars, aes(x = as.factor(cyl), y = mpg, fill = as.factor(cyl))) + 
+  geom_smooth(method = 'lm', se = F, show.legend = FALSE, formula = "y ~ x") + 
+  geom_boxplot(show.legend = FALSE) + 
+  scale_x_discrete(breaks = c(4, 6, 8), 
+                     labels = c("4-cyl", "6-cyl", "8-cyl")) + 
+  labs(x = "cyl", y = "mpg") + 
+  scale_fill_brewer(palette = "Set2") + 
+  ds4ling_bw_theme(base_size = 26, base_family = 'Times')
+```
+
+---
+
+```{r, eval=FALSE, cache=FALSE}
+lm(mpg ~ cyl, data = mtcars)
+```
+
+```{r, mtcars_table3, echo=FALSE}
+mod_2 %>% 
+  tidy(.) %>% 
+  mutate(., term = recode_factor(term, `(Intercept)` = "Intercept", 
+                                       `as.factor(cyl)6` = "6-cyl", 
+                                       `as.factor(cyl)8` = "8-cyl")) %>% 
+  knitr::kable(., format = 'html', digits = 3)
+```
+
+```{r, mtcars_p4, echo=FALSE, fig.width=14, fig.height=4.5}
+mtcars %>%
+  ggplot(., aes(x = as.factor(cyl), y = mpg, fill = as.factor(cyl))) + 
+    geom_jitter(alpha = 0.2, width = 0.2, height = 0, show.legend = F) + 
+    geom_segment(aes(x = 1, xend = 2, 
+                 y = dplyr::filter(mtcars, cyl == 4) %>% pull(mpg) %>% mean, 
+                 yend = dplyr::filter(mtcars, cyl == 6) %>% pull(mpg) %>% mean), 
+                 show.legend = FALSE, color = 'black') + 
+    geom_segment(aes(x = 2, xend = 3, 
+                 y = dplyr::filter(mtcars, cyl == 6) %>% pull(mpg) %>% mean, 
+                 yend = dplyr::filter(mtcars, cyl == 8) %>% pull(mpg) %>% mean), 
+                 show.legend = FALSE, color = 'black') + 
+    stat_summary(fun.data = mean_sdl, geom = 'pointrange', pch = 21, 
+      show.legend = F, size = 1.2, fun.args = list(mult = 1)) +
+    scale_color_brewer(palette = "Set2", guide = "none") + 
+    scale_x_discrete(breaks = c(4, 6, 8), 
+                     labels = c("4-cyl", "6-cyl", "8-cyl")) + 
+    labs(x = "cyl", y = "mpg") + 
+    ylim(10, 35) + 
+    ds4ling_bw_theme(base_size = 26, base_family = 'Times')
+```
+
+---
+
+.pull-left[
+
+### Regression output
+
+```{r, eval=FALSE, cache=FALSE}
+mtcars %>%
+  lm(mpg ~ cyl, data = .) %>% 
+  summary(.)
+```
+
+```{r, mtcars_table5, echo=FALSE, output='asis'}
+summary(mod_2) %>% 
+  tidy(.) %>% 
+  rename(., Term = term, Estimate = estimate, `Std. Error` = std.error, t = statistic) %>% 
+  mutate(., Estimate = round(Estimate, 2), 
+            `Std. Error` = round(`Std. Error`, 2), 
+            t = round(t, 2), 
+            `p.value` = round(`p.value`, 4),
+            Term = recode(Term, `(Intercept)` = 'Intercept', 
+                                `as.factor(cyl)6` = '6', 
+                                `as.factor(cyl)8` = '8'), 
+            Estimate = cell_spec(Estimate, "html", 
+                            color = if_else(Estimate > 20, "red", "black"))) %>% 
+  kable(., format = 'html', escape = F, align = c('l', 'r', 'r', 'r', 'r')) %>%
+  kable_styling("hover", full_width = F, font_size = 18)
+```
+
+]
+
+--
+
+.pull-right[
+
+### Means
+
+```{r, eval=FALSE, cache=FALSE}
+mtcars %>% 
+  group_by(., cyl) %>% 
+  summarize(., mean_mpg = mean(mpg), 
+               sd_mpg = sd(mpg))
+```
+
+```{r, mtcars_table6, echo=FALSE}
+mtcars %>% 
+  group_by(., cyl) %>% 
+  summarize(., mean_mpg = mean(mpg) %>% round(., 2), sd_mpg = sd(mpg)) %>% 
+  mutate(., mean_mpg = cell_spec(mean_mpg, "html", 
+                          color = if_else(mean_mpg > 20, "red", "black"))) %>% 
+  kable(., format = 'html', digits = 2, escape = F, align = c('l', 'r', 'r')) %>%
+  kable_styling("hover", full_width = F, font_size = 18)
+```
+
+]
+
+</br>
+
+- Each simple effect is an independent samples t-test
+- The baseline is compared to the other two levels of the factor
+--
+
+- Notice that `6-cyl` is not compared to `8-cyl`
+- We would have to change the baseline to make that comparison
+
+---
+
+```{r, 'show_code', eval=FALSE, cache=FALSE}
+mtcars %>%
+  mutate(., cyl = as.factor(cyl),
+            cyl = fct_relevel(cyl, c('6', '4', '8'))) %>% #<<
+  lm(mpg ~ cyl, data = .) %>% 
+  summary(.)
+```
+
+```{r, mtcars_table7, echo=FALSE, results='asis'}
+mtcars %>%
+  mutate(., cyl = as.factor(cyl),
+            cyl = fct_relevel(cyl, c('6', '4', '8'))) %>%
+  lm(mpg ~ cyl, data = .) %>% 
+  summary(.) %>% 
+  tidy(.) %>% 
+  rename(., `Std. Error` = std.error, Estimate = estimate, 
+             Statistic = statistic, Term = term) %>% 
+  mutate(., Estimate = round(Estimate, 2), 
+            `Std. Error` = round(`Std. Error`, 2), 
+            `Statistic` = round(Statistic, 2), 
+            `p.value` = round(`p.value`, 4),
+            Term = recode(Term, `(Intercept)` = 'Intercept'), 
+            Estimate = cell_spec(Estimate, "html", 
+                            color = if_else(Estimate > 18, "red", "black"))) %>% 
+  kable(., format = 'html', escape = F, align = c('l', 'r', 'r', 'r', 'r')) %>%
+  kable_styling("hover", full_width = F, font_size = 18)
+```
+
+- Now we have the 6-to-8 cyl comparison
+- Notice how the slopes have changed
+
+---
+
+### Categorical and continuous predictors - mixed GLMs
+
+- One of the benefits of doing ANOVA with MRC is that you can include different 
+types of predictors in your model, i.e., **categorical** and .blue[continuous].
+
+- Neither classical ANOVA nor classical MRC can handle combinations of these 
+two predictors
+
+- This is possible because of dummy coding
+
+---
+layout: false
+class: middle
+
+```{r, 'age_vocab_raw', echo=FALSE, fig.height=8, fig.width=14, fig.cap="Vocabulary size as a function of age."}
+vocab_sample <- sample_n(vocab_data, size = 200)
+
+ggplot(vocab_sample, aes(x = ages, y = vocab)) + 
+  geom_point(shape = 21, fill = 'grey', stroke = 1, size = 2, alpha = .8) + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+```
+
+---
+layout: false
+class: middle
+
+```{r, 'age_vocab_bivar_reg', echo=FALSE, fig.height=8, fig.width=14, fig.cap="Vocabulary size as a function of age."}
+ggplot(vocab_sample, aes(x = ages, y = vocab)) + 
+  geom_point(shape = 21, fill = 'grey', stroke = 1, size = 2, alpha = .8) + 
+  geom_smooth(method = lm, color = 'darkred', formula = 'y ~ x') + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 18)
+```
+
+---
+template: base
+
+### Bivariate model 
+
+.pull-left[
+
+$$vocab \sim age$$
+
+```{r, vocab_mod, cache=FALSE, echo=FALSE}
+vocab_age_mod <- lm(vocab ~ ages, data = vocab_sample)
+```
+
+```{r, vocab_age_coefs, echo=FALSE, cache=FALSE}
+summary(vocab_age_mod)
+```
+]
+
+.pull-right[
+```{r, 'age_vocab_bivar_reg2', echo=FALSE, fig.height=6, fig.width=6.5}
+ggplot(vocab_sample, aes(x = ages, y = vocab)) + 
+  geom_point(shape = 21, fill = 'grey', stroke = 1, size = 2, alpha = .9) + 
+  geom_smooth(method = lm, color = 'darkred', formula = 'y ~ x') + 
+  ds4ling_bw_theme(base_family = "Times", base_size = 16)
+```
+]
+
+---
+template: base
+
+### Additive model 
+
+.pull-left[
+
+$$vocab \sim age + reader$$
+
+```{r, vocab_additive_mod, cache=FALSE, echo=FALSE}
+vocab_additive_mod <- lm(vocab ~ ages + reader_type, data = vocab_sample)
+```
+
+```{r, vocab_additive_coefs, echo=FALSE, cache=FALSE}
+summary(vocab_additive_mod)
+```
+]
+
+.pull-right[
+```{r, 'age_additive_plot1', echo=FALSE, fig.height=6, fig.width=6.5}
+vocab_sample %>% 
+  ggplot(., aes(x = ages, y = vocab, fill = reader_type)) + 
+    geom_point(shape = 21, color = 'black', size = 3, alpha = 0.75) + 
+    scale_fill_brewer(palette = "Set1") + 
+    geom_abline(size = 1.5, color = 'grey40', 
+                intercept = coef(vocab_additive_mod)[1], 
+                slope = coef(vocab_additive_mod)[2]) + 
+    geom_abline(size = 1.5, color = 'grey40',
+                intercept = coef(vocab_additive_mod)[1] + 
+                            coef(vocab_additive_mod)[3], 
+                slope = coef(vocab_additive_mod)[2]) + 
+    ds4ling_bw_theme(base_family = "Times", base_size = 16) + 
+    theme(legend.position = c(0.2, 0.85))
+```
+]
+
+---
+
+# Dummy variables
+
+### Categorical and continuous predictors - mixed GLMs
+
+- A mixed GLM can account for continuous and categorical predictors
+
+- However, if the slope of two groups are different, then you must interact 
+the categorical variable with the continuous one
+
+- The interaction term constitutes a test for "homogeneity of slopes"
+
+- These interaction terms accommodate the possible difference in slopes and 
+therefore avoids a serious model misspecification
+
+- Leaving them out would be omitting a relevant variable!
+
+---
+
+# Dummy variables
+
+### Categorical and continuous predictors - mixed GLMs
+
+- What does it mean to have an interaction between a dummy variable and a 
+continuous predictor?
+
+- Remember that with a continuous variable we get an intercept and a slope, so 
+if one is interacting with a categorical variable, it means that either the 
+*intercepts* or the *slopes* of both might be different for each category
+
+- "Homogeneity of slopes" assumes that your different groups have the same 
+slope for the continuous variable
+
+---
+
+# Dummy variables
+
+### Categorical and continuous predictors - mixed GLMs
+
+- The problem is that using either classical ANOVA or classical MRC (or even 
+"ANCOVA", which is a combination of both) does not permit you to handle 
+interactions between these types of variables
+
+- But using Dummy or Contrast Coding Does!
+
+- By virtue of the numerical nature of these "coded vectors", which can be 
+accommodated by MRC
+
+---
+template: base
+
+### Multiplicative model 
+
+.pull-left[
+
+$vocab \sim age + reader + age:reader$
+
+```{r, vocab_int_mod, cache=FALSE, echo=FALSE}
+vocab_int_mod <- lm(vocab ~ ages * reader_type, data = vocab_sample)
+```
+
+```{r, vocab_int_coefs, echo=FALSE, cache=FALSE}
+summary(vocab_int_mod)
+```
+
+]
+
+.pull-right[
+
+```{r, 'age_int_plot1', echo=FALSE, fig.height=6, fig.width=6.5}
+vocab_sample %>% 
+  ggplot(., aes(x = ages, y = vocab, fill = reader_type)) + 
+    geom_point(shape = 21, color = 'black', size = 3, alpha = 0.75) + 
+    scale_fill_brewer(palette = "Set1") + 
+    geom_smooth(method = lm, se = F, size = 1.5, color = 'grey40', formula = "y ~ x") + 
+    ds4ling_bw_theme(base_family = "Times", base_size = 16) + 
+    theme(legend.position = c(0.2, 0.85))
+```
+
+]
+
+---
+template: base
+class: middle
+
+```{r, model_comparison, cache=FALSE, echo=FALSE, results='asis'}
+stargazer::stargazer(vocab_age_mod, vocab_additive_mod, vocab_int_mod, 
+                     type = 'html', single.row = F, intercept.bottom = F)
+```
+
+---
+template: base
+
+```{r, null_model, cache=FALSE, echo=FALSE}
+vocab_age_null <- lm(vocab ~ 1, data = vocab_sample)
+```
+
+```{r, model_comparisons, cache=FALSE}
+anova(vocab_age_null, vocab_age_mod, vocab_additive_mod, vocab_int_mod)
+```
+
+--
+
+The vocabulary data were analyzed using a general linear model. Estimated 
+vocabulary size was the criterion with *age* and *reader type* 
+(frequent/average) as predictors. The *reader type* factor was dummy coded with 
+average readers set as the reference group. Main effects and the *age* by 
+*reader type* interaction were assessed using nested model comparisons. 
+Experiment-wise alpha was set at 0.05. 
+
+There was a main effect of age (F(1) = 1649.49, p < 0.001), reader type 
+(F(1) = 243.34; p < 0.001), as well as an age by reader type interaction 
+(F(1) = 45.19; p < 0.001). The model containing the interaction provided the 
+best fit of the data (R<sup>2</sup> = 0.91). Overall, vocabulary size increased 
+as a function of age. However, the size of the effect was modulated by reader 
+type. Specifically, average readers showed an increase of approximately 1,111 
+words +/- 48.42 se (t = 22.94, p < 0.001) per year. Frequent readers showed an 
+additional increase of 466 words +/- 69.28 se per year 
+(1,577 words total, t = 6.72, p < 0.001). 
+
+---
+class: middle, center
+
+<iframe src="https://gallery.shinyapps.io/multi_regression/" style="border:none;" height="600" width="1300"></iframe>
+
+---
+
+### Practice
+
+[dummy variable practice](./assets/dummies_walkthrough/dummies.zip)
+
+---
+exclude: true
+
+`r AutoCite(bib, c("wickham2016r", "qass93_ch2", "qass93_ch3", "qass93_ch4"))`
+
+---
+layout: false
+class: title-slide-final, left
+
+# References
+
+```{r, results='asis', echo=FALSE, eval=TRUE, cache=FALSE}
+PrintBibliography(bib)
+```
+
+Figueredo, A. J. (2013). Continuous and Categorical Predictors. *Statistical Methods in Psychological Research*.
+
+Figueredo, A. J. (2013). The General Linear Model: ANOVA. *Statistical Methods in Psychological Research*.
