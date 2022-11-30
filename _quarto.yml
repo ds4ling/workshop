@@ -6,6 +6,7 @@ project:
     - "!slides/"
   resources:
     - "slides/"
+    - "scripts/"
 
 website:
   title: "Data science for linguists"

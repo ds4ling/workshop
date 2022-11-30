@@ -28,3 +28,5 @@ slides %>%
   pull(value)
 
 ```
+
+[Day 1 script](https://www.ds4ling.jvcasillas.com/workshops/scripts/day1.R)
