@@ -1,6 +1,6 @@
 ---
 title   : 'Statistics for Linguists'
-subtitle: 'Day 1 - The linear model:</br>.lightgrey[Assumptions, diagnostics, and interpretation]'
+subtitle: 'Day 2 - The linear model:</br>.lightgrey[Assumptions, diagnostics, and interpretation]'
 author  : "Joseph V. Casillas, PhD"
 date    : "Rutgers University</br>Last update: `r Sys.Date()`"
 output:
@@ -30,7 +30,7 @@ xaringanExtra::use_xaringan_extra(
 
 ```{r, 'helpers', echo=FALSE, message=F, warning=F}
 source(here::here("slides", "assets", "scripts", "helpers.R"))
-read_chunk(here::here("slides", "01_05_lm_assumptions_diagnostics", "assets", 
+read_chunk(here::here("slides", "02_05_lm_assumptions_diagnostics", "assets", 
   "scripts", "assumptions_diagnostics.R"))
 ```
 
