@@ -62,7 +62,7 @@ layout: true
 --
 
   - "Linguists learn to do stats on the street."
-  - "If you want to be a phonotician today, you really have to train to be a 
+  - "If you want to be a phonetician today, you really have to train to be a 
   programmer."
 
 ---
