@@ -1508,6 +1508,14 @@ tribble(
 </blockquote>
 
 ---
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/rstats_type12_error1.png)
+background-size: contain
+
+---
+background-image: url(https://raw.githubusercontent.com/jvcasillas/media/master/rstats/memes/rstats_type12_error2.png)
+background-size: contain
+
+---
 
 <iframe src="https://jvcasillas.shinyapps.io/r_for_linguists/#section-data-structures" style="border:none;" height="800" width="100%"></iframe>
 

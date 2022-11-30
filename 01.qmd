@@ -3,4 +3,28 @@ title: "Day 1"
 editor: source
 ---
 
-- link
+```{r}
+#| label: create-list
+#| echo: false
+#| warning: false
+#| results: 'asis'
+
+library("tidyverse")
+library("fs")
+
+root <- "https://www.ds4ling.jvcasillas.com/workshops/slides/"
+
+slides <- dir_ls(path = here::here("slides")) %>% 
+  as_tibble() %>% 
+  mutate(value = str_remove_all(value, here::here("slides/"))) %>% 
+  filter(value != "assets") %>% 
+  separate(value, into = c("day", "slide_num", "lecture"), sep = "_", 
+           remove = F, extra = "merge") %>% 
+  mutate(lecture = str_replace_all(lecture, "_", " "))
+
+slides %>% 
+  filter(day == "01") %>% 
+  mutate(value = glue::glue("- [{lecture}]({root}{value}/index.html)")) %>% 
+  pull(value)
+
+```

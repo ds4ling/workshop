@@ -698,7 +698,7 @@ by normal curve.
   - We can check the correlation between a vector of data and the theoretical 
   quantiles. 
   - Normal data should be highly correlated with theoretical quantiles from the 
-  normal distribution (more on correlation next week). 
+  normal distribution (more on correlation in a bit). 
 
 ]
 
