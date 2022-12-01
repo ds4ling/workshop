@@ -12,3 +12,4 @@ I recommend the following resources:
 
 - [R for Data Science](https://r4ds.had.co.nz) (online book).
 - [Statistics for Linguists in R](https://www.routledge.com/Statistics-for-Linguists-An-Introduction-Using-R/Winter/p/book/9781138056091) (texbook).
+- [R for linguists](https://jvcasillas.shinyapps.io/r_for_linguists/)
