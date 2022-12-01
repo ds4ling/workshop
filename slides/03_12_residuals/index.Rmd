@@ -120,6 +120,7 @@ ggplot(mtcars, aes(x = disp, y = mpg)) +
 ]
 
 ---
+exclude: true
 background-image: url("../../sources/img/workflow/datascience_workflow4.png")
 background-size: 500px
 background-position: 90% 50%
@@ -190,9 +191,9 @@ layout: true
 
 # What we've seen
 
-- MRC
+- Bivariate linear regression
 
-- Linear regression
+- MRC
 
 - General linear model
 
@@ -228,9 +229,9 @@ background-size: 750px
 .white[
 ~~Frequentist~~  
 
-- **Bayesian** MRC
+- **Bayesian** bivariate linear regression
 
-- **Bayesian** Linear regression
+- **Bayesian** MRC
 
 - **Bayesian** General linear model
 
@@ -279,27 +280,31 @@ background-position: 90% 50%
 
 .pull-left[
 
+.large[
 - Getting help
   - stackoverflow.com
   - coursera.con
   - datacamp.com
+]
 
 <p></p>
 
+.large[
 - Coding (things to learn)
   - functional programming
   - leaving the tidyverse...
+]
 
 <p></p>
 
+.large[
 - Useful links for mixed effects models
   - [Getting started](http://www.bodowinter.com/tutorial/bw_LME_tutorial1.pdf)
   - [Intro](https://ourcodingclub.github.io/2017/03/15/mixed-models.html)
   - [Conceptual understanding](http://mfviz.com/hierarchical-models/)
   - [Logistic regression](http://www.karlin.mff.cuni.cz/~pesta/NMFM404/mixed.html)
   - [Specifying random effects](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#model-specification)
-  - [More links](https://socialbyselection.wordpress.com/2015/07/14/mixed-effect-models/)
-
+]
 ]
 
 ---

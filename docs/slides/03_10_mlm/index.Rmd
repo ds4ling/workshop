@@ -1,6 +1,6 @@
 ---
 title   : 'Statistics for Linguists'
-subtitle: 'Day 2 - Multilevel models'
+subtitle: 'Day 3 - Multilevel models'
 author  : "Joseph V. Casillas, PhD"
 date    : "Rutgers University</br>Last update: `r Sys.Date()`"
 output:
@@ -52,9 +52,9 @@ layout: true
 
 # What we've seen
 
-- MRC
+- Bivariate linear regression
 
-- Linear regression
+- MRC
 
 - General linear model
 
@@ -77,14 +77,17 @@ layout: false
 
 # What about repeated measures designs?
 
+.Large[
 - Whenever we have more than one data point from the same 
 participant we are dealing with a type of repeated measures 
 design
   - between subjects factor
   - within subjects factor
+]
 
 <p></p>
 
+.Large[
 - Everything we have done this semester has been under the 
 assumption that we have one data point per participant (i.e., 
 no within subjects factors)
@@ -94,10 +97,13 @@ there was no autocorrelation, i.e., that the data were independent
 
 - Repeated measures designs introduce autocorrelation into the 
 model. Why?
+]
 
 ---
 
 # What's the big deal?
+
+.Large[
 
 - Disregarding lack of independence = pseudo-replication
 
@@ -106,6 +112,7 @@ independent when they aren’t
 
 - This will inflate your degrees of freedom, completely bias your 
 parameter estimates and make your p-values meaningless
+]
 
 ---
 
@@ -141,10 +148,11 @@ head(ChickWeight, 20)
 
 # What can we do?
 
+.Large[
 - Currently, the most popular solution is to use a multi-level or 
 hierarchical model
 
-- These models are commonly referred to as mixed effects models 
+- These models are commonly referred to as mixed-effects models 
 
 - They include both fixed effects and random effects
 
@@ -154,6 +162,7 @@ time-series data, etc.)
 
 - Building on our knowledge of the linear model, understanding 
 the basic idea of mixed effects models is trivial
+]
 
 ---
 
@@ -417,7 +426,7 @@ effect specified to the right
 
 - Thus, `(1 + time|subjects)` means random slopes for the effect `time` for each subject
 
-- It is rarely a good idea to only use random intercepts
+- It is rarely a good idea to only use random intercepts when the structure of your data lends itself to including random slopes as well
 ]
 
 .pull-right[
@@ -438,7 +447,7 @@ ggplot(my_df, aes(x = time, y = response, group = subjects)) +
 
 # Great news!
 
-- We have spent the entire semester building up our knowledge 
+- We have spent the last 12(ish) hours building up our knowledge 
 of the linear model so that we would be prepared to understand 
 mixed effects models 
 
@@ -448,7 +457,7 @@ mixed effects models
 
 <p></p>
 
-- Everything that you have learned in this class applies 
+- Everything that you have learned in this workshop applies 
 to a mixed effects model 
   - model interpretation
   - nested model comparisons
@@ -481,6 +490,8 @@ glmer(counts   ~ fixed_effect + (1 + fixed_effect|participant), family = poisson
 ---
 
 <iframe src="http://mfviz.com/hierarchical-models/" height="100%" width="100%" title="mlm" style="border:none;"></iframe>
+
+.footnote[http://mfviz.com/hierarchical-models/]
 
 ---
 class: title-slide-section-grey, middle

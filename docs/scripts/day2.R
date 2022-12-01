@@ -148,6 +148,25 @@ gvlma::gvlma(bad_auto)
 
 
 
+library(ds4ling)
+set.seed(20221201)
+vocab_sample <- sample_n(vocab_data, size = 200)
+
+mod1 <- lm(vocab ~ ages, data = vocab_sample)
+summary(mod1)
+
+mod2 <- lm(vocab ~ ages + reader_type, data = vocab_sample)
+summary(mod2)
+summary(mod2$residuals)
+
+mod3 <- lm(vocab ~ ages * reader_type, data = vocab_sample)
+anova(mod2, mod3)
+summary(mod3)
+
+#
+
+
+
 
 
 

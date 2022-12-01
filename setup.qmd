@@ -19,7 +19,7 @@ Now you will need to install the following packages:
 
 - tidyverse
 - lme4
-- sjPlots
+- sjPlot
 - remotes
 - ds4ling
 

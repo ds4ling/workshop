@@ -1,6 +1,6 @@
 ---
 title   : 'Statistics for Linguists'
-subtitle: 'Day 2 - Bayesian inference'
+subtitle: 'Day 3 - Bayesian inference'
 author  : "Joseph V. Casillas, PhD"
 date    : "Rutgers University</br>Last update: `r Sys.Date()`"
 output:

@@ -12,7 +12,7 @@
     <script src="assets/tile-view/tile-view.js"></script>
     <link href="assets/panelset/panelset.css" rel="stylesheet" />
     <script src="assets/panelset/panelset.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x000da3391304a26aaeac216c84b4750","expires":14}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"xaa3e6f3c7304d5baa3752d647b75577","expires":14}</script>
     <script src="assets/himalaya/himalaya.js"></script>
     <script src="assets/js-cookie/js.cookie.js"></script>
     <link href="assets/editable/editable.css" rel="stylesheet" />
@@ -27,13 +27,13 @@ class: center, middle, inverse, title-slide
 # Statistics for Linguists
 ]
 .subtitle[
-## Day 2 - Multilevel models
+## Day 3 - Multilevel models
 ]
 .author[
 ### Joseph V. Casillas, PhD
 ]
 .date[
-### Rutgers University</br>Last update: 2022-11-29
+### Rutgers University</br>Last update: 2022-12-01
 ]
 
 ---
@@ -58,9 +58,9 @@ layout: true
 
 # What we've seen
 
-- MRC
+- Bivariate linear regression
 
-- Linear regression
+- MRC
 
 - General linear model
 
@@ -83,14 +83,17 @@ layout: false
 
 # What about repeated measures designs?
 
+.Large[
 - Whenever we have more than one data point from the same 
 participant we are dealing with a type of repeated measures 
 design
   - between subjects factor
   - within subjects factor
+]
 
 &lt;p&gt;&lt;/p&gt;
 
+.Large[
 - Everything we have done this semester has been under the 
 assumption that we have one data point per participant (i.e., 
 no within subjects factors)
@@ -100,10 +103,13 @@ there was no autocorrelation, i.e., that the data were independent
 
 - Repeated measures designs introduce autocorrelation into the 
 model. Why?
+]
 
 ---
 
 # What's the big deal?
+
+.Large[
 
 - Disregarding lack of independence = pseudo-replication
 
@@ -112,6 +118,7 @@ independent when they aren’t
 
 - This will inflate your degrees of freedom, completely bias your 
 parameter estimates and make your p-values meaningless
+]
 
 ---
 
@@ -173,10 +180,11 @@ head(ChickWeight, 20)
 
 # What can we do?
 
+.Large[
 - Currently, the most popular solution is to use a multi-level or 
 hierarchical model
 
-- These models are commonly referred to as mixed effects models 
+- These models are commonly referred to as mixed-effects models 
 
 - They include both fixed effects and random effects
 
@@ -186,6 +194,7 @@ time-series data, etc.)
 
 - Building on our knowledge of the linear model, understanding 
 the basic idea of mixed effects models is trivial
+]
 
 ---
 
@@ -539,7 +548,7 @@ effect specified to the right
 
 - Thus, `(1 + time|subjects)` means random slopes for the effect `time` for each subject
 
-- It is rarely a good idea to only use random intercepts
+- It is rarely a good idea to only use random intercepts when the structure of your data lends itself to including random slopes as well
 ]
 
 .pull-right[
@@ -550,7 +559,7 @@ effect specified to the right
 
 # Great news!
 
-- We have spent the entire semester building up our knowledge 
+- We have spent the last 12(ish) hours building up our knowledge 
 of the linear model so that we would be prepared to understand 
 mixed effects models 
 
@@ -560,7 +569,7 @@ mixed effects models
 
 &lt;p&gt;&lt;/p&gt;
 
-- Everything that you have learned in this class applies 
+- Everything that you have learned in this workshop applies 
 to a mixed effects model 
   - model interpretation
   - nested model comparisons
@@ -593,6 +602,8 @@ glmer(counts   ~ fixed_effect + (1 + fixed_effect|participant), family = poisson
 ---
 
 &lt;iframe src="http://mfviz.com/hierarchical-models/" height="100%" width="100%" title="mlm" style="border:none;"&gt;&lt;/iframe&gt;
+
+.footnote[http://mfviz.com/hierarchical-models/]
 
 ---
 class: title-slide-section-grey, middle
@@ -1101,12 +1112,6 @@ background-size: contain
 ---
 background-color: black
 
-
-```
-## Inverted geom defaults of fill and color/colour.
-## To change them back, use invert_geom_defaults().
-```
-
 &lt;img src="index_files/figure-html/topo-map-1.png" width="1008" /&gt;
 
 ---
@@ -1150,51 +1155,22 @@ class: title-slide-final, left
 
 # References
 
-[1] W. Berry and S. Feldman. "Multicollinearity". In: _Multiple
-Regression in Practice_. Ed. by W. Berry and S. Feldman. Sage University
-Paper Series on Quantitative Applications in the Social Sciences - 50.
-Newbury Park, CA: Sage, 1985, pp. 37-50. ISBN: 9780803920545.
-
-[2] W. Berry and S. Feldman. "Specification Error". In: _Multiple
-Regression in Practice_. Ed. by W. Berry and S. Feldman. Sage University
-Paper Series on Quantitative Applications in the Social Sciences - 50.
-Newbury Park, CA: Sage, 1985, pp. 18-25. ISBN: 9780803920545.
-
-[3] M. Hardy. "Assessing Group Differences in Effects". In: _Regression
-with Dummy Variables_. Ed. by M. Hardy. Sage University Paper Series on
-Quantitative Applications in the Social Sciences - 93. Newbury Park, CA:
-Sage, 1993, pp. 29-63. ISBN: 9780803951280.
-
-[4] M. Hardy. "Creating Dummy Variables". In: _Regression with Dummy
+[1] M. Hardy. "Assessing Group Differences in Effects". In: _Regression with Dummy
 Variables_. Ed. by M. Hardy. Sage University Paper Series on Quantitative
-Applications in the Social Sciences - 93. Newbury Park, CA: Sage, 1993,
-pp. 7-17. ISBN: 9780803951280.
+Applications in the Social Sciences - 93. Newbury Park, CA: Sage, 1993, pp. 29-63.
+ISBN: 9780803951280.
 
-[5] M. Hardy. "Using Dummy Variables as Regressors". In: _Regression with
-Dummy Variables_. Ed. by M. Hardy. Sage University Paper Series on
-Quantitative Applications in the Social Sciences - 93. Newbury Park, CA:
-Sage, 1993, pp. 18-28. ISBN: 9780803951280.
+[2] M. Hardy. "Creating Dummy Variables". In: _Regression with Dummy Variables_. Ed.
+by M. Hardy. Sage University Paper Series on Quantitative Applications in the Social
+Sciences - 93. Newbury Park, CA: Sage, 1993, pp. 7-17. ISBN: 9780803951280.
 
-[6] M. Lewis-Beck. "Multiple Regression". In: _Applied Regression: An
-Introduction_. Ed. by M. Lewis-Beck. Sage University Paper Series on
-Quantitative Applications in the Social Sciences - 22. Newbury Park, CA:
-Sage, 1980, pp. 47-74. ISBN: 9781483381497.
+[3] M. Hardy. "Using Dummy Variables as Regressors". In: _Regression with Dummy
+Variables_. Ed. by M. Hardy. Sage University Paper Series on Quantitative
+Applications in the Social Sciences - 93. Newbury Park, CA: Sage, 1993, pp. 18-28.
+ISBN: 9780803951280.
 
-[7] L. Schroeder, D. Sjoquist, and P. Stephan. "Multiple Linear
-Regression". In: _Understanding Regression Analysis: An Introductory
-Guide_. Ed. by L. Schroeder, D. Sjoquist and P. Stephan. Sage University
-Paper Series on Quantitative Applications in the Social Sciences - 57.
-Newbury Park, CA: Sage, 1986, pp. 29-35. ISBN: 9780803927582.
-
-[8] L. Schroeder, D. Sjoquist, and P. Stephan. "Problems and Issues of
-Linear Regression". In: _Understanding Regression Analysis: An
-Introductory Guide_. Ed. by L. Schroeder, D. Sjoquist and P. Stephan.
-Sage University Paper Series on Quantitative Applications in the Social
-Sciences - 57. Newbury Park, CA: Sage, 1986, pp. 65-80. ISBN:
-9780803927582.
-
-[9] H. Wickham and G. Grolemund. _R for Data Science: Import, Tidy,
-Transform, Visualize, and Model Data_. O'Reilly Media, 2016.
+[4] H. Wickham and G. Grolemund. _R for Data Science: Import, Tidy, Transform,
+Visualize, and Model Data_. O'Reilly Media, 2016.
 
 [5] Bates, D. (2011). *Mixed models in R using the lme4 package Part 2: Longitudinal data, modeling interactions*. http://lme4.r-forge.r-project.org/slides/2011-03-16-Amsterdam/2Longitudinal.pdf
 

@@ -1,0 +1,32 @@
+---
+title: "Day 3"
+editor: source
+---
+
+```{r}
+#| label: create-list
+#| echo: false
+#| warning: false
+#| results: 'asis'
+
+library("tidyverse")
+library("fs")
+
+root <- "https://www.ds4ling.jvcasillas.com/workshops/slides/"
+
+slides <- dir_ls(path = here::here("slides")) %>% 
+  as_tibble() %>% 
+  mutate(value = str_remove_all(value, here::here("slides/"))) %>% 
+  filter(value != "assets") %>% 
+  separate(value, into = c("day", "slide_num", "lecture"), sep = "_", 
+           remove = F, extra = "merge") %>% 
+  mutate(lecture = str_replace_all(lecture, "_", " "))
+
+slides %>% 
+  filter(day == "03") %>% 
+  mutate(value = glue::glue("- [{lecture}]({root}{value}/index.html)")) %>% 
+  pull(value)
+
+```
+
+[Day 3 script](https://www.ds4ling.jvcasillas.com/workshops/scripts/day3.R)

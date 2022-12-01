@@ -12,7 +12,7 @@
     <script src="assets/tile-view/tile-view.js"></script>
     <link href="assets/panelset/panelset.css" rel="stylesheet" />
     <script src="assets/panelset/panelset.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x39266888ba6489989df581d3a80dd61","expires":14}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x71f8f71afa94ad8aeb6cfe7da491fee","expires":14}</script>
     <script src="assets/himalaya/himalaya.js"></script>
     <script src="assets/js-cookie/js.cookie.js"></script>
     <link href="assets/editable/editable.css" rel="stylesheet" />
@@ -35,7 +35,7 @@ class: center, middle, inverse, title-slide
 ### Joseph V. Casillas, PhD
 ]
 .date[
-### Rutgers University</br>Last update: 2022-11-30
+### Rutgers University</br>Last update: 2022-12-01
 ]
 
 ---
@@ -885,6 +885,72 @@ logarithmic scale
 
 ### Example
 
+Let's use the `ice_cream_poisson_data` to fit a model (day 3 script)
+
+--
+
+.pull-left[
+
+
+```r
+glm(units ~ 1, 
+    data = ice_cream_poisson_data, 
+*   family = poisson(link = "log")
+  ) 
+```
+
+&lt;table class="table" style="font-size: 14px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.517 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.003 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1741.232 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+--
+
+.pull-right[
+
+&lt;img src="index_files/figure-html/icecream_plot0-1.png" width="504" /&gt;
+
+]
+
+--
+
+.footnote[
+- The intercept-only model tells us the mean of `units` sold
+
+- We can exponentiate 5.52 to make it more  
+interpretable. 
+`exp(5.517)` = 248.99
+
+]
+
+---
+
+# Poisson regression
+
+### Example
+
+Now fit the bivariate model with temperature.
+
+--
+
 .pull-left[
 
 
@@ -922,6 +988,11 @@ glm(units ~ temp,
 &lt;/tbody&gt;
 &lt;/table&gt;
 
+- When `temp` = 0, the model estimates 12 units of ice cream sold.
+- A 1 unit change in temperature = a  
+change of 0.039 log units in ice cream sold. 
+- We can exponentiate 0.039 to get its multiplicative factor.
+- A 1 unit change in temperature gives a 4% positive increase in ice cream sold.
 ]
 
 --
@@ -932,25 +1003,15 @@ glm(units ~ temp,
 
 ]
 
---
-
-.footnote[
-- A 1 unit change in temperature is associated with a  
-change of 0.04 log units in ice cream sold. 
-
-- We can exponentiate 0.04 to make it more  
-interpretable.  `exp(coef(mod_poisson)[2])` = 
-0.04
-
-- A 1 unit change in temperature gives a 4% positive  
-increase in ice cream sold.
-]
-
 ---
 
 # Poisson regression
 
 ### Example
+
+Now fit the additive model by including `city`.
+
+--
 
 .pull-left[
 
@@ -1010,85 +1071,10 @@ increase in ice cream sold.
 
 .footnote[
 - A 1 unit change in temperature is associated with a  
-positive difference of approx. 4% in ice cream sold  
-in NYC. 
+positive difference of approx. 4% in ice cream sold in NYC. 
 
 - When temp = 0, ice cream sold in Tucson is approx.  
-58% less
-
-]
-
----
-
-# Poisson regression
-
-### Example
-
-.pull-left[
-
-
-```r
-ice_cream_poisson_data %&gt;% 
-  mutate(., temp_c = temp - mean(temp)) %&gt;% 
-* glm(units ~ temp_c + city,
-      data = ., 
-      family = poisson(link = "log"))
-```
-
-&lt;table class="table" style="font-size: 14px; margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.387 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.005 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1113.731 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; temp_c &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.043 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 229.264 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; cityTucson &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.514 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -78.088 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-]
-
---
-
-.pull-right[
-
-&lt;img src="index_files/figure-html/icecream_plot3-1.png" width="504" /&gt;
-
-]
-
---
-
-.footnote[
-- A 1 unit change in temperature is associated with a  
-positive difference of approx. 4% in ice cream sold  
-in NYC. 
-
-- At the average temperature (68.5), ice cream  
-sold in Tucson is (still) approx. 58% less
+-0.51 log units lower.
 
 ]
 
@@ -1119,20 +1105,6 @@ not difficult to interpret
 &lt;iframe src="https://jvcasillas.shinyapps.io/shiny_glm/" style="border:none;" height="800" width="100%"&gt;&lt;/iframe&gt;
 
 ---
-
-# Practice
-
-- [Poisson regression practice](./assets/poisson_regression_walkthrough/glm_poisson.zip)
-
-
-
-
-
-
-
-
-
----
 exclude: true
 
 (Wickham and Grolemund, 2016; Hardy, 1993b; Hardy, 1993c; Hardy, 1993d)
@@ -1143,20 +1115,22 @@ class: title-slide-final, left
 
 # References
 
-[1] M. Hardy. "Assessing Group Differences in Effects". In: _Regression with Dummy Variables_. Ed.
-by M. Hardy. Sage University Paper Series on Quantitative Applications in the Social Sciences - 93.
-Newbury Park, CA: Sage, 1993, pp. 29-63. ISBN: 9780803951280.
+[1] M. Hardy. "Assessing Group Differences in Effects". In: _Regression with Dummy
+Variables_. Ed. by M. Hardy. Sage University Paper Series on Quantitative
+Applications in the Social Sciences - 93. Newbury Park, CA: Sage, 1993, pp. 29-63.
+ISBN: 9780803951280.
 
-[2] M. Hardy. "Creating Dummy Variables". In: _Regression with Dummy Variables_. Ed. by M. Hardy.
-Sage University Paper Series on Quantitative Applications in the Social Sciences - 93. Newbury Park,
-CA: Sage, 1993, pp. 7-17. ISBN: 9780803951280.
+[2] M. Hardy. "Creating Dummy Variables". In: _Regression with Dummy Variables_. Ed.
+by M. Hardy. Sage University Paper Series on Quantitative Applications in the Social
+Sciences - 93. Newbury Park, CA: Sage, 1993, pp. 7-17. ISBN: 9780803951280.
 
-[3] M. Hardy. "Using Dummy Variables as Regressors". In: _Regression with Dummy Variables_. Ed. by
-M. Hardy. Sage University Paper Series on Quantitative Applications in the Social Sciences - 93.
-Newbury Park, CA: Sage, 1993, pp. 18-28. ISBN: 9780803951280.
+[3] M. Hardy. "Using Dummy Variables as Regressors". In: _Regression with Dummy
+Variables_. Ed. by M. Hardy. Sage University Paper Series on Quantitative
+Applications in the Social Sciences - 93. Newbury Park, CA: Sage, 1993, pp. 18-28.
+ISBN: 9780803951280.
 
-[4] H. Wickham and G. Grolemund. _R for Data Science: Import, Tidy, Transform, Visualize, and Model
-Data_. O'Reilly Media, 2016.
+[4] H. Wickham and G. Grolemund. _R for Data Science: Import, Tidy, Transform,
+Visualize, and Model Data_. O'Reilly Media, 2016.
 
 Nelder, J., Wedderburn, R. (1972). Generalized Linear Models. *Journal of the Royal Statistical Society*. 135 (3). 370–384.
     </textarea>

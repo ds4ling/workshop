@@ -801,7 +801,10 @@ class: middle
 
 ```{r, 'lin_poisson_comp', cache=FALSE, echo=FALSE, fig.width=14, fig.height=8}
 mod_lin_count <-  lm(units ~ temp, data = ice_cream_poisson_data)
-mod_poisson   <- glm(units ~ temp, data = ice_cream_poisson_data, family = poisson(link = "log"))
+mod_poisson0  <- glm(units ~ 1, data = ice_cream_poisson_data, family = poisson(link = "log"))
+mod_poisson1  <- glm(units ~ temp, data = ice_cream_poisson_data, family = poisson(link = "log"))
+mod_poisson2  <- glm(units ~ temp + city, data = ice_cream_poisson_data, family = poisson(link = "log"))
+mod_poisson3  <- glm(units ~ temp * city, data = ice_cream_poisson_data, family = poisson(link = "log"))
 
 p_lin_count <- ggplot(ice_cream_poisson_data, aes(x = temp, y = units)) + 
   geom_point(pch = 21) + 
@@ -850,6 +853,64 @@ logarithmic scale
 
 ### Example
 
+Let's use the `ice_cream_poisson_data` to fit a model (day 3 script)
+
+--
+
+.pull-left[
+
+```{r, echo=TRUE, eval=FALSE, cache=FALSE}
+glm(units ~ 1, 
+    data = ice_cream_poisson_data, 
+    family = poisson(link = "log") #<<
+  ) 
+```
+
+```{r, 'mod_poisson_null', echo=FALSE, cache=FALSE}
+mod_poisson0 %>% 
+  tidy(.) %>% 
+  kable(., format = 'html', digits = 3) %>% 
+  kable_styling(., font_size = 14)
+```
+
+]
+
+--
+
+.pull-right[
+
+```{r, 'icecream_plot0', cache=FALSE, echo=FALSE, fig.height=5}
+ggplot(ice_cream_poisson_data, aes(x = temp, y = units)) + 
+  geom_point(pch = 21, fill = 'grey80') + 
+  geom_hline(yintercept = exp(coef(mod_poisson0)[[1]]), lty = 3) + 
+  scale_color_brewer(palette = "Set1", name = "") + 
+  labs(x = "Temperature", y = "Units ice cream sold") + 
+  ds4ling_bw_theme(base_size = 20, base_family = "Times")
+```
+
+]
+
+--
+
+.footnote[
+- The intercept-only model tells us the mean of `units` sold
+
+- We can exponentiate `r round(coef(mod_poisson0)[[1]], 2)` to make it more  
+interpretable. 
+`exp(5.517)` = `r exp(coef(mod_poisson0)[[1]])`
+
+]
+
+---
+
+# Poisson regression
+
+### Example
+
+Now fit the bivariate model with temperature.
+
+--
+
 .pull-left[
 
 ```{r, echo=TRUE, eval=FALSE, cache=FALSE}
@@ -859,12 +920,17 @@ glm(units ~ temp,
 ```
 
 ```{r, 'mod_poisson', echo=FALSE, cache=FALSE}
-mod_poisson %>% 
+mod_poisson1 %>% 
   tidy(.) %>% 
   kable(., format = 'html', digits = 3) %>% 
   kable_styling(., font_size = 14)
 ```
 
+- When `temp` = 0, the model estimates `r round(exp(coef(mod_poisson1)[[1]]))` units of ice cream sold.
+- A 1 unit change in temperature = a  
+change of `r round(coef(mod_poisson1)[[2]], 3)` log units in ice cream sold. 
+- We can exponentiate `r round(coef(mod_poisson1)[[2]], 3)` to get its multiplicative factor.
+- A 1 unit change in temperature gives a 4% positive increase in ice cream sold.
 ]
 
 --
@@ -883,25 +949,15 @@ ggplot(ice_cream_poisson_data, aes(x = temp, y = units)) +
 
 ]
 
---
-
-.footnote[
-- A 1 unit change in temperature is associated with a  
-change of `r round(coef(mod_poisson)[2], 2)` log units in ice cream sold. 
-
-- We can exponentiate `r round(coef(mod_poisson)[2], 2)` to make it more  
-interpretable.  `exp(coef(mod_poisson)[2])` = 
-`r round(coef(mod_poisson)[2], 2)`
-
-- A 1 unit change in temperature gives a 4% positive  
-increase in ice cream sold.
-]
-
 ---
 
 # Poisson regression
 
 ### Example
+
+Now fit the additive model by including `city`.
+
+--
 
 .pull-left[
 
@@ -942,70 +998,10 @@ ggplot(ice_cream_poisson_data, aes(x = temp, y = units, color = city)) +
 
 .footnote[
 - A 1 unit change in temperature is associated with a  
-positive difference of approx. 4% in ice cream sold  
-in NYC. 
+positive difference of approx. `r round((exp(coef(mod_poisson2)[[2]]) - 1), 2) * 100`% in ice cream sold in NYC. 
 
 - When temp = 0, ice cream sold in Tucson is approx.  
-`r round(exp(-0.542), 2) * 100`% less
-
-]
-
----
-
-# Poisson regression
-
-### Example
-
-.pull-left[
-
-```{r, echo=TRUE, eval=FALSE, cache=FALSE}
-ice_cream_poisson_data %>% 
-  mutate(., temp_c = temp - mean(temp)) %>% 
-  glm(units ~ temp_c + city, #<<
-      data = ., 
-      family = poisson(link = "log"))
-```
-
-```{r, 'mod_poisson_city_centered', echo=FALSE}
-ice_cream_poisson_data %>% 
-  mutate(., temp_c = temp - mean(temp)) %>% 
-  glm(units ~ temp_c + city, 
-      data = ., 
-      family = poisson(link = "log")) %>% 
-  tidy(.) %>% 
-  kable(., format = 'html', digits = 3) %>% 
-  kable_styling(., font_size = 14)
-```
-
-]
-
---
-
-.pull-right[
-
-```{r, 'icecream_plot3', cache=FALSE, echo=FALSE, fig.height=5}
-ice_cream_poisson_data %>% 
-ggplot(., aes(x = (temp - mean(temp)), y = units, color = city)) + 
-  geom_point(pch = 21, fill = 'grey80') + 
-  geom_smooth(method = glm, method.args = list(family = "poisson"), 
-    formula = "y ~ x") + 
-  geom_vline(xintercept = 0, lty = 3) + 
-  scale_color_brewer(palette = "Set1", name = "") + 
-  labs(x = "Temperature", y = "Units ice cream sold") + 
-  ds4ling_bw_theme(base_size = 20, base_family = "Times")
-```
-
-]
-
---
-
-.footnote[
-- A 1 unit change in temperature is associated with a  
-positive difference of approx. 4% in ice cream sold  
-in NYC. 
-
-- At the average temperature (`r mean(ice_cream_poisson_data$temp)`), ice cream  
-sold in Tucson is (still) approx. `r round(exp(-0.542), 2) * 100`% less
+`r round(coef(mod_poisson2)[[3]], 2)` log units lower.
 
 ]
 
@@ -1034,20 +1030,6 @@ not difficult to interpret
 ---
 
 <iframe src="https://jvcasillas.shinyapps.io/shiny_glm/" style="border:none;" height="800" width="100%"></iframe>
-
----
-
-# Practice
-
-- [Poisson regression practice](./assets/poisson_regression_walkthrough/glm_poisson.zip)
-
-
-
-
-
-
-
-
 
 ---
 exclude: true
