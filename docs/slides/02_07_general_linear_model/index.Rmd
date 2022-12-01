@@ -1,6 +1,6 @@
 ---
 title   : 'Statistics for Linguists'
-subtitle: 'Day 1 - The general linear model'
+subtitle: 'Day 2 - The general linear model'
 author  : "Joseph V. Casillas, PhD"
 date    : "Rutgers University</br>Last update: `r Sys.Date()`"
 output:
@@ -61,32 +61,27 @@ layout: true
 
 ### Classical MRC
 
+.Large[
 - In classical Multiple Regression/Correlation (MRC) predictors are 
 continuous variables
-
-<p></p>
-
-- Recall
-  - Darwinian theory predicted continuous variation in traits
-  - Galton and Pearson created a model in which continuous variables were used
-  - Discontinuous (categorical) variables were not considered
-
-<p></p>
 
 - In real life we do run into dichotomous/discontinuous variables
 
 - Or... if an entire experimental group gets one treatment and another group 
 gets a different treatment, this is also dichotomous/discontinuous
+]
 
 ---
 
 ### Classical ANOVA
 
+.Large[
 - Classical Analysis of Variance (ANOVA) assumes that all predictors are 
 discontinuous variables
 
 - ANOVA methods are often abused by forcing continuous variables into 
 discontinuous form (this can reduce your statistical power by as much as 50%)
+]
 
 ---
 
@@ -157,8 +152,6 @@ layout: true
 # A brief history
 
 ---
-
-### Remember...
 
 .pull-left[
 
@@ -333,14 +326,18 @@ should be random
 
 ### Fisher's method
 
+<!--
 - Using the central limit theorem, we know how the distribution of randomly 
 selected group means will differ from the mean of the entire population
+-->
 
+.Large[
 - If the treatment worked, the results should be greater than what would be 
 expected by chance (meaning sampling of individuals)
 
 - If treatment did not work, the results would not be greater than what is 
 expected by chance (meaning sampling of individuals)
+]
 
 --
 
@@ -674,6 +671,7 @@ chance
 - This is the denominator of the F-ratio!
 
 ---
+exclude: true
 background-image: url(https://memegenerator.net/img/instances/81519428/hey-girl-whats-your-number.jpg), url(https://memegenerator.net/img/instances/81519424/hey-girl-whats-your-type.jpg)
 background-position: 20% 60%, 83% 60%
 background-size: 300px, 300px
@@ -1163,12 +1161,33 @@ layout: false
 class: middle
 
 ```{r, 'age_vocab_raw', echo=FALSE, fig.height=8, fig.width=14, fig.cap="Vocabulary size as a function of age."}
+set.seed(20221201)
 vocab_sample <- sample_n(vocab_data, size = 200)
 
 ggplot(vocab_sample, aes(x = ages, y = vocab)) + 
   geom_point(shape = 21, fill = 'grey', stroke = 1, size = 2, alpha = .8) + 
   ds4ling_bw_theme(base_family = "Times", base_size = 18)
 ```
+
+---
+template: base
+
+# Practice
+
+Let's analyze the `vocab_data` dataset
+
+Run this code: 
+
+```
+set.seed(20221201)
+vocab_sample <- sample_n(vocab_data, size = 200)
+```
+
+Then...
+
+1. Fit a GLM to the `vocab_sample` subset
+2. Start with a bivariate model (vocab ~ age)
+3. Interpret the model summary
 
 ---
 layout: false
@@ -1207,6 +1226,17 @@ ggplot(vocab_sample, aes(x = ages, y = vocab)) +
   ds4ling_bw_theme(base_family = "Times", base_size = 16)
 ```
 ]
+
+---
+template: base
+
+# Practice
+
+Now...
+
+1. Fit another GLM to the `vocab_sample` subset
+2. Include the additive effect of `reader_type` (vocab ~ age + reader_type)
+3. Interpret the model summary
 
 ---
 template: base
@@ -1294,6 +1324,20 @@ interactions between these types of variables
 accommodated by MRC
 
 ---
+
+# Practice
+
+<!--
+[dummy variable practice](./assets/dummies_walkthrough/dummies.zip)
+-->
+
+`vocab_data`
+
+1. Fit yet another GLM to the `vocab_sample`
+2. Start with a full model and test the interaction effect using nested model comparisons, i.e., `anova()`
+3. Interpret the final model
+
+---
 template: base
 
 ### Multiplicative model 
@@ -1369,12 +1413,6 @@ additional increase of 466 words +/- 69.28 se per year
 class: middle, center
 
 <iframe src="https://gallery.shinyapps.io/multi_regression/" style="border:none;" height="600" width="1300"></iframe>
-
----
-
-### Practice
-
-[dummy variable practice](./assets/dummies_walkthrough/dummies.zip)
 
 ---
 exclude: true

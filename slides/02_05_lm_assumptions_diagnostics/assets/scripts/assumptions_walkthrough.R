@@ -1,4 +1,4 @@
-# Install:
+# Install (if necessary):
 # - ggfortify
 # - lawstat
 # - lmtest
@@ -21,22 +21,9 @@ mod2 <- lm(dist ~ speed, data = cars[1:20, ])
 # Assumptions
 
 # 1.
-# The regression model is linear in parameters
-# Eyeball it
-
-
-
-
-
-
-
-
-
-
-
-# 2.
 # The mean of residuals is zero
 # How to check?: Check model summary and test manually
+summary(mod1)
 mean(mod1$residuals)
 
 
@@ -56,29 +43,9 @@ autoplot(mod1, which = c(1, 3))
 # What are you looking for? The line should be more or less flat
 autoplot(mod2, which = c(1, 3))
 
-
-library(tidyverse)
-library(patchwork)
-
-mod1$residuals %>% length
-mod2$residuals %>% length
-
-mod1$fitted
-
-resid  <- mod1$residuals
-fitted <- mod1$fitted
-resid_cog <- tibble(resid_mean = mean(resid), resid_median = median(resid)) %>%
-  pivot_longer(cols = everything())
-
-length(mod1$residuals) * 0.1
-length(mod2$residuals) * 0.1
-
-2 * IQR(mod2$residuals) / length(mod2$residuals)^(1/3)
-
-
-
-diagnosis(mod2)
-diagnosis(mod1)
+# Also
+ds4ling::diagnosis(mod2)
+ds4ling::diagnosis(mod1)
 
 
 
@@ -94,18 +61,14 @@ diagnosis(mod1)
 #
 # How to check? 3 methods
 #
-
-# 4a. afc plot
-acf(mod1$residuals)   # visual inspection
 data(economics)       # bad example
 bad_auto <- lm(pce ~ pop, data = economics)
-acf(bad_auto$residuals)  # highly autocorrelated from the picture.
 
-# 4b. Runs test
+# 4a. Runs test
 lawstat::runs.test(mod1$residuals)
 lawstat::runs.test(bad_auto$residuals)
 
-# 4c. Durbin-Watson test
+# 4b. Durbin-Watson test
 lmtest::dwtest(mod1)
 lmtest::dwtest(bad_auto)
 
@@ -128,7 +91,7 @@ summary(bad_auto2)
 # What happened? Adding the lag variable removes the autocorrelation so now
 # we can interpret the parameter of interest.
 #
-# (you might never do this)
+# (you'll probably never do this, but it exists)
 #
 
 
@@ -160,10 +123,9 @@ cor.test(mtcars$wt, mod1$residuals)
 
 # 6.
 # Normality of residuals
-# (increasingly bad)
-autoplot(mod1, which = 2)
-autoplot(mod2, which = 2)
-autoplot(bad_auto, which = 2)
+# QQPlots, histograms
+ds4ling::diagnosis(mod2)
+ds4ling::diagnosis(mod1)
 
 
 
@@ -175,7 +137,7 @@ autoplot(bad_auto, which = 2)
 
 #
 # You can check some assumptions automatically
-#
+# But this is probably overkill
 gvlma::gvlma(mod1)
 gvlma::gvlma(mod2)
 gvlma::gvlma(bad_auto)

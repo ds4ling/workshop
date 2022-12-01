@@ -1,0 +1,158 @@
+---
+title             : "General Linear Model"
+shorttitle        : "Dummy variable coding"
+
+author: 
+  - name          : "Your Name"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Postal address"
+    email         : "my@email.com"
+
+affiliation:
+  - id            : "1"
+    institution   : "Rutgers University"
+
+author_note: >
+  Complete departmental affiliations for each author (note the indentation, if you start a new paragraph).
+
+  Enter author note here.
+
+abstract: >
+  Enter abstract here (note the indentation, if you start a new paragraph).
+  
+keywords          : "keywords"
+wordcount         : "X"
+
+bibliography      : ["r-references.bib"]
+
+figsintext        : yes
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+lineno            : no
+
+class             : "man"
+output            : papaja::apa6_word
+---
+
+
+# Load libraries
+
+Use this section to load the libraries you will use. 
+
+```{r, 'load_libraries', echo=TRUE}
+library("papaja")
+library("tidyverse")
+```
+
+
+# Load data
+
+Use this section to load the data you will use. 
+
+```{r, 'load_data', echo=TRUE}
+
+
+```
+
+
+# Tidy data
+
+Use this section to tidy your data so that it is in long format. 
+
+```{r, 'tidy_data'}
+# df_tidy <- 
+
+```
+
+
+# Descriptive statistics
+
+Use this section to explore your data (`head()`, `tail()`, `psych::describe()`), 
+and calculate descriptive statistics.
+
+```{r, 'descriptives', echo=TRUE}
+
+
+```
+
+
+
+# Fit models
+
+<!--
+In the following sections you will fit your models. 
+-->
+
+
+## Fit a null model
+
+```{r, 'mod_null'}
+# mod_null <- lm()
+
+```
+
+
+## Add a categorical predictor
+
+
+
+## Add a continuous covariate
+
+
+
+## Include an interaction term
+
+
+
+## Test main effects and interaction term
+
+
+
+# Results
+
+<!--
+In this section you will write up your results. 
+-->
+
+
+
+## Model description
+
+
+
+## Interpretation
+
+<!--
+you can check out `easystats::report()` if you want, but don't rely on it. 
+https://github.com/easystats/report
+-->
+
+
+
+
+
+```{=openxml}
+<w:p>
+  <w:r>
+    <w:br w:type="page"/>
+  </w:r>
+</w:p>
+```
+
+## About this document
+
+We used the `tidyverse` [@R-tidyverse] for data manipulation and R [@R-base] for all our analyses. 
+This document was prepared in RMarkdown using `papaja` [@R-papaja]. 
+
+
+\newpage
+
+# References
+```{r create_r-references}
+r_refs(file = "r-references.bib")
+```
+
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}

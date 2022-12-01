@@ -52,7 +52,7 @@ background-image: url(./assets/img/01_distributions.png)
 background-size: contain
 
 --
-
+exclude: true
 background-image: url(./assets/img/02_clt.png)
 background-size: contain
 
@@ -62,7 +62,7 @@ background-image: url(./assets/img/03a_nhst.png)
 background-size: contain
 
 --
-
+exclude: true
 background-image: url(./assets/img/03b_hypothesis_testing.png)
 background-size: contain
 
@@ -106,9 +106,9 @@ background-position: 5% 10%, 50% 50%, 95% 10%, 0% 95%, 100% 95%
 
 - Distributions
   - Normal distribution
-  - CLT
+  <!-- - CLT-->
 - Hypothesis testing
-  - z-tests
+  <!-- - z-tests -->
   - t-tests
 - Bivariate correlation
 - The linear model
@@ -305,7 +305,7 @@ is a good place to start if you are interested.]
 
 ### Something old
 
-- It turns out we've spent the previous 11 weeks working with the gaussian 
+- It turns out we've spent the previous 9(ish) hours working with the gaussian 
 distribution
 - Gaussian is another way of saying normal
 - This means we can think of standard linear regression in the general linear model as a special case of the generalized linear model

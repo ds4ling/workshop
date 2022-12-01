@@ -20,7 +20,7 @@ website:
         menu:
           - href: "01.qmd"
             text: "Day 1"
-          - href: ""
+          - href: "02.qmd"
             text: "Day 2"
           - href: ""
             text: "Day 3"

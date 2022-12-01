@@ -1,6 +1,6 @@
 ---
 title   : 'Statistics for Linguists'
-subtitle: 'Day 1 - Getting the most out of your model'
+subtitle: 'Day 2 - Getting the most out of your model'
 author  : "Joseph V. Casillas, PhD"
 date    : "Rutgers University</br>Last update: `r Sys.Date()`"
 output:

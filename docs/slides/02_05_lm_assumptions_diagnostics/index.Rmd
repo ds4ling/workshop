@@ -656,8 +656,6 @@ line by simply moving up/down along the y-axis.
 - The measurement represents the amount by which the predicted value would 
 change if the observation was shifted one unit in the y-direction.
 
-- The leverage always takes values between 0 and 1.
-
 - A point with 0 leverage does not effect the regression line.
 
 ---

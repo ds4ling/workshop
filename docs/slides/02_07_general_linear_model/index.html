@@ -14,7 +14,7 @@
     <link href="assets/tachyons/tachyons.min.css" rel="stylesheet" />
     <link href="assets/panelset/panelset.css" rel="stylesheet" />
     <script src="assets/panelset/panelset.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"xe893e8757bf42e3b7a47f7f840cc701","expires":14}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"xfc2f84cc3ea4d7b808cc93e8cde6bdf","expires":14}</script>
     <script src="assets/himalaya/himalaya.js"></script>
     <script src="assets/js-cookie/js.cookie.js"></script>
     <link href="assets/editable/editable.css" rel="stylesheet" />
@@ -33,13 +33,13 @@ class: center, middle, inverse, title-slide
 # Statistics for Linguists
 ]
 .subtitle[
-## Day 1 - The general linear model
+## Day 2 - The general linear model
 ]
 .author[
 ### Joseph V. Casillas, PhD
 ]
 .date[
-### Rutgers University</br>Last update: 2022-11-29
+### Rutgers University</br>Last update: 2022-11-30
 ]
 
 ---
@@ -76,32 +76,27 @@ layout: true
 
 ### Classical MRC
 
+.Large[
 - In classical Multiple Regression/Correlation (MRC) predictors are 
 continuous variables
-
-&lt;p&gt;&lt;/p&gt;
-
-- Recall
-  - Darwinian theory predicted continuous variation in traits
-  - Galton and Pearson created a model in which continuous variables were used
-  - Discontinuous (categorical) variables were not considered
-
-&lt;p&gt;&lt;/p&gt;
 
 - In real life we do run into dichotomous/discontinuous variables
 
 - Or... if an entire experimental group gets one treatment and another group 
 gets a different treatment, this is also dichotomous/discontinuous
+]
 
 ---
 
 ### Classical ANOVA
 
+.Large[
 - Classical Analysis of Variance (ANOVA) assumes that all predictors are 
 discontinuous variables
 
 - ANOVA methods are often abused by forcing continuous variables into 
 discontinuous form (this can reduce your statistical power by as much as 50%)
+]
 
 ---
 
@@ -172,8 +167,6 @@ layout: true
 # A brief history
 
 ---
-
-### Remember...
 
 .pull-left[
 
@@ -348,14 +341,18 @@ should be random
 
 ### Fisher's method
 
+&lt;!--
 - Using the central limit theorem, we know how the distribution of randomly 
 selected group means will differ from the mean of the entire population
+--&gt;
 
+.Large[
 - If the treatment worked, the results should be greater than what would be 
 expected by chance (meaning sampling of individuals)
 
 - If treatment did not work, the results would not be greater than what is 
 expected by chance (meaning sampling of individuals)
+]
 
 --
 
@@ -689,6 +686,7 @@ chance
 - This is the denominator of the F-ratio!
 
 ---
+exclude: true
 background-image: url(https://memegenerator.net/img/instances/81519428/hey-girl-whats-your-number.jpg), url(https://memegenerator.net/img/instances/81519424/hey-girl-whats-your-type.jpg)
 background-position: 20% 60%, 83% 60%
 background-size: 300px, 300px
@@ -1271,6 +1269,26 @@ class: middle
 &lt;/div&gt;
 
 ---
+template: base
+
+# Practice
+
+Let's analyze the `vocab_data` dataset
+
+Run this code: 
+
+```
+set.seed(20221201)
+vocab_sample &lt;- sample_n(vocab_data, size = 200)
+```
+
+Then...
+
+1. Fit a GLM to the `vocab_sample` subset
+2. Start with a bivariate model (vocab ~ age)
+3. Interpret the model summary
+
+---
 layout: false
 class: middle
 
@@ -1298,24 +1316,35 @@ template: base
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -6047.8 -1665.3    19.7  1865.3  6449.0 
+## -6015.8 -2375.1   114.5  2079.9  6340.3 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -1196.61     546.82  -2.188   0.0298 *  
-## ages         1397.87      53.84  25.962   &lt;2e-16 ***
+## (Intercept)   -444.2      595.7  -0.746    0.457    
+## ages          1334.4       59.0  22.616   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 2444 on 198 degrees of freedom
-## Multiple R-squared:  0.7729,	Adjusted R-squared:  0.7718 
-## F-statistic: 674.1 on 1 and 198 DF,  p-value: &lt; 2.2e-16
+## Residual standard error: 2658 on 198 degrees of freedom
+## Multiple R-squared:  0.7209,	Adjusted R-squared:  0.7195 
+## F-statistic: 511.5 on 1 and 198 DF,  p-value: &lt; 2.2e-16
 ```
 ]
 
 .pull-right[
 &lt;img src="index_files/figure-html/age_vocab_bivar_reg2-1.png" width="468" /&gt;
 ]
+
+---
+template: base
+
+# Practice
+
+Now...
+
+1. Fit another GLM to the `vocab_sample` subset
+2. Include the additive effect of `reader_type` (vocab ~ age + reader_type)
+3. Interpret the model summary
 
 ---
 template: base
@@ -1336,19 +1365,19 @@ template: base
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -4166.1 -1236.6    62.4  1190.2  4909.5 
+## -4447.9 -1147.7    -7.3  1080.4  5477.8 
 ## 
 ## Coefficients:
 ##                     Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)         -2254.98     394.00  -5.723 3.84e-08 ***
-## ages                 1338.25      38.32  34.925  &lt; 2e-16 ***
-## reader_typefrequent  3474.07     246.42  14.098  &lt; 2e-16 ***
+## (Intercept)         -2660.92     428.56  -6.209  3.1e-09 ***
+## ages                 1349.60      39.97  33.766  &lt; 2e-16 ***
+## reader_typefrequent  3907.98     255.07  15.321  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 1729 on 197 degrees of freedom
-## Multiple R-squared:  0.887,	Adjusted R-squared:  0.8858 
-## F-statistic:   773 on 2 and 197 DF,  p-value: &lt; 2.2e-16
+## Residual standard error: 1800 on 197 degrees of freedom
+## Multiple R-squared:  0.8727,	Adjusted R-squared:  0.8714 
+## F-statistic:   675 on 2 and 197 DF,  p-value: &lt; 2.2e-16
 ```
 ]
 
@@ -1406,6 +1435,20 @@ interactions between these types of variables
 accommodated by MRC
 
 ---
+
+# Practice
+
+&lt;!--
+[dummy variable practice](./assets/dummies_walkthrough/dummies.zip)
+--&gt;
+
+`vocab_data`
+
+1. Fit yet another GLM to the `vocab_sample`
+2. Start with a full model and test the interaction effect using nested model comparisons, i.e., `anova()`
+3. Interpret the final model
+
+---
 template: base
 
 ### Multiplicative model 
@@ -1424,20 +1467,20 @@ template: base
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -3673.5 -1036.0    22.7  1027.0  3804.4 
+## -4466.8  -980.9   -45.4   944.9  5032.7 
 ## 
 ## Coefficients:
 ##                          Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)               -138.67     475.28  -0.292    0.771    
-## ages                      1110.73      48.42  22.939  &lt; 2e-16 ***
-## reader_typefrequent      -1027.18     705.63  -1.456    0.147    
-## ages:reader_typefrequent   465.73      69.28   6.723  1.9e-10 ***
+## (Intercept)               -336.46     537.88  -0.626    0.532    
+## ages                      1109.07      52.81  20.999  &lt; 2e-16 ***
+## reader_typefrequent       -514.61     739.02  -0.696    0.487    
+## ages:reader_typefrequent   461.25      73.14   6.307 1.85e-09 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 1562 on 196 degrees of freedom
-## Multiple R-squared:  0.9082,	Adjusted R-squared:  0.9067 
-## F-statistic:   646 on 3 and 196 DF,  p-value: &lt; 2.2e-16
+## Residual standard error: 1645 on 196 degrees of freedom
+## Multiple R-squared:  0.8941,	Adjusted R-squared:  0.8925 
+## F-statistic: 551.8 on 3 and 196 DF,  p-value: &lt; 2.2e-16
 ```
 
 ]
@@ -1457,23 +1500,23 @@ class: middle
 &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="3"&gt;vocab&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(1)&lt;/td&gt;&lt;td&gt;(2)&lt;/td&gt;&lt;td&gt;(3)&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;-1,196.606&lt;sup&gt;**&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;-2,254.983&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;-138.673&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(546.816)&lt;/td&gt;&lt;td&gt;(393.996)&lt;/td&gt;&lt;td&gt;(475.279)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;-444.198&lt;/td&gt;&lt;td&gt;-2,660.922&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;-336.463&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(595.671)&lt;/td&gt;&lt;td&gt;(428.560)&lt;/td&gt;&lt;td&gt;(537.877)&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td style="text-align:left"&gt;ages&lt;/td&gt;&lt;td&gt;1,397.867&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;1,338.249&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;1,110.735&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(53.842)&lt;/td&gt;&lt;td&gt;(38.318)&lt;/td&gt;&lt;td&gt;(48.421)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;ages&lt;/td&gt;&lt;td&gt;1,334.411&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;1,349.598&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;1,109.073&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(59.002)&lt;/td&gt;&lt;td&gt;(39.969)&lt;/td&gt;&lt;td&gt;(52.815)&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td style="text-align:left"&gt;reader_typefrequent&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;3,474.068&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;-1,027.182&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(246.423)&lt;/td&gt;&lt;td&gt;(705.629)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;reader_typefrequent&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;3,907.977&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;-514.613&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(255.075)&lt;/td&gt;&lt;td&gt;(739.017)&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td style="text-align:left"&gt;ages:reader_typefrequent&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;465.733&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(69.278)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;ages:reader_typefrequent&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;461.246&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(73.138)&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;200&lt;/td&gt;&lt;td&gt;200&lt;/td&gt;&lt;td&gt;200&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td style="text-align:left"&gt;R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.773&lt;/td&gt;&lt;td&gt;0.887&lt;/td&gt;&lt;td&gt;0.908&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.772&lt;/td&gt;&lt;td&gt;0.886&lt;/td&gt;&lt;td&gt;0.907&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td style="text-align:left"&gt;Residual Std. Error&lt;/td&gt;&lt;td&gt;2,444.005 (df = 198)&lt;/td&gt;&lt;td&gt;1,728.713 (df = 197)&lt;/td&gt;&lt;td&gt;1,562.329 (df = 196)&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic&lt;/td&gt;&lt;td&gt;674.050&lt;sup&gt;***&lt;/sup&gt; (df = 1; 198)&lt;/td&gt;&lt;td&gt;773.006&lt;sup&gt;***&lt;/sup&gt; (df = 2; 197)&lt;/td&gt;&lt;td&gt;646.011&lt;sup&gt;***&lt;/sup&gt; (df = 3; 196)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.721&lt;/td&gt;&lt;td&gt;0.873&lt;/td&gt;&lt;td&gt;0.894&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.720&lt;/td&gt;&lt;td&gt;0.871&lt;/td&gt;&lt;td&gt;0.893&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Residual Std. Error&lt;/td&gt;&lt;td&gt;2,657.721 (df = 198)&lt;/td&gt;&lt;td&gt;1,799.848 (df = 197)&lt;/td&gt;&lt;td&gt;1,645.215 (df = 196)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic&lt;/td&gt;&lt;td&gt;511.504&lt;sup&gt;***&lt;/sup&gt; (df = 1; 198)&lt;/td&gt;&lt;td&gt;675.020&lt;sup&gt;***&lt;/sup&gt; (df = 2; 197)&lt;/td&gt;&lt;td&gt;551.840&lt;sup&gt;***&lt;/sup&gt; (df = 3; 196)&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td colspan="3" style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
 &lt;/table&gt;
 
@@ -1495,10 +1538,10 @@ anova(vocab_age_null, vocab_age_mod, vocab_additive_mod, vocab_int_mod)
 ## Model 3: vocab ~ ages + reader_type
 ## Model 4: vocab ~ ages * reader_type
 ##   Res.Df        RSS Df  Sum of Sq        F    Pr(&gt;F)    
-## 1    199 5208897978                                     
-## 2    198 1182686093  1 4026211885 1649.497 &lt; 2.2e-16 ***
-## 3    197  588724259  1  593961835  243.340 &lt; 2.2e-16 ***
-## 4    196  478410910  1  110313349   45.194 1.901e-10 ***
+## 1    199 5011566024                                     
+## 2    198 1398569498  1 3612996527 1334.819 &lt; 2.2e-16 ***
+## 3    197  638172324  1  760397173  280.928 &lt; 2.2e-16 ***
+## 4    196  530519570  1  107652754   39.772 1.855e-09 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -1528,12 +1571,6 @@ class: middle, center
 &lt;iframe src="https://gallery.shinyapps.io/multi_regression/" style="border:none;" height="600" width="1300"&gt;&lt;/iframe&gt;
 
 ---
-
-### Practice
-
-[dummy variable practice](./assets/dummies_walkthrough/dummies.zip)
-
----
 exclude: true
 
 (Wickham and Grolemund, 2016; Hardy, 1993b; Hardy, 1993c; Hardy, 1993d)
@@ -1544,51 +1581,20 @@ class: title-slide-final, left
 
 # References
 
-[1] W. Berry and S. Feldman. "Multicollinearity". In: _Multiple
-Regression in Practice_. Ed. by W. Berry and S. Feldman. Sage University
-Paper Series on Quantitative Applications in the Social Sciences - 50.
-Newbury Park, CA: Sage, 1985, pp. 37-50. ISBN: 9780803920545.
+[1] M. Hardy. "Assessing Group Differences in Effects". In: _Regression with Dummy Variables_. Ed.
+by M. Hardy. Sage University Paper Series on Quantitative Applications in the Social Sciences - 93.
+Newbury Park, CA: Sage, 1993, pp. 29-63. ISBN: 9780803951280.
 
-[2] W. Berry and S. Feldman. "Specification Error". In: _Multiple
-Regression in Practice_. Ed. by W. Berry and S. Feldman. Sage University
-Paper Series on Quantitative Applications in the Social Sciences - 50.
-Newbury Park, CA: Sage, 1985, pp. 18-25. ISBN: 9780803920545.
+[2] M. Hardy. "Creating Dummy Variables". In: _Regression with Dummy Variables_. Ed. by M. Hardy.
+Sage University Paper Series on Quantitative Applications in the Social Sciences - 93. Newbury Park,
+CA: Sage, 1993, pp. 7-17. ISBN: 9780803951280.
 
-[3] M. Hardy. "Assessing Group Differences in Effects". In: _Regression
-with Dummy Variables_. Ed. by M. Hardy. Sage University Paper Series on
-Quantitative Applications in the Social Sciences - 93. Newbury Park, CA:
-Sage, 1993, pp. 29-63. ISBN: 9780803951280.
+[3] M. Hardy. "Using Dummy Variables as Regressors". In: _Regression with Dummy Variables_. Ed. by
+M. Hardy. Sage University Paper Series on Quantitative Applications in the Social Sciences - 93.
+Newbury Park, CA: Sage, 1993, pp. 18-28. ISBN: 9780803951280.
 
-[4] M. Hardy. "Creating Dummy Variables". In: _Regression with Dummy
-Variables_. Ed. by M. Hardy. Sage University Paper Series on Quantitative
-Applications in the Social Sciences - 93. Newbury Park, CA: Sage, 1993,
-pp. 7-17. ISBN: 9780803951280.
-
-[5] M. Hardy. "Using Dummy Variables as Regressors". In: _Regression with
-Dummy Variables_. Ed. by M. Hardy. Sage University Paper Series on
-Quantitative Applications in the Social Sciences - 93. Newbury Park, CA:
-Sage, 1993, pp. 18-28. ISBN: 9780803951280.
-
-[6] M. Lewis-Beck. "Multiple Regression". In: _Applied Regression: An
-Introduction_. Ed. by M. Lewis-Beck. Sage University Paper Series on
-Quantitative Applications in the Social Sciences - 22. Newbury Park, CA:
-Sage, 1980, pp. 47-74. ISBN: 9781483381497.
-
-[7] L. Schroeder, D. Sjoquist, and P. Stephan. "Multiple Linear
-Regression". In: _Understanding Regression Analysis: An Introductory
-Guide_. Ed. by L. Schroeder, D. Sjoquist and P. Stephan. Sage University
-Paper Series on Quantitative Applications in the Social Sciences - 57.
-Newbury Park, CA: Sage, 1986, pp. 29-35. ISBN: 9780803927582.
-
-[8] L. Schroeder, D. Sjoquist, and P. Stephan. "Problems and Issues of
-Linear Regression". In: _Understanding Regression Analysis: An
-Introductory Guide_. Ed. by L. Schroeder, D. Sjoquist and P. Stephan.
-Sage University Paper Series on Quantitative Applications in the Social
-Sciences - 57. Newbury Park, CA: Sage, 1986, pp. 65-80. ISBN:
-9780803927582.
-
-[9] H. Wickham and G. Grolemund. _R for Data Science: Import, Tidy,
-Transform, Visualize, and Model Data_. O'Reilly Media, 2016.
+[4] H. Wickham and G. Grolemund. _R for Data Science: Import, Tidy, Transform, Visualize, and Model
+Data_. O'Reilly Media, 2016.
 
 Figueredo, A. J. (2013). Continuous and Categorical Predictors. *Statistical Methods in Psychological Research*.
 

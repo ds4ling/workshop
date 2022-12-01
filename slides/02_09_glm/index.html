@@ -12,7 +12,7 @@
     <script src="assets/tile-view/tile-view.js"></script>
     <link href="assets/panelset/panelset.css" rel="stylesheet" />
     <script src="assets/panelset/panelset.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x8393c45a4da40f49554909f9b05667d","expires":14}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x39266888ba6489989df581d3a80dd61","expires":14}</script>
     <script src="assets/himalaya/himalaya.js"></script>
     <script src="assets/js-cookie/js.cookie.js"></script>
     <link href="assets/editable/editable.css" rel="stylesheet" />
@@ -35,7 +35,7 @@ class: center, middle, inverse, title-slide
 ### Joseph V. Casillas, PhD
 ]
 .date[
-### Rutgers University</br>Last update: 2022-11-29
+### Rutgers University</br>Last update: 2022-11-30
 ]
 
 ---
@@ -61,7 +61,7 @@ background-image: url(./assets/img/01_distributions.png)
 background-size: contain
 
 --
-
+exclude: true
 background-image: url(./assets/img/02_clt.png)
 background-size: contain
 
@@ -71,7 +71,7 @@ background-image: url(./assets/img/03a_nhst.png)
 background-size: contain
 
 --
-
+exclude: true
 background-image: url(./assets/img/03b_hypothesis_testing.png)
 background-size: contain
 
@@ -115,9 +115,9 @@ background-position: 5% 10%, 50% 50%, 95% 10%, 0% 95%, 100% 95%
 
 - Distributions
   - Normal distribution
-  - CLT
+  &lt;!-- - CLT--&gt;
 - Hypothesis testing
-  - z-tests
+  &lt;!-- - z-tests --&gt;
   - t-tests
 - Bivariate correlation
 - The linear model
@@ -299,7 +299,7 @@ is a good place to start if you are interested.]
 
 ### Something old
 
-- It turns out we've spent the previous 11 weeks working with the gaussian 
+- It turns out we've spent the previous 9(ish) hours working with the gaussian 
 distribution
 - Gaussian is another way of saying normal
 - This means we can think of standard linear regression in the general linear model as a special case of the generalized linear model
@@ -1143,51 +1143,20 @@ class: title-slide-final, left
 
 # References
 
-[1] W. Berry and S. Feldman. "Multicollinearity". In: _Multiple
-Regression in Practice_. Ed. by W. Berry and S. Feldman. Sage University
-Paper Series on Quantitative Applications in the Social Sciences - 50.
-Newbury Park, CA: Sage, 1985, pp. 37-50. ISBN: 9780803920545.
+[1] M. Hardy. "Assessing Group Differences in Effects". In: _Regression with Dummy Variables_. Ed.
+by M. Hardy. Sage University Paper Series on Quantitative Applications in the Social Sciences - 93.
+Newbury Park, CA: Sage, 1993, pp. 29-63. ISBN: 9780803951280.
 
-[2] W. Berry and S. Feldman. "Specification Error". In: _Multiple
-Regression in Practice_. Ed. by W. Berry and S. Feldman. Sage University
-Paper Series on Quantitative Applications in the Social Sciences - 50.
-Newbury Park, CA: Sage, 1985, pp. 18-25. ISBN: 9780803920545.
+[2] M. Hardy. "Creating Dummy Variables". In: _Regression with Dummy Variables_. Ed. by M. Hardy.
+Sage University Paper Series on Quantitative Applications in the Social Sciences - 93. Newbury Park,
+CA: Sage, 1993, pp. 7-17. ISBN: 9780803951280.
 
-[3] M. Hardy. "Assessing Group Differences in Effects". In: _Regression
-with Dummy Variables_. Ed. by M. Hardy. Sage University Paper Series on
-Quantitative Applications in the Social Sciences - 93. Newbury Park, CA:
-Sage, 1993, pp. 29-63. ISBN: 9780803951280.
+[3] M. Hardy. "Using Dummy Variables as Regressors". In: _Regression with Dummy Variables_. Ed. by
+M. Hardy. Sage University Paper Series on Quantitative Applications in the Social Sciences - 93.
+Newbury Park, CA: Sage, 1993, pp. 18-28. ISBN: 9780803951280.
 
-[4] M. Hardy. "Creating Dummy Variables". In: _Regression with Dummy
-Variables_. Ed. by M. Hardy. Sage University Paper Series on Quantitative
-Applications in the Social Sciences - 93. Newbury Park, CA: Sage, 1993,
-pp. 7-17. ISBN: 9780803951280.
-
-[5] M. Hardy. "Using Dummy Variables as Regressors". In: _Regression with
-Dummy Variables_. Ed. by M. Hardy. Sage University Paper Series on
-Quantitative Applications in the Social Sciences - 93. Newbury Park, CA:
-Sage, 1993, pp. 18-28. ISBN: 9780803951280.
-
-[6] M. Lewis-Beck. "Multiple Regression". In: _Applied Regression: An
-Introduction_. Ed. by M. Lewis-Beck. Sage University Paper Series on
-Quantitative Applications in the Social Sciences - 22. Newbury Park, CA:
-Sage, 1980, pp. 47-74. ISBN: 9781483381497.
-
-[7] L. Schroeder, D. Sjoquist, and P. Stephan. "Multiple Linear
-Regression". In: _Understanding Regression Analysis: An Introductory
-Guide_. Ed. by L. Schroeder, D. Sjoquist and P. Stephan. Sage University
-Paper Series on Quantitative Applications in the Social Sciences - 57.
-Newbury Park, CA: Sage, 1986, pp. 29-35. ISBN: 9780803927582.
-
-[8] L. Schroeder, D. Sjoquist, and P. Stephan. "Problems and Issues of
-Linear Regression". In: _Understanding Regression Analysis: An
-Introductory Guide_. Ed. by L. Schroeder, D. Sjoquist and P. Stephan.
-Sage University Paper Series on Quantitative Applications in the Social
-Sciences - 57. Newbury Park, CA: Sage, 1986, pp. 65-80. ISBN:
-9780803927582.
-
-[9] H. Wickham and G. Grolemund. _R for Data Science: Import, Tidy,
-Transform, Visualize, and Model Data_. O'Reilly Media, 2016.
+[4] H. Wickham and G. Grolemund. _R for Data Science: Import, Tidy, Transform, Visualize, and Model
+Data_. O'Reilly Media, 2016.
 
 Nelder, J., Wedderburn, R. (1972). Generalized Linear Models. *Journal of the Royal Statistical Society*. 135 (3). 370–384.
     </textarea>

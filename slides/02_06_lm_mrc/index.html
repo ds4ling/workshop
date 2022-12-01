@@ -14,7 +14,7 @@
     <link href="assets/tachyons/tachyons.min.css" rel="stylesheet" />
     <link href="assets/panelset/panelset.css" rel="stylesheet" />
     <script src="assets/panelset/panelset.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"e27d1ea62a3144159768456db3a50c2f","expires":14}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"xb195e20659f43dfb8ae477201665699","expires":14}</script>
     <script src="assets/himalaya/himalaya.js"></script>
     <script src="assets/js-cookie/js.cookie.js"></script>
     <link href="assets/editable/editable.css" rel="stylesheet" />
@@ -33,13 +33,13 @@ class: center, middle, inverse, title-slide
 # Statistics for Linguists
 ]
 .subtitle[
-## Day 1 - The linear model:</br>.lightgrey[Multiple regression]
+## Day 2 - The linear model:</br>.lightgrey[Multiple regression]
 ]
 .author[
 ### Joseph V. Casillas, PhD
 ]
 .date[
-### Rutgers University</br>Last update: 2022-11-29
+### Rutgers University</br>Last update: 2022-11-30
 ]
 
 ---
@@ -2004,33 +2004,27 @@ class: title-slide-final, left
 
 # References
 
-[1] W. Berry and S. Feldman. "Multicollinearity". In: _Multiple
-Regression in Practice_. Ed. by W. Berry and S. Feldman. Sage University
-Paper Series on Quantitative Applications in the Social Sciences - 50.
-Newbury Park, CA: Sage, 1985, pp. 37-50. ISBN: 9780803920545.
+[1] W. Berry and S. Feldman. "Multicollinearity". In: _Multiple Regression in Practice_. Ed. by W.
+Berry and S. Feldman. Sage University Paper Series on Quantitative Applications in the Social
+Sciences - 50. Newbury Park, CA: Sage, 1985, pp. 37-50. ISBN: 9780803920545.
 
-[2] W. Berry and S. Feldman. "Specification Error". In: _Multiple
-Regression in Practice_. Ed. by W. Berry and S. Feldman. Sage University
-Paper Series on Quantitative Applications in the Social Sciences - 50.
-Newbury Park, CA: Sage, 1985, pp. 18-25. ISBN: 9780803920545.
+[2] W. Berry and S. Feldman. "Specification Error". In: _Multiple Regression in Practice_. Ed. by W.
+Berry and S. Feldman. Sage University Paper Series on Quantitative Applications in the Social
+Sciences - 50. Newbury Park, CA: Sage, 1985, pp. 18-25. ISBN: 9780803920545.
 
-[3] M. Lewis-Beck. "Multiple Regression". In: _Applied Regression: An
-Introduction_. Ed. by M. Lewis-Beck. Sage University Paper Series on
-Quantitative Applications in the Social Sciences - 22. Newbury Park, CA:
-Sage, 1980, pp. 47-74. ISBN: 9781483381497.
+[3] M. Lewis-Beck. "Multiple Regression". In: _Applied Regression: An Introduction_. Ed. by M.
+Lewis-Beck. Sage University Paper Series on Quantitative Applications in the Social Sciences - 22.
+Newbury Park, CA: Sage, 1980, pp. 47-74. ISBN: 9781483381497.
 
-[4] L. Schroeder, D. Sjoquist, and P. Stephan. "Multiple Linear
-Regression". In: _Understanding Regression Analysis: An Introductory
-Guide_. Ed. by L. Schroeder, D. Sjoquist and P. Stephan. Sage University
-Paper Series on Quantitative Applications in the Social Sciences - 57.
-Newbury Park, CA: Sage, 1986, pp. 29-35. ISBN: 9780803927582.
+[4] L. Schroeder, D. Sjoquist, and P. Stephan. "Multiple Linear Regression". In: _Understanding
+Regression Analysis: An Introductory Guide_. Ed. by L. Schroeder, D. Sjoquist and P. Stephan. Sage
+University Paper Series on Quantitative Applications in the Social Sciences - 57. Newbury Park, CA:
+Sage, 1986, pp. 29-35. ISBN: 9780803927582.
 
-[5] L. Schroeder, D. Sjoquist, and P. Stephan. "Problems and Issues of
-Linear Regression". In: _Understanding Regression Analysis: An
-Introductory Guide_. Ed. by L. Schroeder, D. Sjoquist and P. Stephan.
-Sage University Paper Series on Quantitative Applications in the Social
-Sciences - 57. Newbury Park, CA: Sage, 1986, pp. 65-80. ISBN:
-9780803927582.
+[5] L. Schroeder, D. Sjoquist, and P. Stephan. "Problems and Issues of Linear Regression". In:
+_Understanding Regression Analysis: An Introductory Guide_. Ed. by L. Schroeder, D. Sjoquist and P.
+Stephan. Sage University Paper Series on Quantitative Applications in the Social Sciences - 57.
+Newbury Park, CA: Sage, 1986, pp. 65-80. ISBN: 9780803927582.
 
 ---
 layout: false
@@ -2038,8 +2032,8 @@ class: title-slide-final, left
 
 # References (cont.)
 
-[1] H. Wickham and G. Grolemund. _R for Data Science: Import, Tidy,
-Transform, Visualize, and Model Data_. O'Reilly Media, 2016.
+[1] H. Wickham and G. Grolemund. _R for Data Science: Import, Tidy, Transform, Visualize, and Model
+Data_. O'Reilly Media, 2016.
 
 Figueredo, A. J. (2013). Multiple Regression. *Statistical 
 Methods in Psychological Research*.
@@ -2085,11 +2079,11 @@ glimpse(mrc_ex_data)
 ```
 ## Rows: 10,000
 ## Columns: 5
-## $ age      &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5…
-## $ height   &lt;dbl&gt; 36.77788, 40.85082, 41.90963, 40.91368, 39.99944, 38.79008, 41.8…
-## $ score    &lt;dbl&gt; 57.36148, 55.69443, 53.88175, 56.82029, 53.81413, 53.59684, 57.2…
-## $ age_c    &lt;dbl&gt; -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5…
-## $ height_c &lt;dbl&gt; -12.637914, -8.564972, -7.506157, -8.502107, -9.416351, -10.6257…
+## $ age      &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5…
+## $ height   &lt;dbl&gt; 36.77788, 40.85082, 41.90963, 40.91368, 39.99944, 38.79008, 41.84237, 43.43786, 38.81486, 45.3…
+## $ score    &lt;dbl&gt; 57.36148, 55.69443, 53.88175, 56.82029, 53.81413, 53.59684, 57.22780, 56.45059, 56.60285, 57.1…
+## $ age_c    &lt;dbl&gt; -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5, -6.5…
+## $ height_c &lt;dbl&gt; -12.637914, -8.564972, -7.506157, -8.502107, -9.416351, -10.625709, -7.573417, -5.977934, -10.…
 ```
 
 ```r
