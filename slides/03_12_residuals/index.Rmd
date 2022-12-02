@@ -319,9 +319,9 @@ exclude: true
 ---
 layout: false
 class: title-slide-final
-background-image: url(https://github.com/jvcasillas/ru_xaringan/raw/master/img/logo/ru_shield.png)
-background-size: 55px
-background-position: 9% 15%
+background-image: url(https://github.com/jvcasillas/ru_xaringan/raw/master/img/logo/ru_shield.png), url(./assets/img/qr.png)
+background-size: 55px, 250px
+background-position: 9% 15%, 9% 75%
 
 </br></br></br>
 
