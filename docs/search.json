@@ -28,6 +28,27 @@
     "text": "Please, check the set-up page for important set-up instructions, before the workshop.\nThis workshop assumes you do not have prior knowledge of statistics.\nI recommend the following resources:\n\nR for Data Science (online book).\nStatistics for Linguists in R (texbook).\nR for linguists"
   },
   {
+    "objectID": "scripts/ws_eval.html",
+    "href": "scripts/ws_eval.html",
+    "title": "ds4ling workshop evaluation",
+    "section": "",
+    "text": "Workshop dates: 11-29 to 12-2 (2022)\nLocation: University of Basque Country, Vitoria, Spain"
+  },
+  {
+    "objectID": "scripts/ws_eval.html#load-libraries",
+    "href": "scripts/ws_eval.html#load-libraries",
+    "title": "ds4ling workshop evaluation",
+    "section": "Load libraries",
+    "text": "Load libraries\n\nlibrary(\"googlesheets4\")\nlibrary(\"googledrive\")\nlibrary(\"dplyr\")\nlibrary(\"tidyr\")\nlibrary(\"glue\")\nlibrary(\"stringr\")\nlibrary(\"ggplot2\")\nlibrary(\"ggtext\")\nlibrary(\"forcats\")\nlibrary(\"readr\")\nlibrary(\"kableExtra\")\nlibrary(\"janitor\")"
+  },
+  {
+    "objectID": "scripts/ws_eval.html#get-google-sheet-and-tidy",
+    "href": "scripts/ws_eval.html#get-google-sheet-and-tidy",
+    "title": "ds4ling workshop evaluation",
+    "section": "Get google sheet and tidy",
+    "text": "Get google sheet and tidy\n\n# give gargle permission\ndrive_auth(email = TRUE)\n\n# Locate file, check ID\ndrive_find(n_max = 5, type = \"spreadsheet\")\n\n# New sheet\nall_data_temp <- read_sheet(\"1ZKpviz_MdpacIAIhDurS67pGuecckYTuCS_rEpdGJrs\") %>% \n  clean_names()\n\n# Download to doc folder\nwrite_csv(all_data_temp, \"scripts/ds4ling_ws_20221129.csv\")\n\n\neval_data <- read_csv(\"scripts/ds4ling_ws_20221129.csv\") %>% \n  rename(\n    stats_knowledge = on_a_scale_from_1_to_10_please_rate_your_knowledge_of_statistics_before_taking_this_workshop, \n    lm_knowledge = after_taking_this_workshop_rate_your_understanding_of_the_linear_model, \n    comfort_after_ws = how_comfortable_do_you_feel_now_using_the_linear_model_in_your_own_research, \n    what_helpful = what_did_you_find_to_be_particularly_helpful, \n    what_more = what_would_like_to_have_seen_more_of, \n    add_feedback = please_provide_any_additional_feedback\n  ) %>% \n  mutate(id = gsub(\"\\\\D\", \"\", timestamp))\n\nglimpse(eval_data)\n\nRows: 6\nColumns: 8\n$ timestamp        <dttm> 2022-12-02 13:37:39, 2022-12-02 13:40:59, 2022-12-02…\n$ stats_knowledge  <dbl> 6, 5, 1, 1, 5, 5\n$ lm_knowledge     <dbl> 8, 8, 5, 6, 8, 8\n$ comfort_after_ws <dbl> 8, 7, 5, 6, 8, 7\n$ what_helpful     <chr> NA, \"I really loved how you built things up and how y…\n$ what_more        <chr> \"examples from linguistics instead of cars :)\", \"It w…\n$ add_feedback     <chr> \"great workshop!\", NA, \"I just want to thank you baca…\n$ id               <chr> \"20221202133739\", \"20221202134059\", \"20221202134141\",…\n\n\n\neval_data_num <- eval_data %>% \n  select(id, timestamp, stats_knowledge:comfort_after_ws) %>% \n  pivot_longer(cols = stats_knowledge:comfort_after_ws, \n               names_to = \"question\", values_to = \"response\") \n\n\neval_data_num %>% \n  ggplot() + \n  aes(x = question, y = response) + \n  geom_point(alpha = 0.4) + \n  stat_summary(fun.data = mean_se, geom = \"pointrange\", \n               size = 2, pch = 21, fill = \"white\") + \n  coord_cartesian(ylim = c(0, 10))"
+  },
+  {
     "objectID": "setup.html",
     "href": "setup.html",
     "title": "Pre-workshop set-up",
